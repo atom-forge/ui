@@ -28,7 +28,7 @@
 	const isSelected = $derived(treeview.isSelected(node.id));
 
 	const rowClass = $derived(twMerge(
-		'flex items-center p-1.5 rounded-control-sm cursor-pointer select-none',
+		'flex items-center p-1.5 rounded-md cursor-pointer select-none',
 		isSelected ? 'bg-secondary' : 'hover:bg-secondary/50',
 	));
 
@@ -51,7 +51,7 @@
 		onclick={handleClick}
 		onkeydown={(e) => e.key === 'Enter' && handleClick()}
 	>
-		<div class="w-6 flex-shrink-0 text-left items-center flex flex-row">
+		<div class="w-6 shrink-0 text-left items-center flex flex-row">
 			{#if hasChildren}
 				<span class="inline-block aspect-square items-center transition-transform duration-200" class:rotate-90={isExpanded}>
 					<Icon icon={ChevronRight} size="4" class="text-muted-contrast"/>
@@ -72,7 +72,7 @@
 
 	{#if hasChildren && isExpanded}
 		<div class="relative" transition:slide={{ duration: 150 }}>
-			<div class="absolute top-1 bottom-1 w-0.25 bg-frame rounded-full" style:left="{level * 1.25 + .75}rem"></div>
+			<div class="absolute top-1 bottom-1 w-px bg-frame rounded-full" style:left="{level * 1.25 + .75}rem"></div>
 			{#each node.children as childNode}
 				<TreeItem node={childNode} level={level + 1}/>
 			{/each}

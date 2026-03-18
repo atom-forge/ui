@@ -28,7 +28,7 @@
 		{#if i > 0}
 			<span class="text-muted-contrast text-xs">+</span>
 		{/if}
-		<kbd class="inline-flex items-center justify-center px-1.5 py-0.5 rounded-control-sm border border-frame bg-gradient-to-b from-secondary to-white dark:from-secondary dark:to-white/10 text-canvas-contrast font-mono text-[11px] font-medium shadow-[0_1px_0_0_rgba(0,0,0,0.1)] dark:shadow-[0_1px_0_0_rgba(0,0,0,0.4)] leading-none">
+		<kbd class="inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-frame bg-gradient-to-b from-secondary to-white dark:from-secondary dark:to-white/10 text-canvas-contrast font-mono text-[11px] font-medium shadow-[0_1px_0_0_rgba(0,0,0,0.1)] dark:shadow-[0_1px_0_0_rgba(0,0,0,0.4)] leading-none">
 			{key}
 		</kbd>
 	{/each}

@@ -54,7 +54,7 @@
 		onclick={() => goto(page - 1)}
 		disabled={page <= 1}
 		class={twMerge(
-			'flex items-center justify-center rounded-control-sm border border-frame bg-secondary text-canvas-contrast',
+			'flex items-center justify-center rounded border border-frame bg-secondary text-canvas-contrast',
 			'hover:brightness-95 transition-colors disabled:opacity-40 disabled:cursor-not-allowed',
 			btnSize
 		)}
@@ -74,7 +74,7 @@
 				disabled={item === page}
 				aria-current={item === page ? 'page' : undefined}
 				class={twMerge(
-					'flex items-center justify-center rounded-control-sm border font-medium transition-colors',
+					'flex items-center justify-center rounded border font-medium transition-colors',
 					btnSize,
 					item === page
 						? 'bg-accent text-accent-contrast border-accent cursor-default'
@@ -90,7 +90,7 @@
 		onclick={() => goto(page + 1)}
 		disabled={page >= total}
 		class={twMerge(
-			'flex items-center justify-center rounded-control-sm border border-frame bg-secondary text-canvas-contrast',
+			'flex items-center justify-center rounded border border-frame bg-secondary text-canvas-contrast',
 			'hover:brightness-95 transition-colors disabled:opacity-40 disabled:cursor-not-allowed',
 			btnSize
 		)}

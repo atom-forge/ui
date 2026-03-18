@@ -161,7 +161,7 @@
 	<div
 		use:portal={"#atom-forge-portal-target"}
 		class={twMerge(
-			"fixed z-10000 px-2 py-1 text-xs rounded-control shadow-lg",
+			"fixed z-10000 px-2 py-1 text-xs rounded-surface shadow-lg",
 			inverted
 				? "bg-primary text-primary-contrast border-transparent"
 				: "bg-surface border border-frame text-surface-contrast"

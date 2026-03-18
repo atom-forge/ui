@@ -171,7 +171,7 @@
 	}
 
 	const triggerCls = $derived(twMerge(
-		'w-full flex items-center gap-2 px-3 rounded-control border bg-control text-left transition-colors',
+		'w-full flex items-center gap-2 px-3 rounded-surface border bg-control text-left transition-colors',
 		size === 'normal'  && 'min-h-10 py-1.5 text-sm',
 		size === 'compact' && 'min-h-8 py-1 text-xs',
 		size === 'small'   && 'min-h-6 py-0.5 text-xs px-2',
@@ -202,7 +202,7 @@
 					{#if chipSnippet}
 						{@render chipSnippet(chipItem, () => removeValue(chipItem.id))}
 					{:else}
-						<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-control-sm bg-accent text-accent-contrast text-xs font-medium cursor-grab active:cursor-grabbing select-none">
+						<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-accent text-accent-contrast text-xs font-medium cursor-grab active:cursor-grabbing select-none">
 							{chipItem.label}
 							<!-- svelte-ignore a11y_click_events_have_key_events a11y_interactive_supports_focus -->
 							<span
@@ -223,7 +223,7 @@
 				{#if chipSnippet}
 					{@render chipSnippet(opt, () => removeValue(opt.value))}
 				{:else}
-					<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-control-sm bg-accent text-accent-contrast text-xs font-medium">
+					<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-accent text-accent-contrast text-xs font-medium">
 						{opt.label}
 						<!-- svelte-ignore a11y_click_events_have_key_events a11y_interactive_supports_focus -->
 						<span

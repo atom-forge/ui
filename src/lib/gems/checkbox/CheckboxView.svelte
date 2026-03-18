@@ -31,7 +31,7 @@
 	const isActive = $derived(status === 'checked' || status === 'some');
 
 	const wrapperClass = $derived(twMerge(
-		'inline-flex items-center gap-2 select-none rounded-control py-1 px-2 transition-colors duration-150',
+		'inline-flex items-center gap-2 select-none rounded-control-sm py-1 px-2 transition-colors duration-150',
 		!disabled && !primary && !accent && 'cursor-pointer hover:bg-secondary',
 		!disabled && !!primary                && 'cursor-pointer hover:bg-primary/10',
 		!disabled && !!accent                 && 'cursor-pointer hover:bg-accent/10',
@@ -40,7 +40,7 @@
 	));
 
 	const boxClass = $derived(twMerge(
-		'flex items-center justify-center shrink-0 rounded-control-sm border-2 transition-colors',
+		'flex items-center justify-center shrink-0 rounded border-2 transition-colors',
 		isNormal  && 'w-5 h-5',
 		!!compact && 'w-4 h-4',
 		!!small   && 'w-3.5 h-3.5',

@@ -150,7 +150,7 @@
 	}
 
 	const containerCls = $derived(twMerge(
-		'flex flex-wrap items-center gap-1 w-full px-3 rounded-control border bg-control transition-colors cursor-text',
+		'flex flex-wrap items-center gap-1 w-full px-3 rounded-surface border bg-control transition-colors cursor-text',
 		size === 'normal'  && 'min-h-10 py-1.5 text-sm',
 		size === 'compact' && 'min-h-8 py-1 text-xs',
 		size === 'small'   && 'min-h-6 py-0.5 text-xs px-2',
@@ -173,7 +173,7 @@
 				{#if chipSnippet}
 					{@render chipSnippet(si.tag, () => removeTag(si.tag))}
 				{:else}
-					<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-control-sm bg-accent text-accent-contrast text-xs font-medium cursor-grab active:cursor-grabbing select-none shrink-0">
+					<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-accent text-accent-contrast text-xs font-medium cursor-grab active:cursor-grabbing select-none shrink-0">
 						{si.tag}
 						<!-- svelte-ignore a11y_click_events_have_key_events a11y_interactive_supports_focus -->
 						<span
@@ -194,7 +194,7 @@
 			{#if chipSnippet}
 				{@render chipSnippet(tag, () => removeTag(tag))}
 			{:else}
-				<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-control-sm bg-accent text-accent-contrast text-xs font-medium shrink-0">
+				<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-accent text-accent-contrast text-xs font-medium shrink-0">
 					{tag}
 					<!-- svelte-ignore a11y_click_events_have_key_events a11y_interactive_supports_focus -->
 					<span

@@ -64,7 +64,7 @@
 			<button
 				type="button"
 				onclick={(e) => openCollapsed(e, item.hidden)}
-				class="px-1.5 py-0.5 text-xs text-muted-contrast hover:text-canvas-contrast hover:bg-secondary rounded-control-sm transition-colors cursor-pointer leading-none"
+				class="px-1.5 py-0.5 text-xs text-muted-contrast hover:text-canvas-contrast hover:bg-secondary rounded transition-colors cursor-pointer leading-none"
 				aria-label="Show hidden breadcrumb items"
 			>…</button>
 		{:else if (item.href || item.onclick) && !isLast}

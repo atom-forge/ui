@@ -38,7 +38,7 @@
 	<div class={twMerge('flex flex-col gap-2', classes)} aria-hidden="true">
 		{#each lines as width}
 			<div
-				class={twMerge(baseClass, 'h-4 rounded-control-sm')}
+				class={twMerge(baseClass, 'h-4 rounded')}
 				style="width: {width}%"
 			></div>
 		{/each}

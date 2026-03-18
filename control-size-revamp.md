@@ -1,110 +1,134 @@
 # Control Size Revamp Plan
 
-Ez a dokumentum az AtomForge UI interaktív kontrolljainak (gombok, beviteli mezők, választók) méretezési rendszerét és annak egységesítését részletezi.
+Ez a dokumentum az AtomForge UI interaktív kontrolljainak méretezési rendszerét, annak auditját és a Scoped CSS Variable alapú technikai megvalósítását részletezi.
 
 ## 1. Jelenlegi állapot (Audit)
 
-A legtöbb kontroll három méretet támogat: `normal` (default), `compact`, és `small`. Azonban a megvalósítás minden komponensben egyedi (hardkódolt Tailwind osztályok), és néhol megjelenik egy negyedik, `micro` méret is.
-
 ### A. Standard Kontrollok (Magasság-alapú)
-Ide tartoznak: `Button`, `Input`, `Select`, `MultiSelect`, `NativeSelect`, `DatePicker`, `TimePicker`, `TagEditor`, `CodeInput`.
-
-| Méret | Tailwind magasság | Font méret | Megjegyzés |
-| :--- | :--- | :--- | :--- |
-| **Normal** | `h-10` (40px) | `text-sm` | Alapértelmezett |
-| **Compact** | `h-8` (32px) | `text-xs` | Sűrűbb felületekhez |
-| **Small** | `h-6` (24px) | `text-xs` | Nagyon sűrű / táblázati sorokba |
-| **Micro** | `h-5` (20px) | `text-[10px]` | Csak `Button` és `Avatar` esetén |
+`Button`, `Input`, `Select`, `MultiSelect`, `NativeSelect`, `DatePicker`, `TimePicker`, `TagEditor`, `CodeInput`.
+*   **Normal:** `h-10` (40px) | `text-sm`
+*   **Compact:** `h-8` (32px) | `text-xs`
+*   **Small:** `h-6` (24px) | `text-xs`
+*   **Micro:** `h-5` (20px) | `text-[10px]`
 
 ### B. Bináris Kontrollok (Fix méretarányú)
-Ide tartoznak: `Checkbox`, `Radio`, `Switch`. Ezek nem nyúlnak ki, hanem fix befoglaló méretük van.
-
-| Komponens | Normal | Compact | Small |
-| :--- | :--- | :--- | :--- |
-| **Checkbox** | `w-5 h-5` | `w-4 h-4` | `w-3.5 h-3.5` |
-| **Radio** | `w-5 h-5` | `w-4 h-4` | `w-3.5 h-3.5` |
-| **Switch (pálya)**| `w-11 h-6` | `w-9 h-5` | `w-7 h-4` |
+`Checkbox`, `Radio`, `Switch`.
+*   **Normal:** `20px` alapú
+*   **Compact:** `16px` alapú
+*   **Small:** `14px` alapú
 
 ### C. Sáv-alapú Kontrollok (Vastagság-alapú)
-Ide tartoznak: `ProgressBar`, `Slider`, `Range`. Ezeknél a méret a sáv (track) és a csúszka (thumb) vastagságát határozza meg.
-
-| Méret | Sáv vastagság | Csúszka (Slider) | Megjegyzés |
-| :--- | :--- | :--- | :--- |
-| **Normal** | `h-4` (16px) | `h-5 w-5` | |
-| **Compact** | `h-2.5` (10px)| `h-4 w-4` | |
-| **Small** | `h-1.5` (6px) | `h-3 w-3` | |
+`ProgressBar`, `Slider`, `Range`.
+*   **Normal:** `h-4` (16px) pálya | `h-5` csúszka
+*   **Compact:** `h-2.5` (10px) pálya | `h-4` csúszka
+*   **Small:** `h-1.5` (6px) pálya | `h-3` csúszka
 
 ### D. Interaktív Konténerek (Öröklés)
-Ide tartoznak: `Accordion` (fejléc), `Tabs` (fül gombok), `Breadcrumb` (elemek). Ezek nem fix magasságúak minden esetben, de a "trigger" felületüknek (amire kattintunk) illeszkednie kell a kontroll magasságokhoz.
+`Accordion` (fejléc), `Tabs` (fül gombok), `Breadcrumb` (elemek).
+*   **Elv:** A kattintható felület magasságának és belső arányainak illeszkednie kell a standard kontrollokhoz.
+
+### E. Információs Elemek (Skálázás)
+Ide tartoznak: `Avatar`, `Chip`, `Badge`, `Kbd`, `Spinner`. Ezeknek vizuálisan illeszkedniük kell a környezetük sűrűségéhez.
 
 | Komponens | Elv |
 | :--- | :--- |
-| **Accordion** | A fejléc magassága (`padding` vagy `min-h`) megegyezik a kontroll magassággal. |
-| **Tabs** | A fül-gombok magassága megegyezik a kontroll magassággal. |
-| **Breadcrumb** | A gombok és linkek magassága a `control-sm` vagy `micro` méretet követi. |
+| **Avatar** | A magassága és a betűmérete pontosan követi a standard kontrollokat (`h-10`, `h-8`, stb.). |
+| **Chip / Tag** | A padding és a font méret a kontroll sémát követi. |
+| **Kbd** | A belső padding és font méret igazodik a szövegkörnyezet sűrűségéhez. |
+| **Spinner** | A mérete mindig az aktuális ikon-méret tokent (`--control-icon-size`) használja. |
 
-## 2. Problémák és Adósságok
+### F. Adatsűrűség (Layout Density)
+Ide tartoznak: `Table`, `Tree`, `Toast`, `Skeleton`. Itt a méret nem egy gomb magasságát, hanem a sorok sűrűségét és a belső margókat jelenti.
 
-1.  **Inkonzisztens propok:** Bár a legtöbb helyen `compact` és `small` a név, a `Button` és `Avatar` használ `micro`-t is, amit más kontrollok nem támogatnak.
-2.  **Hardkódolt értékek:** Ha a `normal` méretet 40px-ről 42px-re szeretnénk állítani, több tucat fájlt kell módosítani.
-3.  **Belső paddingok:** A kontrollok belső elemei (ikonok, affitok) nem mindig igazodnak precízen a külső mérethez.
-4.  **Szöveg-igazítás:** A kisebb méreteknél a `text-xs` és a kontroll magassága közti egyensúly néhol szétcsúszik.
+| Komponens | Elv |
+| :--- | :--- |
+| **Table** | A cellák paddingja változik (`p-4` -> `p-2` -> `p-1`). |
+| **Tree** | Az elemek közötti távolság és az ikonok mérete a kontroll sémát követi. |
+| **Toast** | A belső padding és az ikon mérete igazodik a globális sűrűséghez. |
+| **Skeleton** | A magasságának (pl. sorok esetén) pontosan meg kell egyeznie a kontroll magasságokkal. |
 
-## 3. Javasolt Új Rendszer (Token-alapú)
+---
 
-Bevezetünk egy szemantikus méretezési rendszert a `theme.css`-be, hasonlóan a radius rendszerhez.
+## 2. Új Rendszer: Scoped CSS Variables
 
-### CSS Tokenek (Draft)
+Ahelyett, hogy minden komponensben JS logikával válogatnánk, egy **központi változórendszert** használunk. A komponensek szemantikus utility-ket használnak (pl. `h-control-h`), amiknek az értékét egy környezeti osztály (pl. `size-compact`) írja felül.
+
+### A. CSS Tokenek (theme.css)
+A Tailwind v4 `@theme` blokkjában definiáljuk a szemantikus utility-ket:
+
 ```css
 @theme {
-    /* Magasságok (Standard) */
-    --size-control-n:  2.5rem;  /* 40px */
-    --size-control-c:  2rem;    /* 32px */
-    --size-control-s:  1.5rem;  /* 24px */
-    --size-control-m:  1.25rem; /* 20px */
+    /* Standard magasságok, paddingok, gapek */
+    --spacing-control-h:    var(--control-height);
+    --spacing-control-icon: var(--control-icon-size);
+    --spacing-control-gap:  var(--control-gap);
+    --font-size-control:    var(--control-font-size);
 
-    /* Bináris méretek (Box/Check alap) */
-    --size-check-n:    1.25rem; /* 20px */
-    --size-check-c:    1rem;    /* 16px */
-    --size-check-s:    0.875rem;/* 14px */
+    /* Bináris méretek (Checkbox/Radio) */
+    --spacing-check-size:   var(--check-size);
 
-    /* Sáv méretek (Track alap) */
-    --size-track-n:    1rem;    /* 16px */
-    --size-track-c:    0.625rem;/* 10px */
-    --size-track-s:    0.375rem;/* 6px */
+    /* Sáv méretek (Track/Slider) */
+    --spacing-track-h:      var(--track-height);
+    --spacing-thumb-size:   var(--thumb-size);
 }
 ```
 
-## 4. Tervezési Alapelvek
+### B. Érték-térkép (@layer theme)
+A `:root` tartalmazza a default értékeket, a módosító osztályok pedig a felülírásokat:
+
+```css
+@layer theme {
+    :root {
+        --control-height: 2.5rem; --control-icon-size: 1.25rem; --control-font-size: 0.875rem; --control-gap: 0.5rem;
+        --check-size: 1.25rem;
+        --track-height: 1rem; --thumb-size: 1.25rem;
+    }
+    .size-compact {
+        --control-height: 2rem; --control-icon-size: 1rem; --control-font-size: 0.75rem; --control-gap: 0.375rem;
+        --check-size: 1rem;
+        --track-height: 0.625rem; --thumb-size: 1rem;
+    }
+    .size-small {
+        --control-height: 1.5rem; --control-icon-size: 0.875rem; --control-font-size: 0.75rem; --control-gap: 0.25rem;
+        --check-size: 0.875rem;
+        --track-height: 0.375rem; --thumb-size: 0.75rem;
+    }
+    .size-micro {
+        --control-height: 1.25rem; --control-icon-size: 0.75rem; --control-font-size: 0.625rem; --control-gap: 0.125rem;
+        --check-size: 0.75rem;
+        --track-height: 0.25rem; --thumb-size: 0.625rem;
+    }
+}
+```
+
+---
+
+## 3. Tervezési Alapelvek
 
 ### A. Hierarchikus skálázás
-Minden kontrollnak támogatnia kell mindhárom (vagy négy) méretet. Ha egy `Input` `compact`, akkor a mellette lévő `Button`-nak is `compact`-nak kell lennie azonos magassággal.
+Ha egy szülőre (pl. `Accordion` vagy `ButtonBar`) rátesszük a `size-compact` osztályt, az összes gyereke automatikusan örökli az új méreteket.
 
-### B. Konténer-Kontroll Öröklés
-Az olyan komponensek, mint az `Accordion` vagy a `Tabs`, belső menedzsereken keresztül adják tovább a méretet a gyerekeiknek (`AccordionItem`, `Tab`), amik ezután a standard kontroll tokeneket használják a saját paddingjuk vagy magasságuk beállítására.
+### B. Ikon-kontroll arány
+Az ikonok (`size-control-icon`) mérete garantáltan együtt mozog a kontroll magasságával és a szövegmérettel.
 
-### C. Ikon-kontroll arány
-Az ikonok méretének követnie kell a kontroll méretét:
-- Normal: 20px ikon (`pxSize: 20`)
-- Compact: 16px ikon (`pxSize: 16`)
-- Small: 14px ikon (`pxSize: 14`)
-- Micro: 12px ikon (`pxSize: 12`)
+### C. JS Mentesség
+A komponensnek nem kell tudnia a pontos pixel-értékekről, csak azt kell eldöntenie a propok alapján, hogy melyik módosító osztályt (`size-small`, stb.) alkalmazza magára vagy a környezetére.
 
-## 5. Implementációs Terv
+---
 
-### 1. Fázis: Token Setup
-- [ ] Tokenek definiálása a `theme.css`-ben.
-- [ ] Alapértelmezett font-méretek és paddingok társítása a tokenekhez.
+## 4. Implementációs Terv
 
-### 2. Fázis: Standard Kontroll Migráció
-- [ ] `Button`, `Input`, `Select` stb. átírása a magasság-tokenek használatára.
-- [ ] Ikon méretek automatizálása a kontroll mérete alapján.
+### 1. Fázis: Theme Setup
+- [ ] Tokenek és felülíró osztályok definiálása a `theme.css`-ben.
 
-### 3. Fázis: Bináris Kontroll Migráció
-- [ ] `Checkbox`, `Radio`, `Switch` egységesítése az új `check` tokenek mentén.
+### 2. Fázis: Ikon és Spinner Refactor
+- [ ] Az `Icon.svelte` és `Spinner.svelte` felkészítése a dinamikus méretezésre.
 
-### 4. Fázis: Sáv-alapú Kontroll Migráció
-- [ ] `ProgressBar`, `Slider`, `Range` átírása a track tokenekre.
+### 3. Fázis: Standard Kontroll Migráció
+- [ ] `Button`, `Input`, `Select` stb. átállítása a szemantikus osztályokra.
 
-### 5. Fázis: Micro Standardizálás
-- [ ] Eldönteni, hogy minden kontroll kap-e `micro` méretet, vagy kivezetjük a `Button`-ból. (Javaslat: Maradjon meg mindenhol, ahol technikailag lehetséges).
+### 4. Fázis: Bináris, Sáv és Információs Migráció
+- [ ] `Checkbox`, `Radio`, `Avatar`, `Chip` stb. egységesítése.
+
+### 5. Fázis: Layout Density (Table, Tree)
+- [ ] A táblázatok és listák sűrűség-szabályozásának bevezetése.

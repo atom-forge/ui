@@ -124,7 +124,7 @@
 	}
 
 	const triggerCls = $derived(twMerge(
-		'w-full flex items-center gap-2 px-3 rounded-control border bg-control text-left transition-colors',
+		'w-full flex items-center gap-2 px-3 rounded-surface border bg-control text-left transition-colors',
 		size === 'normal'  && 'h-10 text-sm',
 		size === 'compact' && 'h-8 text-xs',
 		size === 'small'   && 'h-6 text-xs px-2',

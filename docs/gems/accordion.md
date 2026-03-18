@@ -23,6 +23,7 @@ Expandable content panels with support for single or multiple open items, differ
 | `small` | `boolean` | Size | — | Small size padding and text. |
 | `borderless` | `boolean` | — | `false` | Removes borders from items. |
 | `joined` | `boolean` | — | `false` | Renders items as a single connected list with dividers. |
+| `ghost` | `boolean` | — | `false` | Removes the background from header buttons. |
 
 ---
 
@@ -33,6 +34,7 @@ Expandable content panels with support for single or multiple open items, differ
 | `title` | `string` | — | Text displayed in the header button. |
 | `icon` | `IconDefinition` | — | Optional icon displayed before the title. |
 | `id` | `string` | `crypto.randomUUID()` | Unique identifier for the item. |
+| `headerClass` | `string` | — | CSS classes applied to the header button. |
 
 ---
 

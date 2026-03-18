@@ -114,7 +114,7 @@
 						<div class="flex w-full h-full items-end gap-0.5">
 							{#each item.values as segment}
 								<div
-									class="grow rounded-control-sm transition-colors"
+									class="grow rounded-control transition-colors"
 									style:height="{(segment.value / maxValue) * 100}%"
 									style:background-color={segment.color}
 								></div>
@@ -125,8 +125,8 @@
 							{#each item.values as segment, j}
 								<div
 									class="w-full transition-colors"
-									class:rounded-t-control-sm={j === item.values.length - 1}
-									class:rounded-b-control-sm={j === 0}
+									class:rounded-t-control={j === item.values.length - 1}
+									class:rounded-b-control={j === 0}
 									style:height="{(segment.value / maxValue) * 100}%"
 									style:background-color={segment.color}
 								></div>
