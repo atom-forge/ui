@@ -1,0 +1,1 @@
+export {default as Card} from "$lib/gems/card/Card.svelte"

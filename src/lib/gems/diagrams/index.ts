@@ -1,0 +1,1 @@
+export {default as BarChart} from "$lib/gems/diagrams/BarChart.svelte"
