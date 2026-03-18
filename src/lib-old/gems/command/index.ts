@@ -1,2 +1,0 @@
-export {default as CommandPalette} from './CommandPalette.svelte';
-export { type CommandItem} from './command.svelte';

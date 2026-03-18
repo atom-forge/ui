@@ -175,7 +175,7 @@
 
 	const boxClass = (idx: number) => twMerge(
 		'relative flex items-center justify-center',
-		'rounded-md border font-mono font-semibold',
+		'rounded-control border font-mono font-semibold',
 		'bg-control border-frame text-canvas-contrast transition-colors select-none',
 		boxSize,
 		// prefix boxes — visually dimmed, not interactive

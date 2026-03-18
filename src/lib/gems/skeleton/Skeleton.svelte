@@ -30,7 +30,7 @@
 		'bg-secondary relative overflow-hidden',
 		animated && 'skeleton-shimmer',
 		circle && 'rounded-full',
-		!circle && 'rounded-md',
+		!circle && 'rounded-control',
 	));
 </script>
 
@@ -38,7 +38,7 @@
 	<div class={twMerge('flex flex-col gap-2', classes)} aria-hidden="true">
 		{#each lines as width}
 			<div
-				class={twMerge(baseClass, 'h-4 rounded')}
+				class={twMerge(baseClass, 'h-4 rounded-control-sm')}
 				style="width: {width}%"
 			></div>
 		{/each}

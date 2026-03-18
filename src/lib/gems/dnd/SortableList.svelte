@@ -287,11 +287,11 @@
 		{#if dropIndicatorSnippet}
 			{@render dropIndicatorSnippet(items.find(i => i.id === draggingId))}
 		{:else if orientation === "vertical"}
-			<div class="h-4 self-stretch rounded-2xl border border-dashed border-accent/20 bg-accent/10"></div>
+			<div class="h-4 self-stretch rounded-full border border-dashed border-accent/20 bg-accent/10"></div>
 		{:else if orientation === "horizontal"}
-			<div class="w-4 self-stretch rounded-2xl border border-dashed border-accent/20 bg-accent/10"></div>
+			<div class="w-4 self-stretch rounded-full border border-dashed border-accent/20 bg-accent/10"></div>
 		{:else}
-			<div class="w-4 self-stretch rounded-2xl border border-dashed border-accent/20 bg-accent/10"></div>
+			<div class="w-4 self-stretch rounded-full border border-dashed border-accent/20 bg-accent/10"></div>
 		{/if}
 	{/if}
 {/snippet}

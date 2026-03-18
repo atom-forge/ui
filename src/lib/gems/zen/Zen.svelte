@@ -91,7 +91,7 @@
 			<!-- title strip -->
 			{#if title}
 				<div class="flex items-center justify-center backdrop-blur-sm shrink-0 py-3">
-					<span class="text-sm font-medium bg-secondary text-secondary-contrast px-3 py-1 rounded-2xl border border-frame">{title}</span>
+					<span class="text-sm font-medium bg-secondary text-secondary-contrast px-3 py-1 rounded-full border border-frame">{title}</span>
 				</div>
 			{/if}
 		</div>

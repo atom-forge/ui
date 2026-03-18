@@ -88,7 +88,7 @@
 
 	// ── input class ───────────────────────────────────────────────────────────
 
-	const inputClass = 'w-12 h-11 text-center text-lg font-semibold font-mono tabular-nums bg-secondary rounded-md focus:outline-none focus:ring-2 focus:ring-accent text-canvas-contrast cursor-default select-none';
+	const inputClass = 'w-12 h-11 text-center text-lg font-semibold font-mono tabular-nums bg-secondary rounded-control focus:outline-none focus:ring-2 focus:ring-accent text-canvas-contrast cursor-default select-none';
 	const btnClass   = 'flex items-center justify-center w-8 h-7 rounded text-muted-contrast hover:text-canvas-contrast hover:bg-secondary transition-colors';
 </script>
 

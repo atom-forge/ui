@@ -71,7 +71,7 @@
 			{@render optionSnippet(data, isHighlighted)}
 		{:else}
 			<div class={twMerge(
-				'flex items-center px-3 py-2 rounded-lg text-sm transition-colors',
+				'flex items-center px-3 py-2 rounded-control text-sm transition-colors',
 				isHighlighted && !maxReached ? 'bg-accent text-accent-contrast' : 'hover:bg-secondary',
 				maxReached && 'opacity-40 cursor-not-allowed',
 			)}>

@@ -283,7 +283,7 @@
 			{#if tooltip}
 				{@render tooltip(hoveredCell)}
 			{:else}
-				<div class="bg-surface border border-frame rounded-lg shadow-lg px-3 py-2 text-sm min-w-[120px]">
+				<div class="bg-surface border border-frame rounded-surface shadow-lg px-3 py-2 text-sm min-w-[120px]">
 					<div class="font-medium text-canvas-contrast">{hoveredCell.yLabel}, {hoveredCell.xLabel}</div>
 					<div class="text-muted-contrast text-xs mt-0.5">{hoveredCell.value}</div>
 				</div>

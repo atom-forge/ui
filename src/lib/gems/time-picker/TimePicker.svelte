@@ -98,7 +98,7 @@
 	// ── styles ────────────────────────────────────────────────────────────────
 
 	const containerClass = $derived(twMerge(
-		'relative w-full rounded-md bg-control border border-frame transition-colors cursor-pointer select-none',
+		'relative w-full rounded-control bg-control border border-frame transition-colors cursor-pointer select-none',
 		size === 'normal'  && 'h-10 text-sm',
 		size === 'compact' && 'h-8 text-xs',
 		size === 'small'   && 'h-6 text-xs',

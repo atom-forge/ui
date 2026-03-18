@@ -208,7 +208,7 @@
 	const size = $derived(small ? 'small' : compact ? 'compact' : 'normal');
 
 	const wrapperClass = $derived(twMerge(
-		'relative flex flex-col rounded-md border bg-control border-frame transition-colors overflow-hidden',
+		'relative flex flex-col rounded-control border bg-control border-frame transition-colors overflow-hidden',
 		size === 'compact' && 'text-xs',
 		size === 'small'   && 'text-[12px]',
 		disabled && 'cursor-not-allowed bg-muted/50 opacity-70 striped-10',

@@ -90,7 +90,7 @@
 		const isToday = isSameDay(date, today);
 
 		return twMerge(
-			'h-8 w-8 rounded-md text-sm flex items-center justify-center transition-colors',
+			'h-8 w-8 rounded-control text-sm flex items-center justify-center transition-colors',
 			outOfMonth && 'text-muted-contrast',
 			disabled && 'opacity-40 cursor-not-allowed pointer-events-none',
 			isSelected && 'bg-accent text-accent-contrast font-semibold',

@@ -48,9 +48,43 @@ A `theme.css`-ben definiált változók módosításával a teljes alkalmazás k
 
 | Komponens     | Jelenlegi    | Új szemantikus osztály                                            |
 |:--------------|:-------------|:------------------------------------------------------------------|
-| `Card`        | `rounded-lg` | `rounded-[var(--radius-surface)]`                                 |
-| `Button`      | `rounded-md` | `rounded-[var(--radius-control)]`                                 |
-| `Input`       | `rounded-md` | `rounded-[var(--radius-control)]`                                 |
-| `Select`      | `rounded-lg` | `rounded-[var(--radius-control)]` (Csökkentés a konzisztenciáért) |
-| `Checkbox`    | `rounded`    | `rounded-[var(--radius-control-sm)]`                              |
-| `ColorPicker` | `rounded-md` | `rounded-[var(--radius-control)]`                                 |
+| `Card`        | `rounded-lg` | `rounded-surface`                                                 |
+| `Button`      | `rounded-md` | `rounded-control`                                                 |
+| `Input`       | `rounded-md` | `rounded-control`                                                 |
+| `Select`      | `rounded-lg` | `rounded-control` (Csökkentés a konzisztenciáért)                 |
+| `Checkbox`    | `rounded`    | `rounded-control-sm`                                              |
+| `ColorPicker` | `rounded-md` | `rounded-control`                                                 |
+
+## 5. Végrehajtási terv (Implementation Plan)
+
+Az átállást az alábbi lépésekben végezzük el:
+
+### 1. Fázis: Alapok (Theme Setup)
+- [ ] Változók definiálása a `src/lib/theme.css` fájlban a `@theme` blokkon belül. Ez automatikusan létrehozza a `rounded-surface`, `rounded-control`, `rounded-control-sm`, `rounded-fine` és `rounded-full` osztályokat.
+
+### 2. Fázis: Konténerek (Surface Migration)
+- [ ] `Card.svelte`: `rounded-lg` → `rounded-surface`
+- [ ] `Table.svelte`: `rounded-lg` → `rounded-surface`
+- [ ] `Accordion.svelte`: `rounded-lg` → `rounded-surface`
+- [ ] `ModalContainer.svelte` & `Drawer.svelte`: `rounded` → `rounded-surface`
+- [ ] `Toast.svelte`: `rounded-lg` → `rounded-surface`
+
+### 3. Fázis: Interakciók (Control Migration)
+- [ ] `Button.svelte`: `rounded-md` → `rounded-control`
+- [ ] `Input.svelte`: `rounded-md` → `rounded-control`
+- [ ] `Select.svelte` & `MultiSelect.svelte`: `rounded-lg` → `rounded-control` (Egységesítés!)
+- [ ] `NativeSelect.svelte`: `rounded-md` → `rounded-control`
+- [ ] `DatePicker.svelte` & `TimePicker.svelte`: `rounded-md` → `rounded-control`
+- [ ] `ColorPicker.svelte`: `rounded-md` → `rounded-control`
+
+### 4. Fázis: Kiegészítők és Pill formák (Small & Full)
+- [ ] `CheckboxView.svelte`: `rounded` → `rounded-control-sm`
+- [ ] `Badge.svelte` & `Avatar.svelte`: `rounded-full` → `rounded-full` (Token szinten marad, de a változó felülírja az alapértelmezettet)
+- [ ] `Switch.svelte`: `rounded-full` → `rounded-full`
+- [ ] `Chip.svelte`: `rounded-full` → `rounded-full`
+- [ ] `Zen.svelte`: `rounded-2xl` → `rounded-full`
+
+### 5. Fázis: Audit és Takarítás
+- [ ] Teljes projekt keresés `rounded-sm`, `rounded-md`, `rounded-lg` kifejezésekre.
+- [ ] Maradék hardkódolt értékek cseréje szemantikus változókra.
+- [ ] Vizuális ellenőrzés dark és light módban.

@@ -31,7 +31,7 @@
 	)
 
 	const wrapperClass = $derived(twMerge(
-		'overflow-auto border border-frame rounded-lg relative max-h-full',
+		'overflow-auto border border-frame rounded-surface relative max-h-full',
 		classes,
 	));
 	const tableClass = 'w-full text-sm text-left text-canvas-contrast';

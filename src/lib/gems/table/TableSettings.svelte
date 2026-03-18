@@ -13,7 +13,7 @@
 
 </script>
 
-<Card class="rounded-md shadow-lg p-1 flex flex-col w-48">
+<Card class="rounded-control shadow-lg p-1 flex flex-col w-48">
 	<div class="flex flex-col">
 		{#each columns as col}
 			{#if !col.fixed}

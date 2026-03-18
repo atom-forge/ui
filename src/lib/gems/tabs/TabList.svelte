@@ -16,7 +16,7 @@
 <div class={twMerge(
 	"flex",
 	context.variant === 'line' && 'border-b border-frame',
-	context.variant === 'button' && 'gap-1 bg-secondary p-1 rounded-lg',
+	context.variant === 'button' && 'gap-1 bg-secondary p-1 rounded-surface',
 	classes
 )}>
 	{@render children()}

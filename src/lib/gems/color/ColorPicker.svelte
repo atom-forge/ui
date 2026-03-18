@@ -22,7 +22,7 @@
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 
 	const wrapperClass = $derived(twMerge(
-		'relative inline-flex items-center gap-2 border border-frame rounded-md bg-control',
+		'relative inline-flex items-center gap-2 border border-frame rounded-control bg-control',
 		disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
 		size === 'normal'  && 'h-10 px-2',
 		size === 'compact' && 'h-8 px-1.5',
@@ -31,7 +31,7 @@
 	));
 
 	const swatchClass = twMerge(
-		'rounded-sm border border-frame flex-shrink-0',
+		'rounded-fine border border-frame flex-shrink-0',
 		size === 'normal'  && 'h-5 w-5',
 		size === 'compact' && 'h-4 w-4',
 		size === 'small'   && 'h-3 w-3',

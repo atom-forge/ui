@@ -31,7 +31,7 @@
 </script>
 
 <div
-	class="relative flex items-center gap-3 pl-6 pr-4 py-3 rounded-lg shadow-lg use-primary max-w-xs w-full overflow-hidden"
+	class="relative flex items-center gap-3 pl-6 pr-4 py-3 rounded-surface shadow-lg use-primary max-w-xs w-full overflow-hidden"
 	in:slide={{ duration: 200, axis: 'y' }}
 	out:fade={{ duration: 150 }}
 >

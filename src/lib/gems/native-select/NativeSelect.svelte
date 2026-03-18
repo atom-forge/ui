@@ -29,7 +29,7 @@
 	const selectedOption = $derived(options.find(opt => opt.value == value));
 
 	const containerClass = $derived(twMerge(
-		'relative w-full rounded-md overflow-hidden bg-control',
+		'relative w-full rounded-control overflow-hidden bg-control',
 		!borderless && 'border border-frame',
 		borderless && 'bg-transparent',
 		size === 'normal'  && 'h-10 text-sm',

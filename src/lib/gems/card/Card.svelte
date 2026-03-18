@@ -16,7 +16,7 @@
 
 	const effectiveShadowClass = $derived(['shadow-none', 'shadow-sm', 'shadow', 'shadow-md', 'shadow-lg', 'shadow-xl', 'shadow-2xl'][typeof elevate === 'string' ? parseInt(elevate) : elevate])
 </script>
-<div class={twMerge("rounded-lg bg-surface border border-frame text-surface-contrast overflow-hidden", effectiveShadowClass, classes)}
+<div class={twMerge("rounded-surface bg-surface border border-frame text-surface-contrast overflow-hidden", effectiveShadowClass, classes)}
      {...props}>
 	{@render children()}
 </div>

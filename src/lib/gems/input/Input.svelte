@@ -42,7 +42,7 @@
 	const size: Size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 
 	const wrapperClass = $derived(twMerge(
-		'relative flex items-center rounded-md border bg-control border-frame transition-colors',
+		'relative flex items-center rounded-control border bg-control border-frame transition-colors',
 		size === 'normal'  && 'h-10 text-sm',
 		size === 'compact' && 'h-8 text-xs',
 		size === 'small'   && 'h-6 text-[12px]',

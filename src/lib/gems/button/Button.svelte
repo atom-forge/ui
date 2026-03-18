@@ -63,7 +63,7 @@
 	const buttonClass = $derived(twMerge(
 		// Base — shared by all
 		'group relative inline-flex items-center justify-start whitespace-nowrap',
-		'font-medium leading-5 rounded-md transition-all duration-200 select-none',
+		'font-medium leading-5 rounded-control transition-all duration-200 select-none',
 		'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
 		'disabled:pointer-events-none disabled:opacity-50',
 		!isDisabled && 'cursor-pointer',

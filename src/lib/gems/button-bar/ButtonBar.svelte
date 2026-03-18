@@ -11,7 +11,7 @@
 </script>
 
 <span class={twMerge(
-	'inline-flex items-center gap-px rounded-lg bg-secondary border border-frame overflow-hidden',
+	'inline-flex items-center gap-px rounded-surface bg-secondary border border-frame overflow-hidden',
 	classes
 )} {...props}>
 	{@render children?.()}

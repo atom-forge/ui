@@ -21,7 +21,7 @@
 	const classes = $derived(twMerge(
 		'flex items-center gap-2 transition-all duration-150 cursor-pointer',
 		isLine  && 'px-4 py-2 -mb-px text-sm font-medium border-b-2',
-		!isLine && 'px-3 py-1 rounded-md text-sm',
+		!isLine && 'px-3 py-1 rounded-control text-sm',
 		isLine  &&  isActive && 'border-accent text-canvas-contrast',
 		isLine  && !isActive && 'border-transparent text-muted-contrast hover:text-canvas-contrast',
 		!isLine &&  isActive && 'bg-surface text-surface-contrast shadow-sm',

@@ -32,7 +32,7 @@
 
 	const wrapperClass = $derived(twMerge(
 		'w-full',
-		joined  && 'border border-frame rounded-lg overflow-hidden divide-y divide-border',
+		joined  && 'border border-frame rounded-surface overflow-hidden divide-y divide-border',
 		!joined && 'space-y-2',
 		classes
 	));

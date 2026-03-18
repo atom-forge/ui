@@ -28,7 +28,7 @@
 
 	const wrapperClass = $derived(twMerge(
 		'overflow-hidden',
-		!manager.borderless && !manager.joined && 'border border-frame rounded-lg',
+		!manager.borderless && !manager.joined && 'border border-frame rounded-surface',
 		classes
 	));
 

@@ -64,7 +64,7 @@
 				<span
 					aria-hidden="true"
 					style:background-color={meterItem.color}
-					class={twMerge('inline-block rounded-sm shrink-0', swatchSize, swatchClass)}
+					class={twMerge('inline-block rounded-fine shrink-0', swatchSize, swatchClass)}
 				></span>
 				<span class={twMerge('text-canvas-contrast', labelSize, labelClass)}>{meterItem.label}</span>
 				{#if showValues}

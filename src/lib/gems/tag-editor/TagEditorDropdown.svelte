@@ -57,7 +57,7 @@
 			{@render optionSnippet(String(data.label), isHighlighted)}
 		{:else}
 			<div class={twMerge(
-				'flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors',
+				'flex items-center gap-2 px-3 py-2 rounded-control text-sm transition-colors',
 				isHighlighted ? 'bg-accent text-accent-contrast' : 'hover:bg-secondary',
 			)}>
 				{#if data.isNew}

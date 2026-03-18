@@ -25,7 +25,7 @@
 
 	const wrapperClass = $derived(twMerge(
 		'flex items-center gap-3 cursor-pointer',
-		label && 'select-none rounded py-1 px-2',
+		label && 'select-none rounded-control py-1 px-2',
 		label && variant === 'default'  && 'hover:bg-secondary',
 		label && variant === 'primary'  && 'hover:bg-primary/10',
 		label && variant === 'accent'   && 'hover:bg-accent/10',
