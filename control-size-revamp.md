@@ -1,134 +1,86 @@
-# Control Size Revamp Plan
+# Control Size — Reference
 
-Ez a dokumentum az AtomForge UI interaktív kontrolljainak méretezési rendszerét, annak auditját és a Scoped CSS Variable alapú technikai megvalósítását részletezi.
+This document defines the canonical sizing scale for all interactive controls in atom-forge UI.
+Each component implements sizing per-component with boolean props (`compact`, `small`). There is no CSS variable cascade system.
 
-## 1. Jelenlegi állapot (Audit)
+## Canonical Scale
 
-### A. Standard Kontrollok (Magasság-alapú)
-`Button`, `Input`, `Select`, `MultiSelect`, `NativeSelect`, `DatePicker`, `TimePicker`, `TagEditor`, `CodeInput`.
-*   **Normal:** `h-10` (40px) | `text-sm`
-*   **Compact:** `h-8` (32px) | `text-xs`
-*   **Small:** `h-6` (24px) | `text-xs`
-*   **Micro:** `h-5` (20px) | `text-[10px]`
+| Size    | Height | Font          | When to use                          |
+|---------|--------|---------------|--------------------------------------|
+| normal  | `h-10` | `text-sm`     | Default — forms, toolbars            |
+| compact | `h-8`  | `text-xs`     | Dense UIs — sidebars, data tables    |
+| small   | `h-6`  | `text-xs`     | Inline controls, tight spaces        |
+| micro   | `h-5`  | `text-[10px]` | Badges, minimal toolbar items        |
 
-### B. Bináris Kontrollok (Fix méretarányú)
-`Checkbox`, `Radio`, `Switch`.
-*   **Normal:** `20px` alapú
-*   **Compact:** `16px` alapú
-*   **Small:** `14px` alapú
+Padding is per-component (not part of the canonical scale).
 
-### C. Sáv-alapú Kontrollok (Vastagság-alapú)
-`ProgressBar`, `Slider`, `Range`.
-*   **Normal:** `h-4` (16px) pálya | `h-5` csúszka
-*   **Compact:** `h-2.5` (10px) pálya | `h-4` csúszka
-*   **Small:** `h-1.5` (6px) pálya | `h-3` csúszka
+## Component categories
 
-### D. Interaktív Konténerek (Öröklés)
-`Accordion` (fejléc), `Tabs` (fül gombok), `Breadcrumb` (elemek).
-*   **Elv:** A kattintható felület magasságának és belső arányainak illeszkednie kell a standard kontrollokhoz.
+### Height-based controls
 
-### E. Információs Elemek (Skálázás)
-Ide tartoznak: `Avatar`, `Chip`, `Badge`, `Kbd`, `Spinner`. Ezeknek vizuálisan illeszkedniük kell a környezetük sűrűségéhez.
+These use fixed `h-*` to align on the same row as each other.
 
-| Komponens | Elv |
-| :--- | :--- |
-| **Avatar** | A magassága és a betűmérete pontosan követi a standard kontrollokat (`h-10`, `h-8`, stb.). |
-| **Chip / Tag** | A padding és a font méret a kontroll sémát követi. |
-| **Kbd** | A belső padding és font méret igazodik a szövegkörnyezet sűrűségéhez. |
-| **Spinner** | A mérete mindig az aktuális ikon-méret tokent (`--control-icon-size`) használja. |
+`Button`, `Input`, `Select`, `NativeSelect`, `DatePicker`, `TimePicker`
 
-### F. Adatsűrűség (Layout Density)
-Ide tartoznak: `Table`, `Tree`, `Toast`, `Skeleton`. Itt a méret nem egy gomb magasságát, hanem a sorok sűrűségét és a belső margókat jelenti.
+### Min-height controls (flexible)
 
-| Komponens | Elv |
-| :--- | :--- |
-| **Table** | A cellák paddingja változik (`p-4` -> `p-2` -> `p-1`). |
-| **Tree** | Az elemek közötti távolság és az ikonok mérete a kontroll sémát követi. |
-| **Toast** | A belső padding és az ikon mérete igazodik a globális sűrűséghez. |
-| **Skeleton** | A magasságának (pl. sorok esetén) pontosan meg kell egyeznie a kontroll magasságokkal. |
+These use `min-h-*` so they can expand when content wraps (e.g. multiple chips).
+They align with the scale at single-line height.
 
----
+`MultiSelect`, `TagEditor`
 
-## 2. Új Rendszer: Scoped CSS Variables
+### Binary controls (self-sizing)
 
-Ahelyett, hogy minden komponensben JS logikával válogatnánk, egy **központi változórendszert** használunk. A komponensek szemantikus utility-ket használnak (pl. `h-control-h`), amiknek az értékét egy környezeti osztály (pl. `size-compact`) írja felül.
+These don't use the height scale — their size is determined by the control element itself.
 
-### A. CSS Tokenek (theme.css)
-A Tailwind v4 `@theme` blokkjában definiáljuk a szemantikus utility-ket:
+| Control    | Normal          | Compact         | Small             |
+|------------|-----------------|-----------------|-------------------|
+| `Checkbox` | `w-5 h-5`       | `w-4 h-4`       | `w-3.5 h-3.5`     |
+| `Radio`    | `h-5 w-5`       | `h-4 w-4`       | `h-3 w-3`         |
+| `Switch`   | track `w-11 h-6`| track `w-9 h-5` | track `w-7 h-4`   |
 
-```css
-@theme {
-    /* Standard magasságok, paddingok, gapek */
-    --spacing-control-h:    var(--control-height);
-    --spacing-control-icon: var(--control-icon-size);
-    --spacing-control-gap:  var(--control-gap);
-    --font-size-control:    var(--control-font-size);
+### Navigation / layout controls
 
-    /* Bináris méretek (Checkbox/Radio) */
-    --spacing-check-size:   var(--check-size);
+These size their clickable areas to match the scale but don't accept `compact`/`small` props.
 
-    /* Sáv méretek (Track/Slider) */
-    --spacing-track-h:      var(--track-height);
-    --spacing-thumb-size:   var(--thumb-size);
-}
+`Breadcrumb`, `Tabs`, `Accordion`
+
+### Special controls
+
+`CodeInput` — each character box is intentionally taller than the standard scale for readability:
+
+| Size    | Box size  | Font      |
+|---------|-----------|-----------|
+| normal  | `w-10 h-12`| `text-base` |
+| compact | `w-8 h-10` | `text-sm`   |
+| small   | `w-6 h-8`  | `text-xs`   |
+
+`Pagination` — square buttons follow the scale:
+
+| Size    | Button     | Font      |
+|---------|------------|-----------|
+| normal  | `h-10 w-10`| `text-sm` |
+| compact | `h-8 w-8`  | `text-xs` |
+| small   | `h-6 w-6`  | `text-xs` |
+
+## Usage
+
+Pass boolean props directly to each component:
+
+```svelte
+<Input compact />
+<Select compact />
+<Button compact>Save</Button>
 ```
 
-### B. Érték-térkép (@layer theme)
-A `:root` tartalmazza a default értékeket, a módosító osztályok pedig a felülírásokat:
+When all controls in a section need the same size, pass the prop to each explicitly.
+This is intentionally verbose — it's explicit and easy to trace.
 
-```css
-@layer theme {
-    :root {
-        --control-height: 2.5rem; --control-icon-size: 1.25rem; --control-font-size: 0.875rem; --control-gap: 0.5rem;
-        --check-size: 1.25rem;
-        --track-height: 1rem; --thumb-size: 1.25rem;
-    }
-    .size-compact {
-        --control-height: 2rem; --control-icon-size: 1rem; --control-font-size: 0.75rem; --control-gap: 0.375rem;
-        --check-size: 1rem;
-        --track-height: 0.625rem; --thumb-size: 1rem;
-    }
-    .size-small {
-        --control-height: 1.5rem; --control-icon-size: 0.875rem; --control-font-size: 0.75rem; --control-gap: 0.25rem;
-        --check-size: 0.875rem;
-        --track-height: 0.375rem; --thumb-size: 0.75rem;
-    }
-    .size-micro {
-        --control-height: 1.25rem; --control-icon-size: 0.75rem; --control-font-size: 0.625rem; --control-gap: 0.125rem;
-        --check-size: 0.75rem;
-        --track-height: 0.25rem; --thumb-size: 0.625rem;
-    }
-}
-```
+## What we intentionally do NOT have
 
----
+- No `.size-compact` / `.size-small` CSS modifier classes
+- No `--control-height` / `--control-icon-size` CSS variables
+- No cascading size inheritance from parent to child controls
 
-## 3. Tervezési Alapelvek
-
-### A. Hierarchikus skálázás
-Ha egy szülőre (pl. `Accordion` vagy `ButtonBar`) rátesszük a `size-compact` osztályt, az összes gyereke automatikusan örökli az új méreteket.
-
-### B. Ikon-kontroll arány
-Az ikonok (`size-control-icon`) mérete garantáltan együtt mozog a kontroll magasságával és a szövegmérettel.
-
-### C. JS Mentesség
-A komponensnek nem kell tudnia a pontos pixel-értékekről, csak azt kell eldöntenie a propok alapján, hogy melyik módosító osztályt (`size-small`, stb.) alkalmazza magára vagy a környezetére.
-
----
-
-## 4. Implementációs Terv
-
-### 1. Fázis: Theme Setup
-- [ ] Tokenek és felülíró osztályok definiálása a `theme.css`-ben.
-
-### 2. Fázis: Ikon és Spinner Refactor
-- [ ] Az `Icon.svelte` és `Spinner.svelte` felkészítése a dinamikus méretezésre.
-
-### 3. Fázis: Standard Kontroll Migráció
-- [ ] `Button`, `Input`, `Select` stb. átállítása a szemantikus osztályokra.
-
-### 4. Fázis: Bináris, Sáv és Információs Migráció
-- [ ] `Checkbox`, `Radio`, `Avatar`, `Chip` stb. egységesítése.
-
-### 5. Fázis: Layout Density (Table, Tree)
-- [ ] A táblázatok és listák sűrűség-szabályozásának bevezetése.
+Cascading was considered and rejected: it adds CSS architecture complexity for a feature
+(automatic form-wide size) that is rarely needed and easy to achieve by passing props explicitly.

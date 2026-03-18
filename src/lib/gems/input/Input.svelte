@@ -43,9 +43,9 @@
 
 	const wrapperClass = $derived(twMerge(
 		'relative flex items-center rounded-control border bg-control border-frame transition-colors',
-		size === 'normal'  && 'h-10 text-sm',
+		size === 'normal'  && 'h-10 text-xs',
 		size === 'compact' && 'h-8 text-xs',
-		size === 'small'   && 'h-6 text-[12px]',
+		size === 'small'   && 'h-6 text-xs',
 		disabled  && 'cursor-not-allowed bg-muted/50 opacity-70 striped-10',
 		monospace && 'font-mono',
 		invalid ? 'border-error text-error' : 'border-frame',
@@ -55,8 +55,8 @@
 	const inputClass = untrack(() => twMerge(
 		'w-full border-none bg-transparent focus:ring-0 disabled:cursor-not-allowed text-canvas-contrast placeholder:text-muted-contrast',
 		size === 'normal'  && 'px-3',
-		size === 'compact' && 'px-2',
-		size === 'small'   && 'px-2 text-[12px]',
+		size === 'compact' && 'px-2 text-sm',
+		size === 'small'   && 'px-2 text-xs',
 		!!icon && 'pl-9',
 		type === 'password' && 'pr-9',
 	));
@@ -65,7 +65,7 @@
 		'flex-shrink-0 text-muted-contrast',
 		size === 'normal'  && 'px-3',
 		size === 'compact' && 'px-2',
-		size === 'small'   && 'px-2 text-[12px]',
+		size === 'small'   && 'px-2',
 	);
 
 	const htmlType = $derived(type === 'password' ? (isPasswordVisible ? 'text' : 'password') : 'text');

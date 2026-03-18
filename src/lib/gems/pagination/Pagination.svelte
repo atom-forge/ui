@@ -23,7 +23,7 @@
 	const btnSize = $derived(
 		small   ? 'h-6 w-6 text-xs'  :
 		compact ? 'h-8 w-8 text-xs'  :
-		          'h-9 w-9 text-sm'
+		          'h-10 w-10 text-sm'
 	);
 
 	const iconSize = $derived(small ? 12 : compact ? 14 : 16);
