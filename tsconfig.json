@@ -9,6 +9,15 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"module": "NodeNext"
+		"module": "NodeNext",
+		"noImplicitAny": false,
+		"paths": {
+			"$lib": [
+				"../_/lib"
+			],
+			"$lib/*": [
+				"../_/lib/*"
+			]
+		}
 	}
 }

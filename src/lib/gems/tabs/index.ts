@@ -1,5 +1,0 @@
-export {default as Tab} from "$lib/gems/tabs/Tab.svelte"
-export {default as TabList} from "$lib/gems/tabs/TabList.svelte"
-export {default as TabPanel} from "$lib/gems/tabs/TabPanel.svelte"
-export {default as TabPanels} from "$lib/gems/tabs/TabPanels.svelte"
-export {default as Tabs} from "$lib/gems/tabs/Tabs.svelte"

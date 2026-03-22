@@ -1,1 +1,0 @@
-export {default as ColorPicker} from "$lib/gems/color/ColorPicker.svelte"

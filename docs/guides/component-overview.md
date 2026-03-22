@@ -1,53 +1,90 @@
 # Component Overview
 
-This document provides a brief overview of all components available in the UI library.
+This document provides an overview of all components available in the **atom-forge** UI library, organized by category.
 
-- **[Kbd](../gems/kbd.md)**: Renders keyboard shortcut keys styled as physical keycaps.
-- **[Zen](../gems/zen.md)**: Fullscreen overlay for distraction-free focus mode.
-- **[Card](../gems/card.md)**: A surface container with a rounded border and configurable shadow elevation.
-- **[Chip](../gems/chip.md)**: A compact inline badge for labels, statuses, and metadata.
-- **[Icon](../gems/icon.md)**: A thin wrapper around `lucide-svelte` icons with unified sizing, stroke control, and support for `IconDefinition` modifiers.
-- **[Tabs](../gems/tabs.md)**: A tab navigation system with two visual variants (`line` and `button`).
-- **[Tree](../gems/tree.md)**: A collapsible tree view for hierarchical data.
-- **[Badge](../gems/badge.md)**: An absolute-positioned overlay indicator for notification counts or status dots.
-- **[Field](../gems/field.md)**: A wrapper that pairs a form control with a label, hint, and error message.
-- **[Input](../gems/input.md)**: A styled text input supporting multiple types, sizes, icons, prefix/suffix slots, and password visibility toggle.
-- **[Modal](../gems/modal.md)**: An imperative modal system.
-- **[Popup](../gems/popup.md)**: A floating overlay system for anchored, temporary content — context menus, dropdowns, submenus, tooltips.
-- **[Radio](../gems/radio.md)**: A radio button group built from `RadioGroup` (the context provider) and `RadioButtonView` (individual options).
-- **[Table](../gems/table.md)**: A generic, type-safe data table with sticky headers, column visibility control, custom cell rendering, and per-row/per-cell styling.
-- **[Toast](../gems/toast.md)**: Lightweight notification toasts stacked in a fixed overlay.
-- **[Avatar](../gems/avatar.md)**: A circular user representation component.
-- **[Button](../gems/button.md)**: A clickable element for triggering actions.
-- **[Charts (Chart.js)](../gems/charts.md)**: Canvas-based chart components powered by [Chart.js](https://www.chartjs.org/).
-- **[Drawer](../gems/drawer.md)**: A slide-in panel anchored to the left or right edge of the screen.
-- **[Select](../gems/select.md)**: A popup-based dropdown select.
-- **[Slider / Range](../gems/slider.md)**: `Slider` — single thumb for a scalar value. `Range` — two thumbs for an interval `[min, max]`.
-- **[Switch](../gems/switch.md)**: A toggle switch with optional label and icon pair for on/off states.
-- **[Heatmap](../gems/heatmap.md)**: An SVG-based heatmap for visualizing 2D datasets with a color scale.
-- **[Tooltip](../gems/tooltip.md)**: A hover tooltip that follows the cursor and appears after a configurable delay.
-- **[Carousel](../gems/carousel.md)**: A horizontally scrollable slide container with scroll-snap, optional arrow navigation, and a companion `CarouselIndicator` for dot-based navigation.
-- **[Checkbox](../gems/checkbox.md)**: Boolean toggle control with optional group management and three color variants.
-- **[Splitter](../gems/splitter.md)**: A resizable split-panel container.
-- **[Textarea](../gems/textarea.md)**: A multi-line text input styled consistently with `Input`.
-- **[Timeline](../gems/timeline.md)**: A flexible timeline component that renders an `items` array along a vertical or horizontal line.
-- **[Accordion](../gems/accordion.md)**: Expandable content panels with support for single or multiple open items, different sizes, and visual styles.
-- **[BarChart](../gems/bar-chart.md)**: A responsive bar chart supporting single-value, multi-series grouped, and stacked layouts.
-- **[FlipCard](../gems/flip-card.md)**: A 3D flip card with a front and back face.
-- **[Breadcrumb](../gems/breadcrumb.md)**: A navigation trail showing the current page's location within a hierarchy.
-- **[ButtonBar](../gems/button-bar.md)**: A pure visual wrapper that groups its children into a unified bar.
-- **[Code Input](../gems/code-input.md)**: A segmented input for fixed-length codes — OTPs, PIN codes, licence keys, activation codes.
-- **[Pagination](../gems/pagination.md)**: A page navigation control.
-- **[Tag Editor](../gems/tag-editor.md)**: An interactive input that manages a list of string tags.
-- **[DatePicker](../gems/date-picker.md)**: A single-date selector with a popup calendar.
-- **[Empty State](../gems/empty-state.md)**: A centered placeholder shown when a list or section has no content.
-- **[MeterGroup & MeterGroupLegend](../gems/meter-group.md)**: A segmented horizontal (or vertical) bar that visualises proportions within a total.
-- **[TimePicker](../gems/time-picker.md)**: A styled wrapper around the native `<input type="time">`.
-- **[Avatar Group](../gems/avatar-group.md)**: Renders a horizontal stack of overlapping Avatar components.
-- **[ColorPicker](../gems/color-picker.md)**: A styled color input that shows a swatch and the current hex value.
-- **[ContextMenu](../gems/context-menu.md)**: A popup menu built from a declarative config array.
-- **[MultiSelect](../gems/multi-select.md)**: Select multiple items from a list.
-- **[ProgressBar](../gems/progress-bar.md)**: A horizontal progress indicator with an accent fill, striped texture, and smooth width transition.
-- **[NativeSelect](../gems/native-select.md)**: A styled wrapper around the native `<select>` element.
-- **[Progress Ring](../gems/progress-ring.md)**: A circular SVG progress indicator.
-- **[Pagination Slider](../gems/pagination-slider.md)**: A slider-based pagination control.
+---
+
+## General
+Basic building blocks and primitive controls used throughout applications.
+
+- **[Badge](../controls/general/badge.md)**: An absolute-positioned overlay indicator for notification counts or status dots.
+- **[Button](../controls/general/button.md)**: A clickable element for triggering actions.
+- **[Chip](../controls/general/chip.md)**: A compact inline label for metadata, statuses, or tags.
+- **[Icon](../controls/general/icon.md)**: A wrapper for icons with unified sizing and stroke control.
+- **[Kbd](../controls/general/kbd.md)**: Renders keyboard shortcut keys styled as physical keycaps.
+
+---
+
+## Data & Charts
+Components for visualizing, presenting, and manipulating complex data sets.
+
+- **[Bar Chart](../controls/data/bar-chart.md)**: A responsive bar chart supporting single-value, multi-series grouped, and stacked layouts.
+- **[Charts (Chart.js)](../controls/data/charts.md)**: Canvas-based chart components powered by Chart.js.
+- **[Heatmap](../controls/data/heatmap.md)**: An SVG-based heatmap for visualizing 2D datasets with a color scale.
+- **[Meter Group](../controls/data/meter-group.md)**: A segmented horizontal bar that visualizes proportions within a total.
+- **[Progress Ring](../controls/data/progress-ring.md)**: A circular SVG progress indicator.
+- **[Sortable](../controls/data/sortable.md)**: Components for drag-and-drop sorting and list reordering.
+- **[Table](../controls/data/table.md)**: A generic, type-safe data table with sorting, sticky headers, and custom cell rendering.
+- **[Timeline](../controls/data/timeline.md)**: A flexible timeline component that renders items along a vertical or horizontal line.
+
+---
+
+## Display
+Components for displaying content, user information, and UI status.
+
+- **[Avatar](../controls/display/avatar.md)**: A circular user representation with image or initials.
+- **[Avatar Group](../controls/display/avatar-group.md)**: Renders a horizontal stack of overlapping Avatar components.
+- **[Card](../controls/display/card.md)**: A surface container with rounded borders and configurable shadow elevation.
+- **[Carousel](../controls/display/carousel.md)**: A horizontally scrollable slide container with scroll-snap and navigation.
+- **[Empty State](../controls/display/empty-state.md)**: A centered placeholder shown when a section has no content.
+- **[Flip Card](../controls/display/flip-card.md)**: A 3D flip card with a front and back face.
+
+---
+
+## Forms
+Standardized form controls and inputs for user data collection.
+
+- **[Checkbox](../controls/forms/checkbox.md)**: Boolean toggle control with group management and multiple variants.
+- **[Code Input](../controls/forms/code-input.md)**: A segmented input for OTPs, PIN codes, and license keys.
+- **[Color](../controls/forms/color.md)**: A styled color input for hex value selection.
+- **[Date Picker](../controls/forms/date-picker.md)**: A single-date selector with a popup calendar.
+- **[Field](../controls/forms/field.md)**: A wrapper pairing a form control with a label, hint, and error message.
+- **[Input](../controls/forms/input.md)**: A styled text input supporting icons, prefix/suffix slots, and variants.
+- **[Multi-Select](../controls/forms/multi-select.md)**: A control for selecting multiple items from a fixed list.
+- **[Native Select](../controls/forms/native-select.md)**: A styled wrapper around the native HTML select element.
+- **[Progress Bar](../controls/forms/progress-bar.md)**: A horizontal progress indicator with smooth transitions.
+- **[Radio](../controls/forms/radio.md)**: A radio button group for mutually exclusive options.
+- **[Select](../controls/forms/select.md)**: A custom searchable dropdown select.
+- **[Slider](../controls/forms/slider.md)**: Range and scalar value slider with single or double thumbs.
+- **[Switch](../controls/forms/switch.md)**: A toggle switch for binary on/off states.
+- **[Tag Editor](../controls/forms/tag-editor.md)**: An interactive input for managing a list of string tags.
+- **[Textarea](../controls/forms/textarea.md)**: A multi-line text input styled consistently with the input system.
+- **[Time Picker](../controls/forms/time-picker.md)**: A styled wrapper around the native time input.
+
+---
+
+## Layout
+Structural components to help organize and navigate content.
+
+- **[Accordion](../controls/layout/accordion.md)**: Expandable content panels with single or multiple open items.
+- **[Breadcrumb](../controls/layout/breadcrumb.md)**: A navigation trail showing the current page's location.
+- **[Button Bar](../controls/layout/button-bar.md)**: A visual wrapper that groups children into a unified horizontal bar.
+- **[Pagination](../controls/layout/pagination.md)**: Controls for navigating through multiple pages of content.
+- **[Pagination Slider](../controls/layout/pagination-slider.md)**: A slider-based page navigation control.
+- **[Splitter](../controls/layout/splitter.md)**: A resizable split-panel container for complex layouts.
+- **[Stepper](../controls/layout/stepper.md)**: A multi-step progress and navigation control.
+- **[Tabs](../controls/layout/tabs.md)**: A tab navigation system with multiple visual variants.
+- **[Tree](../controls/layout/tree.md)**: A collapsible tree view for hierarchical data structures.
+
+---
+
+## Overlays
+Dynamic overlays that appear on top of the main application content.
+
+- **[Context Menu](../controls/overlays/context-menu.md)**: A popup menu built from a declarative configuration.
+- **[Drawer](../controls/overlays/drawer.md)**: A slide-in panel anchored to the left or right edge of the screen.
+- **[Modal](../controls/overlays/modal.md)**: An imperative modal dialog system.
+- **[Popup](../controls/overlays/popup.md)**: A floating overlay system for anchored content like dropdowns and submenus.
+- **[Toast](../controls/overlays/toast.md)**: Lightweight notification messages stacked in a fixed overlay.
+- **[Tooltip](../controls/overlays/tooltip.md)**: Hover tooltips that appear with a delay.
+- **[Zen](../controls/overlays/zen.md)**: A fullscreen overlay for distraction-free focus mode.

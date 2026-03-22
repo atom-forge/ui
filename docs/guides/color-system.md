@@ -26,7 +26,7 @@ Surfaces define the physical structure of your app. They create depth and help u
 
 ### Layout Example
 
-```svelte
+```sveltehtml
 <div class="bg-canvas min-h-screen">
   <aside class="bg-surface border-r border-frame">
     <!-- Sidebar content -->
@@ -62,7 +62,7 @@ Atom Forge uses Tailwind 4's dynamic modifiers to derive interaction states from
 - **Dark Mode Hover**: Use `dark:hover:brightness-110` or `dark:hover:brightness-105`.
 - **Ghost Hover**: Transition from transparent to `hover:bg-secondary`.
 
-```svelte
+```sveltehtml
 <!-- A semantic primary button -->
 <button class="bg-primary text-primary-contrast hover:brightness-90 transition-all">
   Click Me

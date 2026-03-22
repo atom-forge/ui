@@ -1,1 +1,0 @@
-export {default as Zen} from './Zen.svelte';

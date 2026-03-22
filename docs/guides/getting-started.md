@@ -27,21 +27,21 @@ npm install @atom-forge/ui
 Add these lines to your app's CSS entry point (`src/app.css`):
 
 ```css
-/* Adjust the relative paths to match the location of your CSS file */
-@import 'tailwindcss';
-@import '../../../node_modules/@atom-forge/ui/dist/theme.css';
-@source '../../../node_modules/@atom-forge/ui/dist';
-@source '../../../src';
+@import "tailwindcss";
+
+/* 1. Import semantic tokens and base styles */
+@import "../node_modules/@atom-forge/ui/dist/core/theme.css";
+
+/* 2. Tell Tailwind to scan the library for utility classes */
+@source "../node_modules/@atom-forge/ui/dist";
+
+/* 3. Ensure your own project files are scanned */
+@source ".";
 ```
 
-The `@source` directives are required because Tailwind CSS 4 does not scan `node_modules` by default.
-Without them, the utility classes used inside UI's components won't be included in the generated
-CSS and components will appear unstyled. The second `@source` ensures your own `src/` folder is scanned too.
+The `@source` directive for `node_modules` is required because Tailwind CSS 4 does not scan `node_modules` by default. Without it, the utility classes used inside **atom-forge** components won't be included in your bundle.
 
-The paths above are relative to `src/app.css` — adjust them if your CSS entry point lives elsewhere.
-
-`@atom-forge/ui/dist/theme.css` defines the semantic color tokens, surface layers, and utility classes
-that all components depend on.
+`@atom-forge/ui/dist/core/theme.css` defines the semantic color tokens, surface layers, and utility classes that all components depend on.
 
 ---
 
@@ -53,7 +53,7 @@ Import your CSS and wrap the root layout with `<UI>`. This single component:
 - Sets up dark mode with `localStorage` persistence and `prefers-color-scheme` detection
 - Renders portal targets and overlay containers
 
-```svelte
+```sveltehtml
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
   import '../app.css';
@@ -89,7 +89,7 @@ import { Button, Input, Card, Select, Switch } from '@atom-forge/ui';
 
 ## Your first component
 
-```svelte
+```sveltehtml
 <script lang="ts">
   import { Button } from '@atom-forge/ui';
   import { Plus, Trash } from 'lucide-svelte';
@@ -107,7 +107,7 @@ import { Button, Input, Card, Select, Switch } from '@atom-forge/ui';
 
 `getThemeManager()` is available anywhere inside the `<UI>` tree. Bind `theme.dark` directly:
 
-```svelte
+```sveltehtml
 <script lang="ts">
   import { getThemeManager, Switch } from '@atom-forge/ui';
   import { Moon, Sun } from 'lucide-svelte';
@@ -186,6 +186,6 @@ None of these require manual container placement — `<UI>` handles everything.
 ## Next steps
 
 - [Color System](./color-system.md) — semantic color tokens, dark/light theming
-- [Button](../gems/button.md) — full prop reference for the most used component
-- [Modal](../gems/modal.md) — async modal pattern in depth
-- [Table](../gems/table.md) — generic typed data table
+- [Button](../controls/general/button.md) — full prop reference for the most used component
+- [Modal](../controls/overlays/modal.md) — async modal pattern in depth
+- [Table](../controls/data/table.md) — generic typed data table
