@@ -1,0 +1,9 @@
+export type ColStyle = { align: 'left' | 'center' | 'right'; prefix: string; postfix: string; sumDecorator: boolean };
+export type TableData = {
+	rows: string[][];
+	colStyles: ColStyle[];
+	headingRow: boolean;
+	headingCol: boolean;
+	sumRow: boolean;
+	sumCol: boolean;
+};

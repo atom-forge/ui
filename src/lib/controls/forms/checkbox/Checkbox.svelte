@@ -45,7 +45,7 @@
 	// Group-managed checkboxes (especially masters) need a separate $state because
 	// the manager drives the 'some' indeterminate state which can't be derived from value alone.
 	// Standalone checkboxes derive status directly from boolValue so external binding changes reflect immediately.
-	let managedStatus: 'checked' | 'unchecked' | 'some' = $state(boolValue ? 'checked' : 'unchecked');
+	let managedStatus: 'checked' | 'unchecked' | 'some' = $state(untrack(() => boolValue ? 'checked' : 'unchecked'));
 	const status = $derived(group ? managedStatus : (boolValue ? 'checked' : 'unchecked'));
 
 	function setBoolValue(newVal: boolean) {

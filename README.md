@@ -19,7 +19,7 @@ Welcome to the documentation for the AtomForge UI component library.
 
 ---
 
-For licensing information and other details, please visit **[atom-forge.eu](https://atom-forge.eu)**.
+For licensing information and other details, please visit **[atom-forge.eu](https://atom-forge.eu)** or subscribe to our **[Substack](https://atomforge.substack.com)**.
 
 ---
 

@@ -63,6 +63,23 @@ export * from "./controls/overlays/toast"
 export * from "./controls/overlays/tooltip"
 export * from "./controls/overlays/zen"
 
+// Editors
+export * from "./controls/editors/block-editor";
+export * from "./controls/editors/diagram-editor";
+export * from "./controls/editors/img-editor";
+export * from "./controls/editors/markdown-editor";
+export * from "./controls/editors/table-editor";
+
+// Scheduling
+export * from "./controls/scheduling/calendar";
+export * from "./controls/scheduling/gantt";
+export * from "./controls/scheduling/organizer";
+export * from "./controls/scheduling/resource-manager";
+
+// Content
+export * from "./controls/content/doc";
+export * from "./controls/content/prose";
+
 // Core
 export {default as Root} from "./core/Root.svelte"
 export {getThemeManager} from "./core/theme-manager.svelte"

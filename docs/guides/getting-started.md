@@ -12,6 +12,32 @@ UI is a Svelte 5 component library built with Tailwind CSS 4. It provides compos
 - `lucide-svelte` (peer dep for icons)
 - `tailwind-merge` (peer dep)
 
+### Optional: prose components (`content/prose`)
+
+The `ProseMarkdown`, `ProsePage`, `ProseCallout` and related components render Tailwind typography classes. To use them, install `@tailwindcss/typography` and add it to your CSS:
+
+```bash
+npm install @tailwindcss/typography
+```
+
+```css
+/* src/app.css */
+@plugin "@tailwindcss/typography";
+```
+
+Without this plugin the prose components will render without typographic styling.
+
+### Optional: code highlighting (`DocShowCode`, `BlockViewCode`)
+
+`DocShowCode` and `BlockViewCode` use `svelte-highlight` for syntax highlighting. The library ships the highlighter logic but **not** the theme CSS — you must import a theme yourself:
+
+```ts
+// e.g. in your layout or app entry
+import 'svelte-highlight/styles/github-dark.css';
+```
+
+Available themes are listed in the [`svelte-highlight` documentation](https://github.com/metonym/svelte-highlight#styles).
+
 ---
 
 ## Installation
@@ -189,3 +215,9 @@ None of these require manual container placement — `<UI>` handles everything.
 - [Button](../controls/general/button.md) — full prop reference for the most used component
 - [Modal](../controls/overlays/modal.md) — async modal pattern in depth
 - [Table](../controls/data/table.md) — generic typed data table
+
+---
+
+## Community
+
+Stay updated with the latest releases, component updates, and architectural discussions by subscribing to our **[Substack](https://atomforge.substack.com)**.
