@@ -143,19 +143,13 @@ Consistent naming, reusable across the library.
 ❌ Never:
 
 ```ts
-{
-	children: Snippet
-}
+let props = {children}:{children: Snippet} = $props();
 ```
 
 ✅ Use:
 
-```ts
-{
-	children
-}
-:
-ChildrenProp = $props();
+```typescript
+let props = {children}:ChildrenProp = $props();
 ```
 
 ---
@@ -167,7 +161,6 @@ ChildrenProp = $props();
 ❌ Never:
 
 ```sveltehtml
-
 <slot/>
 ```
 
@@ -186,7 +179,6 @@ ChildrenProp = $props();
 ❌ Never:
 
 ```sveltehtml
-
 <Component let:item={data}>
 	{data.name}
 </Component>
@@ -195,11 +187,11 @@ ChildrenProp = $props();
 ✅ Use:
 
 ```sveltehtml
-
 {#snippet row(data)}
 	{data.name}
-	{#/snippet}
-	<Component {row}/>
+{#/snippet}
+	
+<Component {row}/>
 ```
 
 ---
