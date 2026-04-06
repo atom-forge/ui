@@ -72,16 +72,14 @@
 	],
 	"dependencies": {
 		"@atlaskit/pragmatic-drag-and-drop": "^1.7.9",
-		"@atlaskit/pragmatic-drag-and-drop-flourish": "^2.0.12",
 		"@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.1.0",
 		"chart.js": "^4.5.1",
 		"esm-env": "^1.2.2",
 		"lucide-svelte": "^0.561.0",
 		"marked": "^17.0.4",
 		"sheetclip": "^0.3.0",
-		"turndown": "^7.2.0",
 		"svelte-highlight": "^7.9.0",
 		"tailwind-merge": "^3.4.0",
-		"tailwind-variants": "^3.2.2"
+		"turndown": "^7.2.0"
 	}
 }
