@@ -23,8 +23,8 @@ The editor is **plugin-based**. Non-text block types (youtube, gallery, chart, e
 
 ## Phases & Todos
 
-### Phase 0 — Dev Test Page
-`todo.EDITOR-00-dev-page.md`
+### Phase 0 — Dev Test Page ✓
+`work/journal/` (archived)
 - Enable `src/routes/` in this project for development-only testing (update `ui-lib-dev.md` rule to allow dev routes, which are never published in the package)
 - Create `src/routes/editor/+page.svelte` as a live sandbox for the editor component
 - The page should exercise: basic text editing, load/save round-trip, and registered plugins
@@ -66,6 +66,13 @@ The editor is **plugin-based**. Non-text block types (youtube, gallery, chart, e
 - Plugin components render **inline within the continuous text flow** — no card framing, no extra margins, same layout wrapper as text blocks
 - Ship two reference plugins as separate exports: `youtubePlugin`, `galleryPlugin`
 - Plugin registration and dispatch by `block.type`
+
+## EDITOR-00 Key Decisions
+
+- **`$lib` unavailable in routes** — The project `tsconfig.json` overrides the `$lib` path alias (points to the published dist, not `src/lib`). Route files must use relative imports (`../lib/...`).
+- **New component, not existing BlockEditor** — The plan builds a new minimalist `Editor` at `src/lib/controls/forms/block-editor/`. The existing `BlockEditor` at `src/lib/controls/editors/block-editor/` is a separate, unrelated component.
+- **Shell files added** — `src/app.html` and `src/routes/+layout.svelte` are required for SvelteKit dev routes. Layout wraps with `Root` for theming.
+- **Dev routes guide** — `work/docs/guides/dev-routes.md` documents the convention for future phases.
 
 ## Plan-level Acceptance Criteria
 - [ ] All 5 phase todos completed and closed

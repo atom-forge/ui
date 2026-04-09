@@ -9,7 +9,8 @@ applies_to: Any task that creates or modifies components in the atom-forge/ui li
 
 ## Project Rules
 
-- **Pure Library**: This project contains only the library source and documentation. No demo app or routes in `src`.
+- **Pure Library**: This project contains only the library source and documentation. No app routes are published in the package.
+- **Dev-only Routes**: `src/routes/` may be used for development-only sandboxes and test pages. These files are **never exported** from `src/lib/index.ts` and are not included in the published package. They exist solely to exercise library components during development.
 - **Component Reuse**: **ALWAYS** reuse existing components within the library. If a control exists (e.g., `Checkbox`), use it instead of native elements or creating a new one. Refer to [docs/guides/component-overview.md](../../../docs/guides/component-overview.md) for the full list.
 - **Grouping**: Components must be placed in the correct category folder: `data`, `display`, `forms`, `general`, `layout`, or `overlays`.
 - **Atomic Components**: Each component gets its own folder with an `index.ts` for clean exports.
