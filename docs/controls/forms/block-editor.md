@@ -64,6 +64,21 @@ interface Block {
 }
 ```
 
+## Syntax highlighting
+
+The editor highlights Markdown syntax as you type. Syntax markers remain visible (not hidden), styled with semantic color tokens.
+
+| Token | Syntax | Appearance |
+|-------|--------|------------|
+| Heading | `# Heading` | Accent color, bold |
+| Bold | `**text**` | Bold weight |
+| Italic | `*text*` | Italic style |
+| Blockquote | `> text` | Muted color |
+| Inline code | `` `code` `` | Error color, muted background |
+| Markers | `#`, `**`, `*`, `` ` ``, `>` | Muted color |
+
+Highlighting is applied reactively on every keystroke. Cursor position is preserved across DOM updates.
+
 ## Styling
 
 The editor container accepts a `class` prop for external overrides. By default it renders with a border, background, and internal padding. Block divs use a monospace font with `whitespace-pre-wrap` for accurate Markdown display.

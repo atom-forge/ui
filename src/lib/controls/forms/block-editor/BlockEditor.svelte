@@ -2,6 +2,7 @@
 	import { twMerge } from 'tailwind-merge';
 	import type { ClassProp } from '../../../helpers/types';
 	import type { Block } from './types.ts';
+	import { highlight } from './highlight.ts';
 
 	let {
 		value = $bindable(''),
@@ -54,10 +55,10 @@
 		return editorEl?.querySelector<HTMLDivElement>(`[data-block-id="${blockId}"]`) ?? null;
 	}
 
-	// Fire-once action: sets initial innerText on block creation.
-	// Content is managed imperatively after that — no update handler.
+	// Fire-once action: sets initial innerHTML (with syntax highlighting) on block
+	// creation. Content is managed imperatively after that — no update handler.
 	function initBlock(node: HTMLDivElement, content: string) {
-		node.innerText = content;
+		node.innerHTML = highlight(content);
 	}
 
 	// ── Cursor helpers ─────────────────────────────────────────────────────────
@@ -105,11 +106,25 @@
 		sel.addRange(range);
 	}
 
+	// ── Syntax highlighting ────────────────────────────────────────────────────
+
+	// Saves cursor position, replaces innerHTML with highlighted content,
+	// then restores cursor. Must be called while `el` is focused and has a
+	// valid selection (i.e. synchronously inside an event handler).
+	function applyHighlight(el: HTMLDivElement, content: string) {
+		const offset = getCursorOffset(el);
+		el.innerHTML = highlight(content);
+		setCursorPosition(el, offset);
+	}
+
 	// ── Event handlers ─────────────────────────────────────────────────────────
 
 	function onInput(e: Event, i: number) {
+		const el = e.target as HTMLDivElement;
 		// innerText may append a trailing \n for a <br> at end — strip it
-		blocks[i].content = (e.target as HTMLDivElement).innerText.replace(/\n$/, '');
+		const content = el.innerText.replace(/\n$/, '');
+		blocks[i].content = content;
+		applyHighlight(el, content);
 	}
 
 	function onKeydown(e: KeyboardEvent, i: number) {
@@ -120,6 +135,7 @@
 			e.preventDefault();
 			document.execCommand('insertText', false, '\n');
 			blocks[i].content = el.innerText.replace(/\n$/, '');
+			// oninput will fire and apply highlighting
 			return;
 		}
 
@@ -133,7 +149,7 @@
 
 			// Update current block and its DOM immediately (before splice)
 			blocks[i].content = before;
-			el.innerText = before;
+			el.innerHTML = highlight(before);
 
 			const next = makeBlock(after);
 			blocks.splice(i + 1, 0, next);
@@ -170,7 +186,7 @@
 			setTimeout(() => {
 				const prevEl = getBlockEl(prevId);
 				if (!prevEl) return;
-				prevEl.innerText = merged;
+				prevEl.innerHTML = highlight(merged);
 				setCursorPosition(prevEl, cursorAt);
 			});
 			return;
@@ -201,3 +217,37 @@
 		></div>
 	{/each}
 </div>
+
+<style>
+	/* Syntax highlighting tokens — applied to dynamically injected spans. */
+	/* Uses :global() because innerHTML is set imperatively, outside Svelte's scope. */
+	/* Colors reference semantic CSS custom properties — no hardcoded values. */
+
+	:global([data-hl="heading"]) {
+		color: var(--color-accent);
+		font-weight: bold;
+	}
+
+	:global([data-hl="marker"]) {
+		color: var(--color-muted-contrast);
+	}
+
+	:global([data-hl="bold"]) {
+		font-weight: bold;
+	}
+
+	:global([data-hl="italic"]) {
+		font-style: italic;
+	}
+
+	:global([data-hl="blockquote"]) {
+		color: var(--color-muted-contrast);
+	}
+
+	:global([data-hl="code"]) {
+		color: var(--color-error);
+		background-color: color-mix(in srgb, var(--color-muted) 60%, transparent);
+		border-radius: 2px;
+		padding: 0 2px;
+	}
+</style>

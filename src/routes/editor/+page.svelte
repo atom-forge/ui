@@ -59,7 +59,7 @@ Another paragraph. Edit me.`;
 
 		<!-- Phase badge -->
 		<p class="text-sm text-muted-contrast">
-			Phase 1 — Core block structure. Enter splits blocks, Backspace at start merges, Shift+Enter soft line break.
+			Phase 2 — Syntax highlighting. Headings, bold, italic, blockquotes, and inline code are highlighted as you type.
 		</p>
 
 		<!-- Editor -->

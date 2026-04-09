@@ -39,7 +39,7 @@ The editor is **plugin-based**. Non-text block types (youtube, gallery, chart, e
 - Load: split Markdown on `\n\n` into blocks; Save: join blocks with `\n\n`
 - `Shift+Enter` → soft line break (`\n`) within block
 
-### Phase 2 — Syntax Highlighting
+### Phase 2 — Syntax Highlighting ✓
 `todo.EDITOR-02-syntax-highlighting.md`
 - Lightweight regex parser injects styled `<span>` tags into contenteditable content
 - Highlights: headings (`#`), bold (`**`), italic (`*`), blockquote (`>`), inline code (`` ` ``)
@@ -66,6 +66,14 @@ The editor is **plugin-based**. Non-text block types (youtube, gallery, chart, e
 - Plugin components render **inline within the continuous text flow** — no card framing, no extra margins, same layout wrapper as text blocks
 - Ship two reference plugins as separate exports: `youtubePlugin`, `galleryPlugin`
 - Plugin registration and dispatch by `block.type`
+
+## EDITOR-02 Key Decisions
+
+- **`highlight.ts` pure module** — Regex parser in a separate file, no DOM dependency. Processes line-by-line (block/heading/blockquote), then inline (code → bold → italic, in that priority order).
+- **`data-hl` + `:global()` CSS** — Dynamically-injected spans use `data-hl` attributes; styles live in the Svelte `<style>` block with `:global()`. Avoids Tailwind build-time purging issues for dynamic class names.
+- **CSS custom properties** — All highlight colors use `var(--color-*)` tokens (accent, muted-contrast, error, muted). Theme-aware, no hardcoded hex.
+- **`applyHighlight` cursor preservation** — Saves char offset via `getCursorOffset` before innerHTML update; restores via `setCursorPosition` (TreeWalker over text nodes). Works across span boundaries because TreeWalker operates on raw text nodes.
+- **`initBlock` now sets `innerHTML`** — Changed from `innerText` to `innerHTML = highlight(content)`. All programmatic DOM writes (Enter, Backspace) follow the same pattern.
 
 ## EDITOR-01 Key Decisions
 
