@@ -1,12 +1,9 @@
 <script lang="ts">
 	// Dev sandbox for the block editor (src/lib/controls/forms/block-editor)
-	// This page is updated after each phase to reflect new capabilities.
-	// It is never exported from src/lib/index.ts.
+	// Updated each phase to reflect new capabilities.
+	import BlockEditor from '../../lib/controls/forms/block-editor/BlockEditor.svelte';
 
-	// ── Phase 0: scaffold ──────────────────────────────────────────────────────
-	// BlockEditor component does not exist yet — created in Phase 1.
-	// The load/save state and plugin list are pre-wired so Phase 1 can drop
-	// the component in with minimal changes.
+	// ── Phase 1: core block structure ──────────────────────────────────────────
 
 	const INITIAL_MARKDOWN = `# Hello Block Editor
 
@@ -16,9 +13,9 @@ This is a paragraph block. It supports **bold**, *italic*, and \`inline code\`.
 
 Another paragraph. Edit me.`;
 
-	let markdown = $state(INITIAL_MARKDOWN);
+	let markdown    = $state(INITIAL_MARKDOWN);
 	let savedMarkdown = $state(INITIAL_MARKDOWN);
-	let saveCount = $state(0);
+	let saveCount   = $state(0);
 
 	function save() {
 		savedMarkdown = markdown;
@@ -26,16 +23,15 @@ Another paragraph. Edit me.`;
 	}
 
 	function reset() {
-		markdown = INITIAL_MARKDOWN;
+		markdown      = INITIAL_MARKDOWN;
 		savedMarkdown = INITIAL_MARKDOWN;
-		saveCount = 0;
+		saveCount     = 0;
 	}
 
 	// Plugin stubs — registered at instantiation time once Phase 4 lands.
-	// Each plugin will follow the BlockPlugin interface defined in Phase 4.
 	const plugins: { type: string; label: string }[] = [
-		{type: 'youtube', label: 'YouTube embed'},
-		{type: 'gallery', label: 'Image gallery'},
+		{ type: 'youtube', label: 'YouTube embed' },
+		{ type: 'gallery', label: 'Image gallery' },
 	];
 </script>
 
@@ -63,19 +59,15 @@ Another paragraph. Edit me.`;
 
 		<!-- Phase badge -->
 		<p class="text-sm text-muted-contrast">
-			Phase 0 — Dev page scaffold. BlockEditor component drops in during Phase 1.
+			Phase 1 — Core block structure. Enter splits blocks, Backspace at start merges, Shift+Enter soft line break.
 		</p>
 
-		<!-- Editor placeholder (replaced with <BlockEditor> in Phase 1) -->
-		<div class="rounded-lg border border-frame bg-surface-primary p-4">
-			<p class="mb-2 text-xs font-medium uppercase tracking-wide text-muted-contrast">
-				Editor (Phase 1 placeholder)
+		<!-- Editor -->
+		<div class="rounded-lg border border-frame overflow-hidden">
+			<p class="px-4 py-2 text-xs font-medium uppercase tracking-wide text-muted-contrast border-b border-frame bg-surface-primary">
+				Editor
 			</p>
-			<textarea
-				bind:value={markdown}
-				class="w-full resize-y rounded border border-frame bg-canvas p-3 font-mono text-sm text-canvas-contrast focus:outline-none focus:ring-1 focus:ring-accent"
-				rows={12}
-			></textarea>
+			<BlockEditor bind:value={markdown} class="rounded-none border-none" />
 		</div>
 
 		<!-- Save round-trip output -->

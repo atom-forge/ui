@@ -18,6 +18,7 @@ export * from "./controls/display/flip-card/index.js"
 export * from "./controls/display/skeleton/index.js"
 
 // Forms
+export * from "./controls/forms/block-editor/index.js"
 export * from "./controls/forms/checkbox/index.js"
 export * from "./controls/forms/code-input/index.js"
 export * from "./controls/forms/color/index.js"

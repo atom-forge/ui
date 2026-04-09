@@ -30,7 +30,7 @@ The editor is **plugin-based**. Non-text block types (youtube, gallery, chart, e
 - The page should exercise: basic text editing, load/save round-trip, and registered plugins
 - Updated after each phase to reflect new capabilities
 
-### Phase 1 — Core Block Structure
+### Phase 1 — Core Block Structure ✓
 `todo.EDITOR-01-core-blocks.md`
 - `BlockEditor` root component with `$state` block array
 - `Block` interface: `{ id, type, content, metadata }`
@@ -66,6 +66,14 @@ The editor is **plugin-based**. Non-text block types (youtube, gallery, chart, e
 - Plugin components render **inline within the continuous text flow** — no card framing, no extra margins, same layout wrapper as text blocks
 - Ship two reference plugins as separate exports: `youtubePlugin`, `galleryPlugin`
 - Plugin registration and dispatch by `block.type`
+
+## EDITOR-01 Key Decisions
+
+- **Export name is `MdBlockEditor`** — `BlockEditor` is already taken by `src/lib/controls/editors/block-editor/`. Types namespace is `MdBlockEditorTypes`. The component file remains `BlockEditor.svelte` internally.
+- **Contenteditable DOM strategy** — `initBlock` Svelte action (fire-once, no `update` handler) sets `innerText` on element creation. Content is never reactively re-rendered by Svelte; `oninput` syncs DOM → state, and programmatic changes (Enter/Backspace) update both state and DOM imperatively.
+- **Two-`$effect` sync pattern** — Effect 1 (`blocks` → `value`) serializes on every mutation; Effect 2 (`value` → `blocks`) re-parses only when `value !== lastSerialized`. A plain (non-reactive) `lastSerialized` variable breaks the feedback loop without introducing extra reactive state.
+- **Shift+Enter** uses `document.execCommand('insertText', false, '\n')` for cross-browser `\n` insertion in contenteditable. With `whitespace-pre-wrap`, the character renders as a visual line break and `innerText` reads it back correctly.
+- **Cursor placement** after Enter/Backspace uses `setTimeout` to query the target block by `data-block-id` after Svelte re-renders, then a `TreeWalker` over text nodes to position the caret.
 
 ## EDITOR-00 Key Decisions
 
