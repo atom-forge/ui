@@ -1,8 +1,11 @@
 {
 	"name": "@atom-forge/ui",
-	"version": "0.0.29",
+	"version": "0.0.30",
 	"style": "./core/theme.css",
-	"author": "Gergely Laborci",
+	"author": {
+		"name": "Gergely Laborci",
+		"url": "https://github.com/laborci"
+	},
 	"description": "A Svelte component library for building admin interfaces and dashboards",
 	"license": "SEE LICENSE IN LICENSE",
 	"scripts": {
