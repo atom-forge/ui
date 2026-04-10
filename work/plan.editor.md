@@ -46,10 +46,22 @@ The editor is **plugin-based**. Non-text block types (youtube, gallery, chart, e
 - Color tokens from the semantic color system (no hardcoded hex)
 
 ### Phase 3 — Block Navigation & Granular Operations ✓
-`todo.EDITOR-03-navigation.md`
+`work/journal/` (archived)
 - `ArrowUp/Down`: coordinate-based block switching, preserving horizontal X position
 - `Double Shift+Enter`: block split at cursor position
 - Cursor placement when switching blocks
+
+## EDITOR-03 Key Decisions
+
+- **`isOnFirstLine` / `isOnLastLine` zero-rect fix** — When `caretRect.height === 0` (cursor on an empty line), the original code treated it as both first and last line, causing ArrowUp/Down to incorrectly jump between blocks mid-block. Fixed by falling back to `getCursorOffset(el) === 0` for first-line detection and `getCursorOffset >= innerText.length` for last-line detection. Empty lines in the middle of multi-line blocks are now correctly treated as neither.
+
+- **Double-Enter split trims surrounding newlines** — The second Enter splits at `pos - 1`, but if the cursor was already next to an existing `\n` (e.g. mid-paragraph), `before` could end with `\n` and `after` could start with `\n`. Fixed by applying `.replace(/\n+$/, '')` to `before` and `.replace(/^\n+/, '')` to `after` at split time.
+
+- **Single-step Backspace merge** — Backspace at block start merges immediately into the previous block (cursor lands at the junction). Delete at block end merges the next block into the current one. No two-step gesture — merge is immediate.
+
+- **Delete at block end merges forward** — New `Delete` key handler: `isAtEnd(el) && i < blocks.length - 1` → merges `blocks[i + 1]` into `blocks[i]`, cursor stays at the original content length (junction point).
+
+- **`splitOnFenceClose` in `onInput`** — When a code block gains a closing ` ``` ` mid-edit, the block is split at the first closer. Guard condition: `!hadCloser || hasContentAfter` — skips the split for a normally-loaded closed block (where `after` would be empty), but fires when the user types a new closer in a position that leaves content after it.
 
 ### Phase 4 — Plugin System
 `todo.EDITOR-04-plugin-system.md`
