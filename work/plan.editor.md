@@ -45,7 +45,7 @@ The editor is **plugin-based**. Non-text block types (youtube, gallery, chart, e
 - Highlights: headings (`#`), bold (`**`), italic (`*`), blockquote (`>`), inline code (`` ` ``)
 - Color tokens from the semantic color system (no hardcoded hex)
 
-### Phase 3 — Block Navigation & Granular Operations
+### Phase 3 — Block Navigation & Granular Operations ✓
 `todo.EDITOR-03-navigation.md`
 - `ArrowUp/Down`: coordinate-based block switching, preserving horizontal X position
 - `Double Shift+Enter`: block split at cursor position

@@ -5,13 +5,39 @@
 
 	// ── Phase 1: core block structure ──────────────────────────────────────────
 
-	const INITIAL_MARKDOWN = `# Hello Block Editor
+	const INITIAL_MARKDOWN = `# Heading 1
 
-This is a paragraph block. It supports **bold**, *italic*, and \`inline code\`.
+## Heading 2 with **bold** and *italic*
 
-> A blockquote block.
+### Heading 3
 
-Another paragraph. Edit me.`;
+Normal paragraph with **bold**, *italic*, ~~strikethrough~~, __underline__, and \`inline code\`. Also a [link](https://example.com).
+
+> Blockquote block. Supports *inline* **markup** too.
+
+- Unordered list item
+- Another item with \`code\`
+- Third item **bold**
+
+1. Ordered list item
+2. Second item
+3. Third item
+
+---
+
+| Name | Type | Default |
+|------|------|---------|
+| value | string | \`""\` |
+| class | string | — |
+
+\`\`\`typescript
+function add(a: number, b: number): number {
+  const result = a + b;
+  return result;
+}
+\`\`\`
+
+Another plain paragraph after the code block.`;
 
 	let markdown    = $state(INITIAL_MARKDOWN);
 	let savedMarkdown = $state(INITIAL_MARKDOWN);
@@ -59,7 +85,7 @@ Another paragraph. Edit me.`;
 
 		<!-- Phase badge -->
 		<p class="text-sm text-muted-contrast">
-			Phase 2 — Syntax highlighting. Headings, bold, italic, blockquotes, and inline code are highlighted as you type.
+			Phase 3 — Block navigation. <kbd class="rounded border border-frame px-1 font-mono text-xs">Enter</kbd> = soft line break; <kbd class="rounded border border-frame px-1 font-mono text-xs">Enter Enter</kbd> = new block. <kbd class="rounded border border-frame px-1 font-mono text-xs">↑</kbd> / <kbd class="rounded border border-frame px-1 font-mono text-xs">↓</kbd> moves between blocks preserving horizontal position.
 		</p>
 
 		<!-- Editor -->
