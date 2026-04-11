@@ -24,4 +24,4 @@ import type { ChildrenProp } from '../lib/helpers/types';
 
 | Route | Purpose |
 |---|---|
-| `/editor` | Dev sandbox for the new `Editor` component (`src/lib/controls/forms/block-editor/`). Updated after each editor phase. |
+| `/editor` | Dev sandbox for Block Editor v2 (`src/lib/dev/block-editor-2/`). Updated after each EDITOR2 phase. |

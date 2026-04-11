@@ -20,11 +20,25 @@ applies_to: Any task that creates or modifies components in the atom-forge/ui li
 
 ---
 
+## New Component Workflow
+
+New components must always be developed in a staging area before being placed in their final location.
+
+1. **Develop in `src/lib/dev/`** — create the component and its documentation here during active development.
+2. **Iterate freely** — `src/lib/dev/` is a sandbox; structure and naming can change.
+3. **Move when done** — once the component is considered complete, move it to the correct `src/lib/controls/[category]/` folder and move its doc to `docs/controls/[category]/`.
+4. **Then export** — only add the component to `src/lib/index.ts` after it has been moved out of `src/lib/dev/`.
+
+`src/lib/dev/` is never exported and never published in the package.
+
+---
+
 ## Project Structure
 
 ```
 docs/controls/[category]/*.md  # component docs
 src/lib/controls/[category]/   # component source (atomic folders)
+src/lib/dev/                   # staging area for new components (not exported)
 src/lib/core/                  # central library logic (Root, theme-manager, theme.css)
 src/lib/helpers/               # shared utilities, types and snippets
 src/lib/index.ts               # main entry point (re-exports)

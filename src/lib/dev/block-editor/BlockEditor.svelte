@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { twMerge } from 'tailwind-merge';
-	import type { ClassProp } from '../../../helpers/types';
+	import type { ClassProp } from '../../helpers/types.ts';
 	import type { Block, BlockPlugin } from './types.ts';
 	import { highlight } from './highlight.ts';
 

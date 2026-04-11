@@ -1,71 +1,64 @@
 # Block Editor Guide
 
-`MdBlockEditor` — a minimalist, block-based Markdown editor located at `src/lib/controls/forms/block-editor/`.
+The block editor is being rebuilt as **Block Editor v2** (`BlockEditor2`) in `src/lib/dev/block-editor-2/`. The original v1 is preserved in `src/lib/dev/block-editor/` for reference during the v2 development phases.
 
-## Architecture
+---
 
-**Split on Load / Join on Save**: Markdown is split on `\n\n` into independent blocks on load; blocks are joined back with `\n\n` when serialized to `value`.
+## Block Editor v2 (active development)
 
-**Syntax Highlighting**: Regex-based; highlights headings, bold, italic, blockquote, inline code, and more. Syntax markers stay visible (not hidden). Implementation in `highlight.ts`.
+**Location:** `src/lib/dev/block-editor-2/`
 
-**Plugin-based**: The core editor only knows about the `text` built-in type. All other block types (`youtube`, `gallery`, custom) are registered externally via `BlockPlugin`. The core never imports plugin-specific logic.
+### Architecture: Focus-to-Reveal
 
-## File structure
+The core design contract: blocks render a formatted preview when unfocused; focused blocks reveal raw Markdown with muted syntax markers.
 
-```
-src/lib/controls/forms/block-editor/
-  BlockEditor.svelte        — root component
-  types.ts                  — Block, BlockPlugin interfaces
-  highlight.ts              — regex highlight engine
-  index.ts                  — public exports
-  plugins/
-    youtube/
-      YoutubeBlock.svelte   — YouTube embed component
-      index.ts              — youtubePlugin export
-    gallery/
-      GalleryBlock.svelte   — image gallery component
-      index.ts              — galleryPlugin export
-```
+- **Unfocused state**: a plain `<div>` renders preview HTML via `renderPreview()`. Markdown markers are hidden; inline formatting (`**bold**`, `*italic*`, etc.) is converted to semantic HTML.
+- **Focused state**: a `contenteditable` div shows raw Markdown with syntax highlighting via `highlight.ts`.
+- **No layout shift**: both modes share identical CSS (`font-mono text-sm leading-relaxed`). Color, font, and spacing are unchanged on focus toggle.
 
-## Block types
+### Focus management
 
-| Type | Detected by |
-|------|-------------|
-| `text` | fallback |
-| `heading` | `^#{1,6} ` |
-| `blockquote` | `^> ` |
-| `list` | `^\s*[-*] ` or `^\s*\d+\. ` |
-| `code` | ` ``` ` opener |
-| `table` | every line starts with `\|` |
-| `hr` | `/^(-{3,}|\*{3,}|_{3,})$/` |
-| `<plugin type>` | `^block:<type>` first line |
+`Block.focused` is the single source of truth. The `{#if block.focused}` branch in the template drives the DOM swap.
 
-## Plugin block format
+- `focusBlock(i, offset?)` — sets `blocks[i].focused = true`, clears all others. Stores desired cursor offset in `pendingCursors` (non-reactive `Map`) for the `initEditBlock` action.
+- `initEditBlock` Svelte action — runs once when the edit div mounts. Sets highlighted HTML, focuses element, places cursor from `pendingCursors`.
+- `onBlur(i)` — uses `setTimeout(0)` to defer unfocus, allowing a same-tick `focusBlock()` (from clicking another block) to cancel the effect.
 
-Plugin blocks in Markdown are identified by a `block:<type>` prefix on the first line:
+### File structure
 
 ```
-block:youtube
-https://www.youtube.com/watch?v=dQw4w9WgXcQ
+src/lib/dev/block-editor-2/
+  BlockEditor.svelte   — root component, Focus-to-Reveal scaffold
+  types.ts             — BlockType literal union, Block interface (with focused)
+  preview.ts           — renderPreview(): inline Markdown → semantic HTML
+  highlight.ts         — regex highlight engine (edit mode only)
+  index.ts             — exports: BlockEditor2, BlockEditor2Types
 ```
 
-`detectType()` checks for this prefix before any other detection. The `parse` function of the matching plugin receives the full raw content string.
+### Block types
 
-## Exports
+| Type | Detected by | Preview |
+|------|-------------|---------|
+| `paragraph` | fallback | inline Markdown rendered to HTML |
+| `heading` | `^#{1,6} ` | text without `#` prefix |
+| `bullet-list` | `^\s*[-*] ` | `•` bullet + inline formatting |
+| `ordered-list` | `^\s*\d+\. ` | number + inline formatting |
+| `todo-list` | `^\s*- \[[ x]\] ` | checkbox symbol + inline formatting |
+| `quote` | `^> ` | italic text without `>` |
+| `code` | ` ``` ` opener | raw code without fences |
+| `divider` | `/^(-{3,})$/` | `<hr>` element |
+
+### Exports
 
 ```ts
-export { MdBlockEditor }        // root component
-export type { MdBlockEditorTypes } // Block, BlockPlugin
-export { youtubePlugin }        // reference plugin
-export { galleryPlugin }        // reference plugin
+export { BlockEditor2 }
+export type { BlockEditor2Types }  // Block, BlockType
 ```
 
-## Adding a new plugin
+---
 
-1. Create `plugins/<type>/` with a Svelte component and `index.ts`.
-2. The component must accept `metadata: <YourMetadata>` as a prop.
-3. Define `parse` (raw → metadata) and `serialize` (metadata → raw).
-4. Export from `index.ts` and re-export from `block-editor/index.ts`.
-5. Register via the `plugins` prop at call site.
+## Block Editor v1 (reference)
 
-See `docs/controls/forms/block-editor.md` for the full authoring guide.
+**Location:** `src/lib/dev/block-editor/`
+
+Always-editable syntax-highlighting editor. Plugin-based architecture (`BlockPlugin`). Kept for reference during v2 development. Will be removed once v2 is promoted.
