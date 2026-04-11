@@ -2,8 +2,10 @@
 	// Dev sandbox for the block editor (src/lib/controls/forms/block-editor)
 	// Updated each phase to reflect new capabilities.
 	import BlockEditor from '../../lib/controls/forms/block-editor/BlockEditor.svelte';
+	import { youtubePlugin } from '../../lib/controls/forms/block-editor/plugins/youtube/index.ts';
+	import { galleryPlugin } from '../../lib/controls/forms/block-editor/plugins/gallery/index.ts';
 
-	// ── Phase 1: core block structure ──────────────────────────────────────────
+	// ── Phase 1–3: core block structure, syntax highlighting, navigation ──────
 
 	const INITIAL_MARKDOWN = `# Heading 1
 
@@ -37,11 +39,26 @@ function add(a: number, b: number): number {
 }
 \`\`\`
 
-Another plain paragraph after the code block.`;
+Another plain paragraph after the code block.
+
+block:youtube
+https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+A paragraph between plugin blocks.
+
+block:gallery
+https://picsum.photos/seed/alpha/400/300
+https://picsum.photos/seed/beta/400/300
+https://picsum.photos/seed/gamma/400/300
+
+Final paragraph after the gallery.`;
 
 	let markdown    = $state(INITIAL_MARKDOWN);
 	let savedMarkdown = $state(INITIAL_MARKDOWN);
 	let saveCount   = $state(0);
+
+	// ── Phase 4: plugin system ────────────────────────────────────────────────
+	const plugins = [youtubePlugin, galleryPlugin];
 
 	function save() {
 		savedMarkdown = markdown;
@@ -53,12 +70,6 @@ Another plain paragraph after the code block.`;
 		savedMarkdown = INITIAL_MARKDOWN;
 		saveCount     = 0;
 	}
-
-	// Plugin stubs — registered at instantiation time once Phase 4 lands.
-	const plugins: { type: string; label: string }[] = [
-		{ type: 'youtube', label: 'YouTube embed' },
-		{ type: 'gallery', label: 'Image gallery' },
-	];
 </script>
 
 <div class="min-h-screen bg-canvas p-8">
@@ -85,15 +96,30 @@ Another plain paragraph after the code block.`;
 
 		<!-- Phase badge -->
 		<p class="text-sm text-muted-contrast">
-			Phase 3 — Block navigation. <kbd class="rounded border border-frame px-1 font-mono text-xs">Enter</kbd> = soft line break; <kbd class="rounded border border-frame px-1 font-mono text-xs">Enter Enter</kbd> = new block. <kbd class="rounded border border-frame px-1 font-mono text-xs">↑</kbd> / <kbd class="rounded border border-frame px-1 font-mono text-xs">↓</kbd> moves between blocks preserving horizontal position.
+			Phase 4 — Plugin system. <kbd class="rounded border border-frame px-1 font-mono text-xs">youtube</kbd> and <kbd class="rounded border border-frame px-1 font-mono text-xs">gallery</kbd> plugins are registered. Plugin blocks render inline within the text flow using the <kbd class="rounded border border-frame px-1 font-mono text-xs">block:&lt;type&gt;</kbd> prefix.
 		</p>
+
+		<!-- Registered plugins -->
+		<div class="rounded-lg border border-frame bg-surface-primary p-4">
+			<p class="mb-2 text-xs font-medium uppercase tracking-wide text-muted-contrast">
+				Registered plugins
+			</p>
+			<ul class="space-y-1">
+				{#each plugins as plugin}
+					<li class="text-sm text-canvas-contrast">
+						<span class="font-mono text-accent">{plugin.type}</span>
+						— use <span class="font-mono text-muted-contrast">block:{plugin.type}</span> as the first line of a block
+					</li>
+				{/each}
+			</ul>
+		</div>
 
 		<!-- Editor -->
 		<div class="rounded-lg border border-frame overflow-hidden">
 			<p class="px-4 py-2 text-xs font-medium uppercase tracking-wide text-muted-contrast border-b border-frame bg-surface-primary">
 				Editor
 			</p>
-			<BlockEditor bind:value={markdown} class="rounded-none border-none" />
+			<BlockEditor bind:value={markdown} {plugins} class="rounded-none border-none" />
 		</div>
 
 		<!-- Save round-trip output -->
@@ -102,21 +128,6 @@ Another plain paragraph after the code block.`;
 				Saved output (saves: {saveCount})
 			</p>
 			<pre class="whitespace-pre-wrap font-mono text-sm text-canvas-contrast">{savedMarkdown}</pre>
-		</div>
-
-		<!-- Registered plugins -->
-		<div class="rounded-lg border border-frame bg-surface-primary p-4">
-			<p class="mb-2 text-xs font-medium uppercase tracking-wide text-muted-contrast">
-				Registered plugins (Phase 4)
-			</p>
-			<ul class="space-y-1">
-				{#each plugins as plugin}
-					<li class="text-sm text-canvas-contrast">
-						<span class="font-mono text-accent">{plugin.type}</span>
-						— {plugin.label}
-					</li>
-				{/each}
-			</ul>
 		</div>
 
 	</div>

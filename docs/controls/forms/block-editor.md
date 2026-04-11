@@ -13,6 +13,7 @@ import { MdBlockEditor } from '@atom-forge/ui';
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `string` | `''` | Markdown content. Supports `bind:value` for two-way binding. |
+| `plugins` | `BlockPlugin[]` | `[]` | External plugins for non-text block types. |
 | `class` | `string` | — | Additional CSS classes merged onto the container. |
 
 ## Basic usage
@@ -78,6 +79,118 @@ The editor highlights Markdown syntax as you type. Syntax markers remain visible
 | Markers | `#`, `**`, `*`, `` ` ``, `>` | Muted color |
 
 Highlighting is applied reactively on every keystroke. Cursor position is preserved across DOM updates.
+
+## Plugin system
+
+The editor is plugin-based. Non-text block types are registered externally via `BlockPlugin` — the core editor has no knowledge of specific types beyond `text`.
+
+### `BlockPlugin` interface
+
+```ts
+import type { MdBlockEditorTypes } from '@atom-forge/ui';
+import type { Component } from 'svelte';
+
+// MdBlockEditorTypes.BlockPlugin<M>
+interface BlockPlugin<M = any> {
+  type: string;                      // matches the `block:<type>` prefix
+  parse: (raw: string) => M;         // raw content string → metadata
+  serialize: (metadata: M) => string; // metadata → raw content string
+  component: Component<{ metadata: M }>; // Svelte component rendered in-flow
+}
+```
+
+### Block content format
+
+Plugin blocks use a `block:<type>` prefix on the first line, followed by plugin-specific payload lines:
+
+```
+block:youtube
+https://www.youtube.com/watch?v=dQw4w9WgXcQ
+```
+
+```
+block:gallery
+https://example.com/image1.jpg
+https://example.com/image2.jpg
+```
+
+### Authoring a plugin
+
+```ts
+import type { MdBlockEditorTypes } from '@atom-forge/ui';
+import type { Component } from 'svelte';
+import MyBlockComponent from './MyBlockComponent.svelte';
+
+interface MyMetadata { value: string }
+
+const myPlugin: MdBlockEditorTypes.BlockPlugin<MyMetadata> = {
+  type: 'my-type',
+  parse(raw) {
+    const [, ...lines] = raw.split('\n');
+    return { value: lines.join('\n') };
+  },
+  serialize(meta) {
+    return `block:my-type\n${meta.value}`;
+  },
+  component: MyBlockComponent,
+};
+```
+
+`MyBlockComponent.svelte` receives `metadata` as a prop:
+
+```sveltehtml
+<script lang="ts">
+  let { metadata }: { metadata: { value: string } } = $props();
+</script>
+
+<div>{metadata.value}</div>
+```
+
+### Registering plugins
+
+Pass plugins at instantiation time:
+
+```sveltehtml
+<script lang="ts">
+  import { MdBlockEditor, youtubePlugin, galleryPlugin } from '@atom-forge/ui';
+  let markdown = $state('');
+</script>
+
+<MdBlockEditor bind:value={markdown} plugins={[youtubePlugin, galleryPlugin]} />
+```
+
+Plugin components render inline within the continuous text flow — no card framing, no extra margins, same left-aligned layout wrapper as text blocks.
+
+## Reference plugins
+
+Two reference plugins are exported from `@atom-forge/ui`:
+
+### `youtubePlugin`
+
+Renders a YouTube embed from a URL.
+
+```
+block:youtube
+https://www.youtube.com/watch?v=<id>
+```
+
+```ts
+import { youtubePlugin } from '@atom-forge/ui';
+```
+
+### `galleryPlugin`
+
+Renders a row of images from a list of URLs.
+
+```
+block:gallery
+https://example.com/img1.jpg
+https://example.com/img2.jpg
+```
+
+```ts
+import { galleryPlugin } from '@atom-forge/ui';
+```
 
 ## Styling
 

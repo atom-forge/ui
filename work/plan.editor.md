@@ -51,6 +51,24 @@ The editor is **plugin-based**. Non-text block types (youtube, gallery, chart, e
 - `Double Shift+Enter`: block split at cursor position
 - Cursor placement when switching blocks
 
+## EDITOR-04 Key Decisions
+
+- **`block:<type>` prefix convention** — Plugin blocks are identified by `block:<type>` on the first line of the block's content string. `detectType()` checks this before any built-in heuristic. The raw content string is preserved as-is through serialization — no transformation by the core.
+
+- **`BlockPlugin<M>` with `any` default** — The generic `M` parameter defaults to `any` (matching the existing `Block.metadata: any`). A `plugins: BlockPlugin[]` array is heterogeneous; the core calls `plugin.parse(raw)` and passes the result directly to the component as `metadata`. No unsafe casts needed in the template.
+
+- **Metadata computed at render time** — `plugin.parse(block.content)` is called inline in the `{#each}` block via `{@const meta = ...}`. Metadata is never stored in block state, avoiding stale values and reactivity side-effects.
+
+- **`oncontent` callback on plugin components** — Plugin components receive an `oncontent: (content: string) => void` prop alongside `metadata`. Calling it updates `blocks[i].content` and re-derives the type. This makes plugin blocks fully editable without the core knowing anything about their internals.
+
+- **Drag handle as flex sibling** — The `⠿` handle is a `shrink-0 w-4` flex sibling to the left of each block's `[data-block-id]` div. This eliminates the overlap with the `::before` bar that occurred when the handle was positioned absolutely inside `pl-3`. Text blocks no longer need `contenteditable="false"` hacks on the handle child.
+
+- **`dragFromIdx` is `$state`** — Both drag indices are reactive so the end-of-list drop zone and the "don't highlight self" guard render correctly during a drag operation.
+
+- **Tab/Shift+Tab indentation** — Collapse: insert/remove `\t` at cursor. Range: indent/dedent every line touched by the selection; both selection endpoints are adjusted by the number of characters added/removed before each endpoint. Implemented via `getCursorRange` / `setCursorRange` helpers that walk the text-node tree of the contenteditable.
+
+- **Block margins** — Replaced `space-y-3` (bottom-only gap) with `my-1.5` per block row (equal top+bottom, same total gap between adjacent blocks).
+
 ## EDITOR-03 Key Decisions
 
 - **`isOnFirstLine` / `isOnLastLine` zero-rect fix** — When `caretRect.height === 0` (cursor on an empty line), the original code treated it as both first and last line, causing ArrowUp/Down to incorrectly jump between blocks mid-block. Fixed by falling back to `getCursorOffset(el) === 0` for first-line detection and `getCursorOffset >= innerText.length` for last-line detection. Empty lines in the middle of multi-line blocks are now correctly treated as neither.
@@ -63,8 +81,8 @@ The editor is **plugin-based**. Non-text block types (youtube, gallery, chart, e
 
 - **`splitOnFenceClose` in `onInput`** — When a code block gains a closing ` ``` ` mid-edit, the block is split at the first closer. Guard condition: `!hadCloser || hasContentAfter` — skips the split for a normally-loaded closed block (where `after` would be empty), but fires when the user types a new closer in a position that leaves content after it.
 
-### Phase 4 — Plugin System
-`todo.EDITOR-04-plugin-system.md`
+### Phase 4 — Plugin System ✓
+`work/journal/` (archived)
 - Define `BlockPlugin` interface:
   ```ts
   interface BlockPlugin {

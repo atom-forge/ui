@@ -1,21 +1,24 @@
 <script lang="ts">
 	import { twMerge } from 'tailwind-merge';
 	import type { ClassProp } from '../../../helpers/types';
-	import type { Block } from './types.ts';
+	import type { Block, BlockPlugin } from './types.ts';
 	import { highlight } from './highlight.ts';
 
 	let {
 		value = $bindable(''),
 		class: classes,
-	}: ClassProp & { value?: string } = $props();
+		plugins = [],
+	}: ClassProp & { value?: string; plugins?: BlockPlugin[] } = $props();
 
 	// ── Serialization ──────────────────────────────────────────────────────────
 
 	// Infers block type from content — mirrors the detection logic in highlight.ts.
 	// Used at parse time and on every edit so block.type stays current.
+	// Plugin blocks are identified by the `block:<type>` prefix on the first line.
 	function detectType(content: string): string {
 		const lines = content.split('\n');
 		const first = lines[0];
+		if (first.startsWith('block:')) return first.slice(6).trim() || 'text';
 		if (first.startsWith('```')) return 'code';
 		if (lines.every(l => l.startsWith('|'))) return 'table';
 		if (/^(-{3,}|\*{3,}|_{3,})$/.test(content)) return 'hr';
@@ -311,6 +314,110 @@
 		applyHighlight(el, content);
 	}
 
+	// ── Tab / Shift+Tab helpers ────────────────────────────────────────────────
+
+	// Returns both start and end character offsets of the current selection.
+	function getCursorRange(el: HTMLDivElement): { start: number; end: number } {
+		const sel = window.getSelection();
+		if (!sel || sel.rangeCount === 0) return { start: 0, end: 0 };
+		const r = sel.getRangeAt(0);
+		const pre = r.cloneRange();
+		pre.selectNodeContents(el);
+		pre.setEnd(r.startContainer, r.startOffset);
+		const start = pre.toString().length;
+		pre.setEnd(r.endContainer, r.endOffset);
+		const end = pre.toString().length;
+		return { start, end };
+	}
+
+	// Sets a selection range (or a collapsed cursor when start === end).
+	function setCursorRange(el: HTMLDivElement, start: number, end: number) {
+		if (start === end) { setCursorPosition(el, start); return; }
+		el.focus();
+		const sel = window.getSelection();
+		if (!sel) return;
+		const range = document.createRange();
+		const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+		let pos = 0, node: Node | null;
+		let sNode: Text | null = null, sOff = 0;
+		let eNode: Text | null = null, eOff = 0;
+		while ((node = walker.nextNode()) !== null) {
+			const t = node as Text;
+			const len = t.length;
+			if (!sNode && pos + len >= start) { sNode = t; sOff = start - pos; }
+			if (!eNode && pos + len >= end)   { eNode = t; eOff = end   - pos; }
+			if (sNode && eNode) break;
+			pos += len;
+		}
+		if (sNode && eNode) { range.setStart(sNode, sOff); range.setEnd(eNode, eOff); }
+		else { range.selectNodeContents(el); range.collapse(false); }
+		sel.removeAllRanges();
+		sel.addRange(range);
+	}
+
+	// Tab / Shift+Tab: insert or remove a '\t' at the cursor, or indent/dedent
+	// every line touched by the selection.
+	function handleTab(e: KeyboardEvent, el: HTMLDivElement, i: number) {
+		e.preventDefault();
+		const dedent  = e.shiftKey;
+		const content = blocks[i].content;
+		const TAB     = '\t';
+		const { start, end } = getCursorRange(el);
+
+		// ── Collapsed cursor ───────────────────────────────────────────────────
+		if (start === end) {
+			if (!dedent) {
+				// Insert tab at cursor
+				const nc = content.slice(0, start) + TAB + content.slice(start);
+				blocks[i].content = nc;
+				setBlockHTML(el, nc);
+				setCursorPosition(el, start + TAB.length);
+			} else {
+				// Remove tab at start of the current line
+				const lineStart = content.lastIndexOf('\n', start - 1) + 1;
+				if (content.slice(lineStart).startsWith(TAB)) {
+					const nc = content.slice(0, lineStart) + content.slice(lineStart + TAB.length);
+					blocks[i].content = nc;
+					setBlockHTML(el, nc);
+					setCursorPosition(el, Math.max(lineStart, start - TAB.length));
+				}
+			}
+			return;
+		}
+
+		// ── Range selection: indent/dedent every touched line ─────────────────
+		const lines = content.split('\n');
+		let pos    = 0;
+		let newStart = start;
+		let newEnd   = end;
+
+		const newLines = lines.map((line) => {
+			const lineStart = pos;
+			const lineEnd   = lineStart + line.length;
+			pos = lineEnd + 1;                          // +1 for the '\n'
+
+			// A line is "touched" when the selection overlaps its character span.
+			const touched = lineStart < end && lineEnd >= start;
+			if (!touched) return line;
+
+			if (!dedent) {
+				if (lineStart <= start) newStart += TAB.length;
+				newEnd += TAB.length;
+				return TAB + line;
+			} else {
+				if (!line.startsWith(TAB)) return line;
+				if (start > lineStart) newStart = Math.max(lineStart, newStart - TAB.length);
+				newEnd = Math.max(lineStart, newEnd - TAB.length);
+				return line.slice(TAB.length);
+			}
+		});
+
+		const nc = newLines.join('\n');
+		blocks[i].content = nc;
+		setBlockHTML(el, nc);
+		setCursorRange(el, Math.max(0, newStart), Math.max(0, newEnd));
+	}
+
 	function onKeydown(e: KeyboardEvent, i: number) {
 		const el = e.currentTarget as HTMLDivElement;
 
@@ -318,6 +425,9 @@
 		const isArrow = e.key === 'ArrowUp' || e.key === 'ArrowDown';
 		if (e.key !== 'Enter') lastWasEnter = false;
 		if (!isArrow)          stickyX = null;
+
+		// ── Tab / Shift+Tab — indent / dedent ────────────────────────────────
+		if (e.key === 'Tab') { handleTab(e, el, i); return; }
 
 		// ── ArrowUp — jump to previous block when on first visual line ─────────
 		if (e.key === 'ArrowUp' && i > 0 && isOnFirstLine(el)) {
@@ -459,29 +569,120 @@
 		}
 	}
 
+	// ── Plugin content update ──────────────────────────────────────────────────
+
+	function updatePluginContent(i: number, newContent: string) {
+		blocks[i].content = newContent;
+		blocks[i].type    = detectType(newContent);
+	}
+
+	// ── Drag and drop ──────────────────────────────────────────────────────────
+
+	// Both are $state: dragFromIdx drives the end-zone conditional and the
+	// "don't highlight self" guard; dragOverIdx drives the drop-indicator.
+	let dragFromIdx = $state<number | null>(null);
+	let dragOverIdx = $state<number | null>(null);
+
+	function onDragStart(e: DragEvent, i: number) {
+		dragFromIdx = i;
+		e.dataTransfer?.setData('text/plain', String(i));
+	}
+
+	function onDragOver(e: DragEvent, i: number) {
+		e.preventDefault();
+		dragOverIdx = i;
+	}
+
+	function onDragLeave() {
+		dragOverIdx = null;
+	}
+
+	function onDrop(e: DragEvent, dropIdx: number) {
+		e.preventDefault();
+		if (dragFromIdx === null || dragFromIdx === dropIdx) { resetDrag(); return; }
+		const from    = dragFromIdx;
+		const [moved] = blocks.splice(from, 1);
+		// After removing `from`, indices below it shift down by 1.
+		const to      = from < dropIdx ? dropIdx - 1 : dropIdx;
+		blocks.splice(to, 0, moved);
+		resetDrag();
+	}
+
+	function onDragEnd() { resetDrag(); }
+
+	function resetDrag() {
+		dragFromIdx = null;
+		dragOverIdx = null;
+	}
+
 	// ── Styles ─────────────────────────────────────────────────────────────────
 
 	const containerCls = $derived(twMerge(
-		'w-full rounded-control border border-frame bg-surface-primary p-4 space-y-3',
+		'w-full rounded-control border border-frame bg-surface-primary p-4',
 		classes,
 	));
 </script>
 
 <div bind:this={editorEl} class={containerCls}>
 	{#each blocks as block, i (block.id)}
+		{@const plugin = plugins.find(p => p.type === block.type)}
+		<!--
+			Drop-zone wrapper: receives dragover/drop for this slot (insert before block i).
+			group: makes the drag handle visible on hover of the whole row.
+		-->
 		<div
-			data-block-id={block.id}
-			contenteditable="true"
-			role="textbox"
-			aria-multiline="true"
-			tabindex="0"
-			spellcheck={false}
-			class="relative w-full pl-3 font-mono text-sm leading-relaxed text-canvas-contrast whitespace-pre-wrap break-words focus:outline-none min-h-[1.25em]"
-			use:initBlock={block.content}
-			oninput={(e) => onInput(e, i)}
-			onkeydown={(e) => onKeydown(e, i)}
-		></div>
+			role="presentation"
+			class="group my-1.5 flex items-start {dragOverIdx === i && dragFromIdx !== i ? 'border-t-2 border-accent' : 'border-t-2 border-transparent'}"
+			ondragover={(e) => onDragOver(e, i)}
+			ondragleave={onDragLeave}
+			ondrop={(e) => onDrop(e, i)}
+		>
+			<!-- Drag handle — sibling to the content block, never overlaps ::before bar -->
+			<div
+				draggable="true"
+				role="button"
+				tabindex="-1"
+				aria-label="Drag to reorder"
+				class="shrink-0 w-4 py-0.5 flex items-start justify-center cursor-grab select-none opacity-0 group-hover:opacity-100 text-muted-contrast text-xs leading-relaxed"
+				ondragstart={(e) => onDragStart(e, i)}
+				ondragend={onDragEnd}
+			>⠿</div>
+
+			{#if plugin}
+				{@const meta = plugin.parse(block.content)}
+				{@const PluginComponent = plugin.component}
+				<div
+					data-block-id={block.id}
+					class="relative min-w-0 flex-1 pl-3 font-mono text-sm leading-relaxed"
+				>
+					<PluginComponent metadata={meta} oncontent={(c) => updatePluginContent(i, c)} />
+				</div>
+			{:else}
+				<div
+					data-block-id={block.id}
+					contenteditable="true"
+					role="textbox"
+					aria-multiline="true"
+					tabindex="0"
+					spellcheck={false}
+					class="relative min-w-0 flex-1 pl-3 font-mono text-sm leading-relaxed text-canvas-contrast whitespace-pre-wrap break-words focus:outline-none min-h-[1.25em]"
+					use:initBlock={block.content}
+					oninput={(e) => onInput(e, i)}
+					onkeydown={(e) => onKeydown(e, i)}
+				></div>
+			{/if}
+		</div>
 	{/each}
+	<!-- Drop zone at the end of the list -->
+	{#if dragFromIdx !== null}
+		<div
+			role="presentation"
+			ondragover={(e) => { e.preventDefault(); dragOverIdx = blocks.length; }}
+			ondragleave={onDragLeave}
+			ondrop={(e) => onDrop(e, blocks.length)}
+			class="h-4 w-full {dragOverIdx === blocks.length ? 'border-t-2 border-accent' : ''}"
+		></div>
+	{/if}
 </div>
 
 <style>
