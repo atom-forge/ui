@@ -1,0 +1,93 @@
+/*
+ * EditorJS theme — atom-forge semantic tokens
+ *
+ * Uses EditorJS's own CSS custom property system where available.
+ * Direct selectors are only used for block tools that have no variable API.
+ * Import once alongside theme.css.
+ */
+
+/* ── Popover (toolbox, block settings, conversion toolbar) ──────────────────
+   EditorJS uses these --color-* variables throughout .ce-popover__container
+   and all child elements — no need for individual selector overrides.       */
+.ce-popover {
+	--color-border:                     var(--color-frame);
+	--color-shadow:                     color-mix(in srgb, black 10%, transparent);
+	--color-background:                 var(--color-surface);
+	--color-text-primary:               var(--color-surface-contrast);
+	--color-text-secondary:             var(--color-muted-contrast);
+	--color-border-icon:                var(--color-frame);
+	--color-border-icon-disabled:       var(--color-frame);
+	--color-text-icon-active:           var(--color-accent);
+	--color-background-icon-active:     color-mix(in srgb, var(--color-accent) 10%, transparent);
+	--color-background-item-hover:      var(--color-secondary);
+	--color-background-item-focus:      var(--color-secondary);
+	--color-shadow-item-focus:          transparent;
+	--color-background-item-confirm:    var(--color-error);
+	--color-background-item-confirm-hover: var(--color-error);
+}
+
+/* ── Inline toolbar ──────────────────────────────────────────────────────── */
+.ce-inline-toolbar {
+	--color-text-icon-active:           var(--color-accent);
+	--color-background-icon-active:     color-mix(in srgb, var(--color-accent) 10%, transparent);
+	--color-text-primary:               var(--color-surface-contrast);
+	background-color: var(--color-surface);
+	border: 1px solid var(--color-frame);
+	border-radius: var(--radius-control);
+}
+.ce-inline-toolbar__dropdown:hover { background: var(--color-secondary); }
+.ce-inline-toolbar__dropdown { border-right: 1px solid var(--color-frame); }
+
+/* ── Toolbar handle ──────────────────────────────────────────────────────── */
+.ce-toolbar__plus,
+.ce-toolbar__settings-btn { color: var(--color-muted-contrast); }
+.ce-toolbar__plus:hover,
+.ce-toolbar__settings-btn:hover {
+	background-color: var(--color-secondary);
+	color: var(--color-surface-contrast);
+}
+
+/* ── Block tools ─────────────────────────────────────────────────────────── */
+
+.ce-block [contenteditable]:focus { outline: none; }
+.ce-block--selected .ce-block__content {
+	background-color: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+/* Paragraph placeholder */
+.ce-paragraph[data-placeholder]:empty::before { color: var(--color-muted-contrast) !important; }
+
+/* Header */
+.ce-header { color: var(--color-surface-contrast); }
+
+/* Quote */
+.cdx-quote__text {
+	border-left: 4px solid var(--color-accent);
+	padding-left: 0.75rem;
+}
+.cdx-quote__caption { color: var(--color-muted-contrast); }
+
+/* Code */
+.ce-code__textarea {
+	background-color: var(--color-muted) !important;
+	border-color: var(--color-frame) !important;
+	color: var(--color-error) !important;
+}
+.ce-code__textarea:focus { outline: 2px solid var(--color-ring) !important; }
+
+/* Delimiter */
+.ce-delimiter::before { color: var(--color-muted-contrast); }
+
+/* List */
+.cdx-list__item::marker { color: var(--color-accent); }
+
+/* Table */
+.tc-wrap { border-color: var(--color-frame); }
+.tc-row { border-bottom-color: var(--color-frame); }
+.tc-cell { border-right-color: var(--color-frame); }
+.tc-cell:focus { background-color: color-mix(in srgb, var(--color-accent) 8%, transparent); outline: none; }
+.tc-add-row, .tc-add-column { color: var(--color-muted-contrast); }
+.tc-add-row:hover, .tc-add-column:hover { color: var(--color-accent); }
+
+/* ── editorjs-drag-drop: hide mispositioned ::before diamond indicator ────── */
+.ce-block--drop-target .ce-block__content::before { display: none !important; }

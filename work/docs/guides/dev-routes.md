@@ -25,3 +25,4 @@ import type { ChildrenProp } from '../lib/helpers/types';
 | Route | Purpose |
 |---|---|
 | `/editor` | Dev sandbox for Block Editor v2 (`src/lib/dev/block-editor-2/`). Updated after each EDITOR2 phase. |
+| `/ui` | Dev sandbox for `UI.*` bits-ui based components (`src/lib/ui/`). Updated after each BITSUI phase. |
