@@ -15,6 +15,9 @@ Az atom-forge/ui komponenskönyvtár újraírása bits-ui primitívek alapján. 
 - Export: `src/lib/ui/index.ts` egy `UI` named object-et exportál; a főindex ezt re-exportálja: `export { UI } from './ui/index.js'`
 - Használat: `import { UI } from '@atom-forge/ui'` → `<UI.Button .../>`, `<UI.Checkbox .../>` stb. — párhuzamosan él a jelenlegi flat exportokkal
 
+**Kiemelten fontos implementációs elv:**
+> Minden komponensben használjuk fel a bits-ui-t a maximális mértékben. Ha egy primitív elérhető bits-ui-ban, kötelező azt használni — saját implementáció csak ott megengedett, ahol bits-ui nem nyújt megfelelő primitívet (pl. CheckboxView render-only, indeterminate ARIA).
+
 **Fő architectural döntések:**
 - bits-ui adja az interakciós alapot ahol van megfelelő primitív
 - atom-forge konfigurációs API-t ad a bits-ui composition API fölé (Svelte 5 snippetek)
@@ -22,6 +25,17 @@ Az atom-forge/ui komponenskönyvtár újraírása bits-ui primitívek alapján. 
 - bits-ui Popover alatt Floating UI van → Popup pozicionálás is erre kerül
 - TimePicker: native `<input type="time">` wrapper marad (bits-ui Time Field nem nyújt értéket a jelenlegi egyszerű API-hoz)
 - DatePicker: bits-ui Date Picker belső `@internationalized/date` modelljét JS `Date`-re kell bridgelni
+
+---
+
+## BITSUI-02 Key Decisions
+
+- `BitsUI.Checkbox.Root` alapja a `Checkbox` — `checked` és `indeterminate` két külön boolean prop bits-ui-ban
+- `CheckboxView` megtartja eredeti div + manuális ARIA megközelítést (`aria-checked="mixed"` indeterminate-hez)
+- `BitsUI.RadioGroup.Root` + `BitsUI.RadioGroup.Item` alapja a Radio komponenseknek
+- `BitsUI.Switch.Root` + `BitsUI.Switch.Thumb` alapja a Switch-nek
+- `src/lib/ui/` flat struktúra — nincs `general/`/`forms/` alkönyvtár
+- Dev route-ok szétválasztva: `/ui` index + komponensenként külön oldal
 
 ---
 

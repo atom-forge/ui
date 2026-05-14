@@ -1,10 +1,10 @@
 <script lang="ts">
-	import {type AnyProp, type ClassProp, type XOR} from "../../../helpers/types";
+	import {type AnyProp, type ClassProp, type XOR} from "../../helpers/types";
 	import {type Snippet, untrack} from 'svelte';
 	import {twMerge} from "tailwind-merge";
-	import {Icon, type IconDefinition} from "../../../controls/general/icon";
-	import Spinner from '../../../helpers/Spinner.svelte';
-	import {variantMap} from "../../../helpers/variantMap.ts";
+	import {Icon, type IconDefinition} from "../../controls/general/icon";
+	import Spinner from '../../helpers/Spinner.svelte';
+	import {variantMap} from "../../helpers/variantMap.ts";
 
 	let {
 		label: text,
