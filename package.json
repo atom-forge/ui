@@ -31,7 +31,8 @@
 		"!dist/**/*.spec.*",
 		"docs",
 		"README.md",
-		"LICENSE"
+		"LICENSE",
+		"CHANGELOG.md"
 	],
 	"sideEffects": [
 		"**/*.css"
