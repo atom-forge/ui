@@ -1,0 +1,93 @@
+---
+status: active
+plan:
+tags: [frontend]
+---
+
+# Todo: Unify Modal/Drawer overlay stacking and drop backdrop blur
+
+## Source / Context
+Surfaced while building the conference-ninja app: a help `Drawer` opened from inside a `Modal` rendered **behind** the modal instead of on top of it. Root cause investigation and design discussion happened in a conference-ninja session; this todo captures the resulting plan for the library side.
+
+## Description
+`Modal` and `Drawer` are functionally near-identical (array of `{component, props, resolver}`, promise-based `open/close/resolve`, backdrop-click + Escape to close, stackable) but each has its own independent manager, container, and hardcoded z-index classes (`ModalContainer` uses `z-[9999]`, `Drawer`/`DrawerContainer` use bare `z-9999`/`z-9998`). Because they're independent, one overlay type opened from within the other has no way to know it needs a higher z-index than its parent — they collide.
+
+Goal: unify the shared stacking/bookkeeping mechanics of Modal and Drawer behind one internal implementation, while keeping `getModalManager()` / `getDrawerManager()` as separate public facade functions (call sites and consumer-facing behavior must not change). Popup and Toast are explicitly **out of scope** for the stacking mechanism (see rationale below) but Popup's lack of a backdrop should be documented as the intentional reference behavior.
+
+### Why nesting depth, not a global counter or full re-numbering
+A shared incrementing counter or manually renumbering the existing z-index classes was considered and rejected — brute force, doesn't generalize, and doesn't compose if a third overlay type needs the same treatment later. Instead: each overlay reads its current nesting depth from Svelte context (default 0 at the root), computes its own z-index tier from that depth, and provides `depth + 1` to its own children. Opening a `Drawer` from inside a `Modal` automatically picks up depth 1 via context — no manual coordination between the two managers needed.
+
+### Why Popup and Toast are excluded
+- `Popup` already closes on *any* outside interaction (global `window` click/contextmenu listener in `PopupContainer.svelte`, not a backdrop element) and is inherently short-lived — it should always render at a fixed, always-on-top z-index tier, above whatever Modal/Drawer depth currently is. It does not need to participate in the depth system.
+- `Toast` (notifications) should likewise always be visible regardless of what else is open — fixed top-most tier, not depth-tracked.
+
+**Popup's blast radius is large — do not touch its behavior in this todo.** It's not just used for context menus; it's the shared foundation for a large chunk of the form-control library:
+`Select`, `MultiSelect` (+ `MultiSelectDropdown`), `TagEditor` (+ `TagEditorDropdown`), `DatePicker` (+ `DatePickerCalendar`), `TimePicker` (+ `TimePickerPopup`), `ContextMenu`, `Breadcrumb`, and popup-based interactions inside `TableEditor`, `BlockItem` (block editor), and `Table`.
+
+Because so much already depends on Popup's exact current behavior, this todo's changes to Modal/Drawer must be verified to have **zero effect** on Popup — no shared code path should be refactored in a way that touches `popup-manager.svelte.ts` or `PopupContainer.svelte`'s actual logic, only confirmed (by manual/regression testing) to still render above the new depth-tiered Modal/Drawer stack. Concretely: after implementing, manually exercise `Select`, `MultiSelect`, `DatePicker`, and `ContextMenu` both standalone and from inside an open `Modal`/`Drawer`, to confirm no regression.
+
+### Backdrop: drop the blur, keep the click-catcher
+`backdrop-filter: blur()` is expensive (continuous resampling of everything behind it, worse while animating, worse when multiple are stacked) and was identified as a performance concern. Replace with a plain semi-transparent scrim (no `backdrop-filter`).
+
+Every individual Modal/Drawer instance still needs its own full-screen click-catching layer, even when nested — otherwise a click meant to dismiss the inner overlay would fall through to the outer one's backdrop handler, or to the app content around it.
+
+**Decided**: only the outermost (depth 0) instance renders the visible `.overlay-backdrop` tint. Every nested instance (depth > 0) still renders its own full-screen click-catching layer (for backdrop-click-to-close and click-through prevention) but suppresses the visible tint (fully transparent) — reusing the same nesting-depth context value already needed for z-index tiering to gate it. Rejected the alternative of letting every layer show its own (lighter) tint, compounding like the existing stacked-modal `brightness-75` effect: since the backdrop color is app-overridable (see below), compounding an arbitrary color across N layers is unpredictable and hard for a consumer to reason about, and the outermost layer's tint already fully communicates "something is open" — a second dimming layer adds no new information, only visual weight. Which overlay is topmost is already communicated by z-index/interactivity alone.
+
+### Backdrop styling: overridable named class, not a CSS variable, not a per-call option
+Considered and rejected: a CSS custom property (`var(--overlay-backdrop-color)`) and a per-`open()`-call `backdrop` option. Decided instead on a **named, overridable Tailwind utility class**, defined via `@utility`/`@layer components` + `@apply` in this library's `theme.css`, so a consuming app can redeclare the exact same class in its own stylesheet (loaded after this library's `theme.css`) to override it — no JS API, no per-call plumbing, app-wide by default.
+
+```css
+/* this library's theme.css */
+@layer components {
+    .overlay-backdrop {
+        @apply bg-black/50 dark:bg-black/60;
+    }
+}
+```
+
+```css
+/* consumer app's own stylesheet, imported after this library's theme.css */
+@layer components {
+    .overlay-backdrop {
+        @apply bg-black/30 dark:bg-black/40;
+    }
+}
+```
+
+Light/dark variance is handled with the existing `dark:` variant *inside the same class definition* (matching how other components like `Button` already mix base + `dark:` utilities in one class list) — no separate `:root,.light{}` / `.dark{}` token blocks needed for this, since it's a component-level class, not a semantic token.
+
+**Gotcha to document**: CSS cascades per-property, not per-rule-block. If this library's default ever includes `backdrop-blur-*` and a consumer's override only changes `bg-*` (without also specifying `backdrop-blur-none`), the blur is **not** removed — it has no competing declaration, so the original stands. Since the decided default has no blur at all, this isn't live today, but must be called out in `docs/controls/overlays/modal.md` / `drawer.md` so a future override doesn't get bitten by it.
+
+`ModalContainer` and `DrawerContainer` both apply `.overlay-backdrop` to their backdrop element(s) instead of their current ad-hoc inline Tailwind (`bg-canvas/80 backdrop-blur-xs` / `bg-black/50 backdrop-blur-xs`).
+
+## Acceptance Criteria
+- [ ] `Modal` and `Drawer` share one internal overlay-manager implementation (stack array, `open/close/resolve`, `closable` option, `key`-based dedup) — `getModalManager()` and `getDrawerManager()` remain the two public facades, with no breaking changes to their existing call signatures.
+- [ ] Opening a `Drawer` from a `Modal` (or vice versa) renders the more-recently-opened overlay visibly on top, driven by a nesting-depth Svelte context rather than hardcoded/independent z-index classes.
+- [ ] `Popup` and `Toast` are pinned to their own fixed, always-topmost z-index tier, explicitly outside the depth system. `Popup`'s current backdrop-less behavior is preserved (no regression).
+- [ ] Manually verified no regression in Popup-dependent components after the change: `Select`, `MultiSelect`, `DatePicker` (calendar), `TimePicker`, `TagEditor`, `ContextMenu` — each tested both standalone and opened from inside an active `Modal`/`Drawer`.
+- [ ] `backdrop-filter: blur()` removed from Modal/Drawer backdrops; replaced with a plain semi-transparent scrim, defined as a new named, overridable class (`.overlay-backdrop`, via `@layer components` + `@apply`, light/dark handled with the `dark:` variant inside the same class) — not a CSS variable, not a per-`open()`-call option. Both `ModalContainer` and `DrawerContainer` use this class for their backdrop element(s), replacing their current independent inline Tailwind (`bg-canvas/80 backdrop-blur-xs` / `bg-black/50 backdrop-blur-xs`).
+- [ ] Every Modal/Drawer instance (including nested ones) has a functional full-screen click-catcher for backdrop-click-to-close and click-through prevention. Only the outermost (depth 0) instance shows the visible `.overlay-backdrop` tint; nested instances (depth > 0) render the same click-catcher fully transparent.
+- [ ] `Drawer`'s `size: 'sm' | 'md' | 'lg' | 'full'` prop is renamed to match the library's size-naming convention (`normal | compact | small`, see `ui-lib-dev.md`) as part of this pass, since it's touched anyway.
+- [ ] `Modal` gains the `closable` option (currently only `Drawer` has it); `Drawer` gains `key`-based dedup (currently only `Modal` has it) — bring both to parity through the shared implementation.
+- [ ] No type errors (`bun run check`).
+- [ ] `docs/controls/overlays/modal.md` and `docs/controls/overlays/drawer.md` updated to reflect the new shared behavior, the `closable`/`key` parity additions, and the renamed `Drawer` size prop.
+- [ ] Relevant documents in `work/docs/guides/` and `work/contribution/rules/` updated as needed.
+
+## Open Questions (resolve before/during implementation)
+1. Should `Popup`'s "always topmost, no backdrop" behavior become the officially documented reference pattern for any future lightweight/ephemeral overlay type, to prevent this same divergence from happening again?
+
+## Technical Notes
+Affected files (current, pre-refactor locations):
+- `src/lib/controls/overlays/modal/modal-manager.svelte.ts`
+- `src/lib/controls/overlays/modal/ModalContainer.svelte`
+- `src/lib/controls/overlays/drawer/drawer-manager.svelte.ts`
+- `src/lib/controls/overlays/drawer/DrawerContainer.svelte`
+- `src/lib/controls/overlays/drawer/Drawer.svelte`
+- `src/lib/controls/overlays/popup/PopupContainer.svelte` (reference only — no functional changes expected, just confirm it still renders above the new depth-tiered Modal/Drawer stack)
+- `src/lib/controls/overlays/toast/ToastContainer.svelte` (z-index tier only)
+- `src/lib/core/theme.css` (add the `.overlay-backdrop` component class)
+
+Consuming app for live testing: `conference-ninja` now depends on `@atom-forge/ui` via `file:../../AtomForge/ui` (switched from a versioned dependency specifically to test this todo in place). Run `svelte-package --watch` in this repo to keep `dist/` current while iterating; conference-ninja's dev server picks up changes through the symlinked `dist/*` files. Do not bump the published version or run `bun run pub` until this todo is verified working end-to-end in conference-ninja.
+
+## Implementation Log
+<!-- Progress records here -->

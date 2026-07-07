@@ -73,7 +73,7 @@ The `@source` directive for `node_modules` is required because Tailwind CSS 4 do
 
 ## Layout setup
 
-Import your CSS and wrap the root layout with `<UI>`. This single component:
+Import your CSS and wrap the root layout with `<Root>`. This single component:
 
 - Registers all overlay managers (Modal, Toast, Drawer, Popup)
 - Sets up dark mode with `localStorage` persistence and `prefers-color-scheme` detection
@@ -83,16 +83,16 @@ Import your CSS and wrap the root layout with `<UI>`. This single component:
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
   import '../app.css';
-  import { UI } from '@atom-forge/ui';
+  import { Root } from '@atom-forge/ui';
   let { children } = $props();
 </script>
 
-<UI dark>
+<Root dark>
   {@render children()}
-</UI>
+</Root>
 ```
 
-### UI props
+### Root props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -131,7 +131,7 @@ import { Button, Input, Card, Select, Switch } from '@atom-forge/ui';
 
 ## Dark mode
 
-`getThemeManager()` is available anywhere inside the `<UI>` tree. Bind `theme.dark` directly:
+`getThemeManager()` is available anywhere inside the `<Root>` tree. Bind `theme.dark` directly:
 
 ```sveltehtml
 <script lang="ts">
@@ -174,7 +174,7 @@ The script is intentionally render-blocking (no `async`/`defer`) so it always ru
 
 ## Overlay managers
 
-UI provides four imperative managers for overlay UI. All return `Promise<T>` that resolves when the overlay closes.
+`Root` provides four imperative managers for overlay UI. All return `Promise<T>` that resolves when the overlay closes.
 
 ### Toast
 
@@ -205,7 +205,7 @@ const popup = getPopupManager();
 const result = await popup.open.component(ContextMenu, { config: [...] }, { anchor: event });
 ```
 
-None of these require manual container placement — `<UI>` handles everything.
+None of these require manual container placement — `<Root>` handles everything.
 
 ---
 
