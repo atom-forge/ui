@@ -5,5 +5,6 @@
 		<a href="/ui/checkbox" class="text-accent hover:underline">Checkbox</a>
 		<a href="/ui/radio" class="text-accent hover:underline">Radio</a>
 		<a href="/ui/switch" class="text-accent hover:underline">Switch</a>
+		<a href="/ui/overlay" class="text-accent hover:underline">Overlay</a>
 	</nav>
 </div>

@@ -28,7 +28,7 @@ Opens a drawer and returns a `Promise<T>` that resolves when `drawer.close(resul
 |-----------|------|-------------|
 | `component` | `Component` | Svelte component to render inside the drawer. |
 | `props` | `object` | Props passed to the component. |
-| `options` | `DrawerOptions` | Position, size, closable. |
+| `options` | `DrawerOptions` | Position, size, closable, key. |
 
 ### `drawer.close(result?)`
 
@@ -41,17 +41,17 @@ Closes the topmost drawer and resolves its promise with `result`.
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
 | `position` | `'left' \| 'right'` | `'right'` | Which edge the drawer slides from. |
-| `size` | `'sm' \| 'md' \| 'lg' \| 'full'` | `'md'` | Panel width. |
+| `size` | `'normal' \| 'compact' \| 'small'` | `'normal'` | Panel width. |
 | `closable` | `boolean` | `true` | Whether clicking the backdrop closes the drawer. |
+| `key` | `string` | — | Prevents opening another drawer with the same key while one is already active. |
 
 ### Size reference
 
 | Size | Width |
 |------|-------|
-| `sm` | `w-96` (384px) |
-| `md` | `w-128` (512px) |
-| `lg` | `w-192` (768px) |
-| `full` | `w-full` |
+| `small` | `w-80` (320px) |
+| `compact` | `w-96` (384px) |
+| `normal` | `w-128` (512px) |
 
 ---
 
@@ -65,7 +65,7 @@ Closes the topmost drawer and resolves its promise with `result`.
   async function openPanel() {
     const result = await drawer.open(MyPanel, { title: 'Settings' }, {
       position: 'right',
-      size: 'md',
+      size: 'normal',
     });
     console.log('Drawer closed with:', result);
   }
@@ -87,3 +87,25 @@ Closes the topmost drawer and resolves its promise with `result`.
   <Button label="Save" onclick={() => drawer.close('saved')}/>
 </div>
 ```
+
+---
+
+## Stacking
+
+Drawer and Modal share one internal overlay stack and one renderer. A modal opened after a drawer, or a drawer opened after a modal, is rendered above the earlier overlay automatically. Popup and Toast stay outside this stack and remain on their fixed always-topmost tier.
+
+Every drawer has its own full-screen click-catcher. A single visible backdrop layer sits directly below the topmost overlay; overlay click-catchers stay transparent so backdrop color does not compound and the active overlay remains visually clear.
+
+## Backdrop styling
+
+The visible backdrop uses the overridable `.overlay-backdrop` class from the library theme. Consumers can override that class in their own stylesheet loaded after `@atom-forge/ui`:
+
+```css
+@layer components {
+  .overlay-backdrop {
+    @apply bg-black/30 dark:bg-black/40;
+  }
+}
+```
+
+CSS cascades per property. If a future override needs to remove a backdrop-related declaration such as blur, the override must provide a competing declaration for that property. The default drawer backdrop does not use `backdrop-filter`.

@@ -195,7 +195,7 @@ const result = await modal.open(ConfirmDialog, { message: 'Delete this?' });
 
 ```ts
 const drawer = getDrawerManager();
-const result = await drawer.open(SettingsPanel, {}, { position: 'right', size: 'md' });
+const result = await drawer.open(SettingsPanel, {}, { position: 'right', size: 'normal' });
 ```
 
 ### Popup

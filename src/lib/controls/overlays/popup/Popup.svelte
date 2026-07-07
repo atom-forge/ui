@@ -98,7 +98,7 @@
 </script>
 
 <div role="none"
-     class="z-[9999] fixed transition-top duration-top-16 transition-bottom duration-bottom-16"
+     class="z-10000 fixed transition-top duration-top-16 transition-bottom duration-bottom-16"
      style={style}
      onclick={(e) => e.stopPropagation()}
      oncontextmenu={(e) => e.stopPropagation()}

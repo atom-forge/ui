@@ -1,59 +1,60 @@
 import type {Component} from 'svelte';
 import {getContext, setContext} from 'svelte';
+import {getOverlayStackManager, type OverlayOptions, type OverlayStackManager, type OverlayState} from '../shared/overlay-manager.svelte';
 
 export type DrawerPosition = 'left' | 'right';
-export type DrawerSize = 'sm' | 'md' | 'lg' | 'full';
+export type DrawerSize = 'normal' | 'compact' | 'small';
 
-export type DrawerOptions = {
+export type DrawerOptions = OverlayOptions & {
 	position?: DrawerPosition;
 	size?: DrawerSize;
-	closable?: boolean; // Can be closed by clicking the backdrop
 };
 
-export type DrawerState = {
-	component: Component<any, any, any>;
-	props: any;
-	options: DrawerOptions;
-	resolver: (result: any) => void;
-};
+export type DrawerState = OverlayState<DrawerOptions>;
 
-class DrawerManager {
-	drawers = $state<DrawerState[]>([]);
+function normalizeDrawerOptions(options: DrawerOptions = {}): DrawerOptions & Required<Pick<OverlayOptions, 'closable'>> & Required<Pick<DrawerOptions, 'position' | 'size'>> {
+	return {
+		...options,
+		position: options.position || 'right',
+		size: options.size || 'normal',
+		closable: options.closable !== false
+	};
+}
 
-	open<T, Args extends Record<string, any>>(component: Component<Args, any, any>, props?: Args, options: DrawerOptions = {}): Promise<T> {
-		return new Promise<T>((resolve) => {
-			const drawer: DrawerState = {
-				component,
-				props,
-				options: {
-					position: options.position || 'right',
-					size: options.size || 'md',
-					closable: options.closable !== false,
-				},
-				resolver: resolve
-			};
-			this.drawers = [...this.drawers, drawer];
-		});
+class DrawerManagerFacade {
+	constructor(private readonly manager: OverlayStackManager) {}
+
+	get drawers() {
+		return this.manager.itemsOfKind<DrawerOptions>('drawer');
+	}
+
+	open<T, Args extends Record<string, any>>(component: Component<Args, any, any>, props?: Args, options?: DrawerOptions): Promise<T> {
+		return this.manager.open<T, Args, DrawerOptions>('drawer', component, props, normalizeDrawerOptions(options));
 	}
 
 	close(result?: any) {
-		if (this.drawers.length === 0) return;
-		const lastDrawer = this.drawers[this.drawers.length - 1];
-		lastDrawer.resolver(result);
-		this.drawers = this.drawers.slice(0, -1);
+		this.manager.close('drawer', result);
 	}
 
 	resolve(result?: any) {
-		this.close(result);
+		this.manager.resolve('drawer', result);
+	}
+
+	closeTopmostIfClosable(result?: any) {
+		this.manager.closeTopmostIfClosable(result);
+	}
+
+	isTopmost(drawer: DrawerState | undefined) {
+		return this.manager.isTopmost(drawer);
 	}
 }
 
 const KEY = 'atom-forge:drawer-manager';
 
 export function createDrawerManager() {
-	const manager = new DrawerManager();
+	const manager = getOverlayStackManager();
 	setDrawerManager(manager);
 }
 
-export const getDrawerManager = () => getContext<DrawerManager>(KEY);
-export const setDrawerManager = (manager: DrawerManager) => setContext(KEY, manager);
+export const getDrawerManager = () => new DrawerManagerFacade(getContext<OverlayStackManager>(KEY));
+export const setDrawerManager = (manager: OverlayStackManager) => setContext(KEY, manager);

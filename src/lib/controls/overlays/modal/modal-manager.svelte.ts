@@ -1,54 +1,67 @@
 import {RenderSnippet} from '../../../index';
 import type {Component, Snippet} from 'svelte';
 import {getContext, setContext} from 'svelte';
+import {getOverlayStackManager, type OverlayOptions, type OverlayStackManager, type OverlayState} from '../shared/overlay-manager.svelte';
 
-export type ModalState = {
-	component: Component<any, any, any>;
-	props: any;
-	resolver: (result: any) => void;
-	key?: string;
-};
+export type ModalOptions = OverlayOptions;
+export type ModalState = OverlayState<ModalOptions>;
 
-class ModalManager {
-	modals: ModalState[] = $state([]);
+type ModalOpenOptions = ModalOptions | string;
 
-	open<Props extends Record<string, any>>(component: Component<Props, any, any>, props?: Props, key?: string): Promise<any> {
-		if (key && this.modals.some(m => m.key === key)) return Promise.resolve(undefined);
-		return new Promise((resolve) => {
-			console.log("open", props)
-			const modal: ModalState = {component, props, resolver: resolve, key};
-			this.modals = [...this.modals, modal];
-		});
+function normalizeModalOptions(options?: ModalOptions): ModalOptions & Required<Pick<OverlayOptions, 'closable'>> {
+	return {
+		...options,
+		closable: options?.closable !== false
+	};
+}
+
+function toModalOptions(options?: ModalOpenOptions): ModalOptions | undefined {
+	if (typeof options === 'string') return {key: options};
+	return options;
+}
+
+class ModalManagerFacade {
+	constructor(private readonly manager: OverlayStackManager) {}
+
+	get modals() {
+		return this.manager.itemsOfKind<ModalOptions>('modal');
 	}
 
-	openSnippet<Args extends Record<string, any>>(snippet: Snippet<[Args]>, props?: Args): Promise<any> {
-		console.log("openSnippet", props)
-		return this.open(RenderSnippet, {snippet: snippet as Snippet, args: props} as any);
+	open<Result = any, Props extends Record<string, any> = Record<string, any>>(
+		component: Component<Props, any, any>,
+		props?: Props,
+		options?: ModalOpenOptions
+	): Promise<Result> {
+		return this.manager.open<Result, Props, ModalOptions>('modal', component, props, normalizeModalOptions(toModalOptions(options)));
+	}
+
+	openSnippet<Args extends Record<string, any>>(snippet: Snippet<[Args]>, props?: Args, options?: ModalOpenOptions): Promise<any> {
+		return this.open(RenderSnippet, {snippet: snippet as Snippet, args: props} as any, options);
 	}
 
 	close(result?: any) {
-		if (this.modals.length === 0) return;
-
-		const lastModal = this.modals[this.modals.length - 1];
-		lastModal.resolver(result);
-		this.modals = this.modals.slice(0, -1);
+		this.manager.close('modal', result);
 	}
 
 	resolve(result?: any) {
-		if (this.modals.length === 0) return;
-
-		const lastModal = this.modals[this.modals.length - 1];
-		lastModal.resolver(result);
-		this.modals = this.modals.slice(0, -1);
+		this.manager.resolve('modal', result);
 	}
-}
+
+	closeTopmostIfClosable(result?: any) {
+		this.manager.closeTopmostIfClosable(result);
+	}
+
+	isTopmost(modal: ModalState | undefined) {
+		return this.manager.isTopmost(modal);
+	}
+};
 
 const KEY = 'atom-forge:modal-manager';
 
 export function createModalManager() {
-	const manager = new ModalManager();
+	const manager = getOverlayStackManager();
 	setModalManager(manager);
 }
 
-export const getModalManager = () => getContext<ModalManager>(KEY);
-export const setModalManager = (manager: ModalManager) => setContext(KEY, manager);
+export const getModalManager = () => new ModalManagerFacade(getContext<OverlayStackManager>(KEY));
+export const setModalManager = (manager: OverlayStackManager) => setContext(KEY, manager);

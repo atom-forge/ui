@@ -1,8 +1,9 @@
 <script lang="ts">
-	import {createDrawerManager, createModalManager, createPopupManager, createToastManager, DrawerContainer, ModalContainer, PopupContainer, ToastContainer} from "../index";
+	import {createDrawerManager, createModalManager, createPopupManager, createToastManager, PopupContainer, ToastContainer} from "../index";
 	import type {ChildrenProp} from "../helpers/types";
 	import {createThemeManager} from "./theme-manager.svelte";
 	import {onMount} from "svelte";
+	import SharedOverlayContainer from "../controls/overlays/shared/SharedOverlayContainer.svelte";
 
 	let {
 		children
@@ -32,7 +33,6 @@
 	{@render children?.()}
 </div>
 <div id="atom-forge-portal-target" class="relative z-10000"></div>
-<ModalContainer/>
+<SharedOverlayContainer/>
 <PopupContainer/>
 <ToastContainer/>
-<DrawerContainer/>

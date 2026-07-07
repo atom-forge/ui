@@ -3,7 +3,7 @@
 	import {makeDefaultTableData} from "./helpers"
 	import {type Snippet, untrack} from 'svelte';
 	import { twMerge } from 'tailwind-merge';
-	import { AlignLeft, AlignCenter, AlignRight, Plus, X, Settings2, GripHorizontal, Trash2 } from 'lucide-svelte';
+	import { TextAlignStart, TextAlignCenter, TextAlignEnd, Plus, X, Settings2, GripHorizontal, Trash2 } from 'lucide-svelte';
 	import { Switch } from '../../forms/switch';
 import { PopupContainer, createPopupManager, getPopupManager } from '../../overlays/popup';
 import { dnd } from '../../../helpers/actions';
@@ -279,9 +279,9 @@ import { as } from '../../../helpers/as';
 									</div>
 
 									<!-- Align + settings -->
-									<button class={ib(cs.align === 'left')}   onclick={() => setAlign(c, 'left')}   title="Align left"><AlignLeft size={11}/></button>
-									<button class={ib(cs.align === 'center')} onclick={() => setAlign(c, 'center')} title="Align center"><AlignCenter size={11}/></button>
-									<button class={ib(cs.align === 'right')}  onclick={() => setAlign(c, 'right')}  title="Align right"><AlignRight size={11}/></button>
+									<button class={ib(cs.align === 'left')}   onclick={() => setAlign(c, 'left')}   title="Align left"><TextAlignStart size={11}/></button>
+									<button class={ib(cs.align === 'center')} onclick={() => setAlign(c, 'center')} title="Align center"><TextAlignCenter size={11}/></button>
+									<button class={ib(cs.align === 'right')}  onclick={() => setAlign(c, 'right')}  title="Align right"><TextAlignEnd size={11}/></button>
 									<button class={ib(popup?.popup?.ref === `cfg-${c}`)} onclick={(e) => popup?.open.snippet(as<Snippet>(colConfig), { c }, { anchor: e }, `cfg-${c}`)} title="Prefix / Postfix">
 										<Settings2 size={11}/>
 									</button>

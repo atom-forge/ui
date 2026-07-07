@@ -3,8 +3,8 @@
 	import {
 		GripVertical, Plus, X, Copy, Check,
 		ChevronDown, ChevronRight, ArrowUp, ArrowDown,
-		AlignLeft, Heading, Quote, Minus, Youtube, Table2, FileText, LayoutGrid, Code2,
-		CheckSquare, Bookmark,
+		TextAlignStart, Heading, Quote, Minus, Video, Table2, FileText, LayoutGrid, Code,
+		SquareCheck, Bookmark,
 	} from 'lucide-svelte';
 	import { ContextMenu, type ContextMenuItemConfig } from '../../overlays/context-menu';
 	import { getPopupManager } from '../../overlays/popup';
@@ -42,15 +42,15 @@
 	const BlockComp = $derived(components[block.type] as Component<{ id: string; data: any }> | undefined);
 
 	const typeIconMap: Record<string, IconComponent> = {
-		text:     AlignLeft,
+		text:     TextAlignStart,
 		heading:  Heading,
 		quote:    Quote,
 		divider:  Minus,
-		youtube:  Youtube,
+		youtube:  Video,
 		table:    Table2,
 		markdown: FileText,
-		code:     Code2,
-		todo:     CheckSquare,
+		code:     Code,
+		todo:     SquareCheck,
 		link:     Bookmark,
 	};
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {AlertTriangle, Check, CircleX, Info, X} from 'lucide-svelte';
+	import {TriangleAlert, Check, CircleX, Info, X} from 'lucide-svelte';
 	import {untrack} from "svelte";
 	import {fade, slide} from 'svelte/transition';
 	import {Button} from '../../general/button';
@@ -21,7 +21,7 @@
 	const typeIcons: Record<ToastType, IconDefinition> = {
 		info: Info,
 		success: Check,
-		warning: AlertTriangle,
+		warning: TriangleAlert,
 		error: CircleX,
 	};
 

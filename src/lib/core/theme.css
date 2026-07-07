@@ -73,6 +73,12 @@
 	.use-error   { @apply bg-error text-error-contrast; }
 }
 
+@layer components {
+	.overlay-backdrop {
+		@apply bg-black/50 dark:bg-black/60;
+	}
+}
+
 @utility striped-5 {
 	background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 3px, transparent 3px, transparent 6px);
 	@variant dark {

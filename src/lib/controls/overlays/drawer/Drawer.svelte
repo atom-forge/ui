@@ -37,16 +37,15 @@
 </script>
 
 <div
-	class="fixed top-0 bottom-0 z-9999 bg-surface border-l border-frame shadow-2xl flex flex-col"
+	class="fixed top-0 bottom-0 max-w-full bg-surface border-l border-frame shadow-2xl flex flex-col"
 	class:border-l={position === 'right'}
 	class:border-r={position === 'left'}
 	class:border-r-0={position === 'right'}
 	class:left-0={position === 'left'}
 	class:right-0={position === 'right'}
-	class:w-96={size === 'sm'}
-	class:w-128={size === 'md'}
-	class:w-192={size === 'lg'}
-	class:w-full={size === 'full'}
+	class:w-80={size === 'small'}
+	class:w-96={size === 'compact'}
+	class:w-128={size === 'normal'}
 	transition:trueSlide={{ axis: 'x', duration: 300 }}
 >
 	{@render children()}
