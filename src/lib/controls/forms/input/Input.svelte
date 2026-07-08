@@ -21,6 +21,7 @@
 		prefix,
 		suffix,
 		class: classes,
+		oninput: onUserInput,
 		...props
 	}: & ClassProp
 		& AnyProp
@@ -48,12 +49,14 @@
 		size === 'small'   && 'h-6 text-xs',
 		disabled  && 'cursor-not-allowed bg-muted/50 opacity-70 striped-10',
 		monospace && 'font-mono',
-		invalid ? 'border-error text-error' : 'border-frame',
+		invalid
+			? 'border-error text-error focus-within:ring-2 focus-within:ring-error/20'
+			: 'border-frame focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20',
 		classes,
 	));
 
 	const inputClass = untrack(() => twMerge(
-		'w-full border-none bg-transparent focus:ring-0 disabled:cursor-not-allowed text-canvas-contrast placeholder:text-muted-contrast',
+		'w-full border-none bg-transparent outline-none focus:ring-0 disabled:cursor-not-allowed text-canvas-contrast placeholder:text-muted-contrast',
 		size === 'normal'  && 'px-3',
 		size === 'compact' && 'px-2 text-sm',
 		size === 'small'   && 'px-2 text-xs',
@@ -95,6 +98,7 @@
 			inputEl.setSelectionRange(newCursorPos, newCursorPos);
 		}
 		value = formattedValue;
+		onUserInput?.(e);
 	}
 
 	let inputEl: HTMLInputElement | null = null;

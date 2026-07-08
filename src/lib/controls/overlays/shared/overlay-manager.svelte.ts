@@ -67,6 +67,14 @@ export class OverlayStackManager {
 		this.resolveItem(last, result);
 	}
 
+	closeAll(result?: any) {
+		const items = this.items;
+		this.items = [];
+		for (const item of items) {
+			item.resolver(result);
+		}
+	}
+
 	closeItemIfTopmost(item: OverlayState | undefined, result?: any) {
 		if (!item || !item.options.closable || !this.isTopmost(item)) return;
 		this.resolveItem(item, result);

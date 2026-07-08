@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {beforeNavigate} from '$app/navigation';
 	import {createDrawerManager, createModalManager, createPopupManager, createToastManager, PopupContainer, ToastContainer} from "../index";
 	import type {ChildrenProp} from "../helpers/types";
 	import {createThemeManager} from "./theme-manager.svelte";
@@ -23,10 +24,15 @@
 		localStorage.setItem('dark', JSON.stringify(themeManager.dark));
 	});
 
-	createModalManager();
-	createPopupManager();
+	const overlayStackManager = createModalManager();
+	const popupManager = createPopupManager();
 	createToastManager();
 	createDrawerManager();
+
+	beforeNavigate(() => {
+		overlayStackManager.closeAll();
+		popupManager.resolveRoot();
+	});
 </script>
 
 <div style="display: contents;">

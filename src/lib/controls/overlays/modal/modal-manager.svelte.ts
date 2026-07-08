@@ -61,6 +61,7 @@ const KEY = 'atom-forge:modal-manager';
 export function createModalManager() {
 	const manager = getOverlayStackManager();
 	setModalManager(manager);
+	return manager;
 }
 
 export const getModalManager = () => new ModalManagerFacade(getContext<OverlayStackManager>(KEY));

@@ -29,7 +29,9 @@ type OpenArgsType = (PosArgsType | AnchorArgsType) & { offset?: number}
 export class PopupManager {
 	popup: Popup | undefined = $state(undefined);
 	ignoreClose = false;
+	openTimeout: number | null = null;
 	closeTimeout: number | null = null;
+	pendingOpenResolver: ((result?: any) => void) | null = null;
 
 	constructor(readonly parent?: PopupManager) {}
 
@@ -66,7 +68,7 @@ export class PopupManager {
 		if (this.popup) this.close();
 		this.ignoreClose = true;
 		setTimeout(() => this.ignoreClose = false, 100);
-		let resolver: (result: any) => any = () => {};
+		let resolver: (result?: any) => any = () => {};
 		const promise = new Promise((resolve) => {resolver = resolve;});
 
 		if (anchor) {
@@ -76,8 +78,13 @@ export class PopupManager {
 				anchor = anchor.currentTarget;
 			}
 		}
-		setTimeout(
-			() => this.popup = {component, params, resolver, promise, event, anchor, align, offset, ref},
+		this.pendingOpenResolver = resolver;
+		this.openTimeout = window.setTimeout(
+			() => {
+				this.pendingOpenResolver = null;
+				this.openTimeout = null;
+				this.popup = {component, params, resolver, promise, event, anchor, align, offset, ref};
+			},
 			this.popup ? 200 : 0,
 		);
 		return promise;
@@ -102,6 +109,15 @@ export class PopupManager {
 	resolve(result?: any) {
 		this.popup?.resolver(result);
 		this.popup = undefined;
+		if (this.openTimeout !== null) {
+			window.clearTimeout(this.openTimeout);
+			this.openTimeout = null;
+		}
+		this.pendingOpenResolver?.(result);
+		this.pendingOpenResolver = null;
+		if (this.closeTimeout !== null) {
+			window.clearTimeout(this.closeTimeout);
+		}
 		this.closeTimeout = null;
 	}
 

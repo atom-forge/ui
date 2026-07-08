@@ -27,6 +27,9 @@
 				onTabChange(id);
 			}
 		},
+		get activeId() {
+			return activeTabId;
+		},
 		variant
 	});
 </script>

@@ -93,6 +93,10 @@ const result = await popupManager.open.snippet(myPopup, {}, { anchor: event });
 if (result === 'confirmed') { /* handle */ }
 ```
 
+## Navigation
+
+Route navigation closes the root popup immediately and resolves its pending promise with `undefined`. Modal and Drawer overlays are also cleared on navigation; Toast notifications remain visible.
+
 ---
 
 ## Positioning args

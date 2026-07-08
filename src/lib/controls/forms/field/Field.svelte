@@ -77,7 +77,7 @@
 				{#if labelSnippet}
 					{@render labelSnippet()}
 				{:else if label}
-					<label for={forId} class="text-sm font-medium text-canvas-contrast leading-snug">
+					<label for={forId} class="text-xs font-light text-muted-contrast leading-snug">
 						{label}
 						{#if required}<span class="text-error ml-0.5">*</span>{/if}
 						{#if optional}<span class="text-muted-contrast text-xs ml-1">(optional)</span>{/if}

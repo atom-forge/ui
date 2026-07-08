@@ -54,6 +54,7 @@ const KEY = 'atom-forge:drawer-manager';
 export function createDrawerManager() {
 	const manager = getOverlayStackManager();
 	setDrawerManager(manager);
+	return manager;
 }
 
 export const getDrawerManager = () => new DrawerManagerFacade(getContext<OverlayStackManager>(KEY));

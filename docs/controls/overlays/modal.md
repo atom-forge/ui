@@ -115,6 +115,10 @@ Modal and Drawer share one internal overlay stack and one renderer. A drawer ope
 
 Every modal has its own full-screen click-catcher. A single visible backdrop layer sits directly below the topmost overlay; overlay click-catchers stay transparent so backdrop color does not compound and the active overlay remains visually clear.
 
+## Navigation
+
+Route navigation closes all active Modal and Drawer overlays and resolves their pending promises with `undefined`. This cleanup ignores `closable: false`, because `closable` only controls user dismissal, not route lifecycle cleanup. Toasts remain visible across navigation.
+
 ## Backdrop styling
 
 The visible backdrop uses the overridable `.overlay-backdrop` class from the library theme. Consumers can override that class in their own stylesheet loaded after `@atom-forge/ui`:

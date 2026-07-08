@@ -212,12 +212,14 @@
 		size === 'compact' && 'text-xs',
 		size === 'small'   && 'text-[12px]',
 		disabled && 'cursor-not-allowed bg-muted/50 opacity-70 striped-10',
-		invalid  ? 'border-error text-error' : 'border-frame',
+		invalid
+			? 'border-error text-error focus-within:ring-2 focus-within:ring-error/20'
+			: 'border-frame focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20',
 		classes,
 	));
 
 	const taClass = $derived(twMerge(
-		'w-full bg-transparent border-none focus:ring-0 disabled:cursor-not-allowed text-canvas-contrast placeholder:text-muted-contrast leading-5',
+		'w-full bg-transparent border-none outline-none focus:ring-0 disabled:cursor-not-allowed text-canvas-contrast placeholder:text-muted-contrast leading-5',
 		size === 'normal'  && 'px-3 py-2 text-sm',
 		size === 'compact' && 'px-2 py-1 text-xs',
 		size === 'small'   && 'px-2 py-1 text-[12px]',
