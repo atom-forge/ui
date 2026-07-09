@@ -1,11 +1,11 @@
 # TimePicker
 
-A styled wrapper around the native `<input type="time">`. The browser's built-in time picker handles interaction; the component provides a consistent look matching `DatePicker` and `Select`.
+A time form control built on reusable time picker body and popover layers. It preserves the public `string | null` value shape and falls back to the native time input on coarse pointer devices.
 
 ## Import
 
 ```sveltehtml
-import { TimePicker } from '@atom-forge/ui';
+import { TimePicker, TimePickerBody, TimePopover } from '@atom-forge/ui';
 ```
 
 ---
@@ -15,7 +15,7 @@ import { TimePicker } from '@atom-forge/ui';
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `string \| null` | `null` | Bindable time value. Format: `"HH:MM"` or `"HH:MM:SS"` when `seconds` is set. |
-| `seconds` | `boolean` | `false` | Sets `step=1` on the native input to expose seconds. Changes value format to `"HH:MM:SS"`. |
+| `seconds` | `boolean` | `false` | Enables seconds. Changes value format to `"HH:MM:SS"`. |
 | `placeholder` | `string` | `'Select time'` | Text shown when no time is selected. |
 | `disabled` | `boolean` | `false` | Disables the picker. |
 | `clearable` | `boolean` | `false` | Shows an × button to clear the selected time. |
@@ -24,14 +24,24 @@ import { TimePicker } from '@atom-forge/ui';
 | `small` | `boolean` | `false` | Small size — `h-6`. Mutually exclusive with `compact`. |
 | `class` | `string` | — | Additional CSS classes for the trigger element. |
 
----
+## Related Components
+
+| Component | Description |
+|-----------|-------------|
+| `TimePickerBody` | Time spinner body without a trigger or overlay. |
+| `TimePopover` | Anchored popover around `TimePickerBody` with a full-width confirmation footer. |
+| `TimePicker` | Form control that uses `TimePopover` internally. |
 
 ## Behavior
 
-- A hidden `<input type="time">` is anchored inside the container; `showPicker()` opens the native picker near the component (Chrome 99+, Edge, Safari 16+, falls back to `.click()`).
-- The clock icon (separated by a vertical divider) triggers the native picker.
-- The text field is directly editable — accepts `HH:MM` (or `HH:MM:SS` with `seconds`); value updates on blur/enter.
-- `value` is kept in sync from both the native picker and the text field.
+- Desktop pointer devices open the library popover.
+- Coarse pointer devices use the hidden native `<input type="time">`.
+- Popovers close on outside click and Escape.
+- Confirmation is explicit through the full-width footer button.
+- The default confirmation label is `OK`; pass `confirmLabel` to localize it.
+- `onconfirm` on `TimePopover` may be async; the footer shows loading while pending.
+- A null popover value defaults to `00:00` or `00:00:00`, so midnight can be confirmed without editing.
+- `TimePickerBody` keeps visual labels hidden and exposes `Hours`, `Minutes`, and `Seconds` through accessible labels.
 
 ---
 
@@ -62,4 +72,14 @@ import { TimePicker } from '@atom-forge/ui';
 
 <!-- Custom list: 10, 30, 50 minutes -->
 <TimePicker bind:value round={[10, 30, 50]}/>
+```
+
+### Action popover
+
+```sveltehtml
+<TimePopover value={time} round={5} confirmLabel="Mentés" onconfirm={saveTime}>
+  {#snippet trigger(open, isOpen)}
+    <Button secondary outline label="Choose time" onclick={open} aria-expanded={isOpen} />
+  {/snippet}
+</TimePopover>
 ```

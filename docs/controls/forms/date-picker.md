@@ -1,11 +1,11 @@
 # DatePicker
 
-A single-date selector with a popup calendar. Styled consistently with `Select` and `Input`. Supports min/max bounds, disabled dates, custom weekday start, and a clearable option.
+A single-date form control built on reusable date picker body and popover layers. Supports min/max bounds, disabled dates, custom weekday start, async popover confirmation, and a clearable option.
 
 ## Import
 
 ```ts
-import { DatePicker } from 'atom-forge';
+import { DatePicker, DatePickerBody, DatePopover } from '@atom-forge/ui';
 ```
 
 ## Props
@@ -25,6 +25,21 @@ import { DatePicker } from 'atom-forge';
 | `compact` | `boolean` | — | Compact size — `h-8`. Mutually exclusive with `small`. |
 | `small` | `boolean` | — | Small size — `h-6`. Mutually exclusive with `compact`. |
 | `class` | `string` | — | Additional CSS classes for the trigger element. |
+
+## Related Components
+
+| Component | Description |
+|-----------|-------------|
+| `DatePickerBody` | Calendar body without a trigger or overlay. |
+| `DatePopover` | Anchored popover around `DatePickerBody` with a full-width confirmation footer. |
+| `DatePicker` | Form control that uses `DatePopover` internally. |
+
+## Popover Behavior
+
+- Popovers close on outside click and Escape.
+- Confirmation is explicit through the full-width footer button.
+- The default confirmation label is `OK`; pass `confirmLabel` to localize it.
+- `onconfirm` may be async; the footer shows loading while pending.
 
 ## Usage
 
@@ -46,4 +61,14 @@ import { DatePicker } from 'atom-forge';
 
 ```sveltehtml
 <DatePicker bind:value={date} format={d => d.toLocaleDateString('hu-HU')} />
+```
+
+### Action popover
+
+```sveltehtml
+<DatePopover value={date} confirmLabel="Mentés" onconfirm={saveDate}>
+  {#snippet trigger(open, isOpen)}
+    <Button secondary outline label="Choose date" onclick={open} aria-expanded={isOpen} />
+  {/snippet}
+</DatePopover>
 ```

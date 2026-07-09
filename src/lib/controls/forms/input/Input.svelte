@@ -44,9 +44,9 @@
 
 	const wrapperClass = $derived(twMerge(
 		'relative flex items-center rounded-control border bg-control border-frame transition-colors',
-		size === 'normal'  && 'h-10 text-xs',
+		size === 'normal'  && 'h-10 text-sm',
 		size === 'compact' && 'h-8 text-xs',
-		size === 'small'   && 'h-6 text-xs',
+		size === 'small'   && 'h-6 text-[12px]',
 		disabled  && 'cursor-not-allowed bg-muted/50 opacity-70 striped-10',
 		monospace && 'font-mono',
 		invalid
@@ -58,8 +58,8 @@
 	const inputClass = untrack(() => twMerge(
 		'w-full border-none bg-transparent outline-none focus:ring-0 disabled:cursor-not-allowed text-canvas-contrast placeholder:text-muted-contrast',
 		size === 'normal'  && 'px-3',
-		size === 'compact' && 'px-2 text-sm',
-		size === 'small'   && 'px-2 text-xs',
+		size === 'compact' && 'px-2',
+		size === 'small'   && 'px-2',
 		!!icon && 'pl-9',
 		type === 'password' && 'pr-9',
 	));

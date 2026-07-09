@@ -28,6 +28,9 @@
 		items: T[];
 		orientation?: Orientation;
 		grabbedClass?: string;
+		draggingClass?: string;
+		dropIndicatorClass?: string;
+		preservePreviewSize?: boolean;
 		previewOffset?: (args: { container: HTMLElement }) => { x: number; y: number };
 		/** CSS selector for a drag handle inside each item. If provided, drag starts only from that element. */
 		dragHandleSelector?: string;
@@ -43,7 +46,10 @@
 		items = $bindable([]),
 		id = "default-list",
 		orientation = "vertical",
-		grabbedClass,
+		grabbedClass = "rounded-control bg-surface-primary shadow-xl ring-1 ring-accent/35 opacity-95 scale-[1.01]",
+		draggingClass = "opacity-35",
+		dropIndicatorClass,
+		preservePreviewSize = true,
 		previewOffset,
 		dragHandleSelector,
 		item: itemSnippet,
@@ -77,7 +83,7 @@
 			setCustomNativeDragPreview = preview;
 			pointerOutsideOfPreview = pointer;
 
-			const unmonitor = monitorForElements({
+				const unmonitor = monitorForElements({
 				onDrop: () => {
 					insertIndex = -1;
 					draggingId = null;
@@ -125,30 +131,20 @@
 	// --- Utility: reorder same-list ---
 	function reorder(sourceId: string | number, toIndex: number) {
 		const startIndex = items.findIndex((i) => i.id === sourceId);
-		console.log(`[DnD] reorder | list="${id}" | item="${sourceId}" | startIndex=${startIndex} → toIndex=${toIndex}`);
-		if (startIndex === -1) {
-			console.warn('  ❌ item not found');
-			return;
-		}
+		if (startIndex === -1) return;
 		if (toIndex === startIndex || toIndex === startIndex + 1) {
-			console.log('  ↩ no-op (same position)');
 			return;
 		}
 		const newItems = [...items];
 		const [moved] = newItems.splice(startIndex, 1);
 		const insertAt = toIndex > startIndex ? toIndex - 1 : toIndex;
 		newItems.splice(insertAt, 0, moved);
-		console.log('  ✅ reordered:', newItems.map((i: any) => i.id));
 		items = newItems;
 	}
 
 	// --- Utility: cross-list move ---
 	function crossListMove(sourceId: string | number, sourceListId: string, toIndex: number) {
-		console.log(`[DnD] crossListMove | "${sourceListId}" → "${id}" | item="${sourceId}" | toIndex=${toIndex}`);
-		if (!groupCtx) {
-			console.warn('  ❌ no groupCtx');
-			return;
-		}
+		if (!groupCtx) return;
 		groupCtx.onCrossListDrop({
 			sourceListId,
 			targetListId: id,
@@ -185,8 +181,15 @@
 					`[data-dnd-id="${source.data.id}"][data-dnd-list="${id}"]`
 				);
 				if (el) {
+					const rect = el.getBoundingClientRect();
 					const inner = el.firstElementChild;
 					const clone = (inner ?? el).cloneNode(true) as HTMLElement;
+					if (preservePreviewSize) {
+						clone.style.boxSizing = 'border-box';
+						clone.style.width = `${rect.width}px`;
+						clone.style.minWidth = `${rect.width}px`;
+						clone.style.height = `${rect.height}px`;
+					}
 					if (grabbedClass) {
 						container.style.padding = `${padding}px`;
 						clone.className = twMerge(clone.className, grabbedClass);
@@ -242,7 +245,7 @@
         onDrop: handleDrop,
     }}
 >
-	<DropSlot atIndex={0} {insertIndex} draggingItem={items.find(i => i.id === draggingId)} {orientation} {dropIndicatorSnippet}/>
+	<DropSlot atIndex={0} {insertIndex} draggingItem={items.find(i => i.id === draggingId)} {orientation} class={dropIndicatorClass} {dropIndicatorSnippet}/>
 
 	{#if items.length === 0 && empty}
 		<EmptyState icon={empty.icon} title={empty.title} description={empty.description}/>
@@ -250,8 +253,10 @@
 
 	{#each items as item, index (item.id)}
 		<div
-			class="transition-opacity duration-150"
-			class:opacity-40={draggingId === item.id}
+			class={twMerge(
+				"transition-[opacity,transform,filter] duration-150",
+				draggingId === item.id ? draggingClass : "",
+			)}
 			data-dnd-id={item.id}
 			data-dnd-list={id}
 			use:dnd.draggable={{
@@ -280,7 +285,7 @@
 			{@render itemSnippet(item)}
 		</div>
 
-		<DropSlot atIndex={index + 1} {insertIndex} draggingItem={items.find(i => i.id === draggingId)} {orientation} {dropIndicatorSnippet}/>
+		<DropSlot atIndex={index + 1} {insertIndex} draggingItem={items.find(i => i.id === draggingId)} {orientation} class={dropIndicatorClass} {dropIndicatorSnippet}/>
 	{/each}
 
 </div>

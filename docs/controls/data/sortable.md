@@ -22,7 +22,10 @@ Items must have a unique `id: string | number` field.
 | `id` | `string` | `'default-list'` | Unique identifier for this list. Required when used inside a `SortableGroup`. |
 | `item` | `Snippet<[T]>` | — | Snippet rendered for each item. |
 | `orientation` | `'vertical' \| 'horizontal' \| 'grid'` | `'vertical'` | Affects drop edge detection and default indicator direction. |
-| `grabbedClass` | `string` | — | Tailwind classes added to the clone shown as the native drag preview. |
+| `grabbedClass` | `string` | polished preview classes | Tailwind classes added to the clone shown as the native drag preview. |
+| `draggingClass` | `string` | `'opacity-35'` | Tailwind classes applied to the source item while it is being dragged. |
+| `dropIndicatorClass` | `string` | — | Tailwind classes added to the default insertion indicator wrapper. Ignored when `dropIndicator` is provided. |
+| `preservePreviewSize` | `boolean` | `true` | Keeps the native drag preview clone at the original item's measured size. |
 | `previewOffset` | `(args) => {x, y}` | — | Custom cursor offset for the drag preview. |
 | `dragHandleSelector` | `string` | — | CSS selector for a handle element inside each item. Drag starts only from that element. |
 | `dropIndicator` | `Snippet<[T \| undefined]>` | — | Custom drop indicator snippet. Receives the item being dragged. |
@@ -71,7 +74,18 @@ Only trigger drag from a specific element inside the item:
 ```sveltehtml
 <SortableList
   bind:items={tasks}
-  grabbedClass="shadow-xl ring-2 ring-accent"
+  grabbedClass="rounded-md bg-surface-primary shadow-xl ring-2 ring-accent/40 scale-[1.02]"
+>
+  ...
+</SortableList>
+```
+
+### Drag state styling
+
+```sveltehtml
+<SortableList
+  bind:items={tasks}
+  draggingClass="opacity-30 blur-[1px]"
 >
   ...
 </SortableList>
@@ -88,6 +102,10 @@ Only trigger drag from a specific element inside the item:
   {/snippet}
 </SortableList>
 ```
+
+The default indicator is a thin accent line with a small anchor dot. Use
+`dropIndicatorClass` for spacing tweaks, or provide the `dropIndicator` snippet
+when the insertion preview should match a specific surface.
 
 ---
 

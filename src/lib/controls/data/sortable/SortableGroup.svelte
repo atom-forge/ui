@@ -80,53 +80,25 @@
             return typeField;
         },
         onCrossListDrop({ sourceListId, targetListId, itemId, targetIndex }) {
-            console.groupCollapsed(`[DnD] cross-list drop`);
-            console.log('  source list :', sourceListId);
-            console.log('  target list :', targetListId);
-            console.log('  item id     :', itemId);
-            console.log('  targetIndex :', targetIndex);
-
             const sourceList = registry.get(sourceListId);
             const targetList = registry.get(targetListId);
-            console.log('  source registered?', !!sourceList, '| target registered?', !!targetList);
-            if (!sourceList || !targetList) {
-                console.warn('  ❌ abort: list not found in registry');
-                console.groupEnd();
-                return;
-            }
+            if (!sourceList || !targetList) return;
 
             const sourceItems = [...sourceList.getItems()];
-            console.log('  source items:', sourceItems.map(i => i.id));
             const itemIndex = sourceItems.findIndex((i) => i.id === itemId);
-            console.log('  item index in source:', itemIndex);
-            if (itemIndex === -1) {
-                console.warn('  ❌ abort: item not found in source list');
-                console.groupEnd();
-                return;
-            }
+            if (itemIndex === -1) return;
 
             const [movedItem] = sourceItems.splice(itemIndex, 1);
-            console.log('  moved item  :', movedItem);
 
             const itemType = movedItem[typeField];
             const allowed = canDrop(targetListId, itemType);
-            console.log(`  canDrop("${targetListId}", "${itemType}") =`, allowed);
-            if (!allowed) {
-                console.warn('  ❌ abort: rejected by rules');
-                console.groupEnd();
-                return;
-            }
+            if (!allowed) return;
 
             sourceList.setItems(sourceItems);
             const targetItems = [...targetList.getItems()];
             const insertAt = targetIndex ?? targetItems.length;
-            console.log('  target items before:', targetItems.map(i => i.id));
-            console.log('  insert at index    :', insertAt);
             targetItems.splice(insertAt, 0, movedItem);
-            console.log('  target items after :', targetItems.map(i => i.id));
             targetList.setItems(targetItems);
-            console.log('  ✅ done');
-            console.groupEnd();
         },
     });
 

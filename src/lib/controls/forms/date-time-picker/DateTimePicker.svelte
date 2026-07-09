@@ -1,22 +1,23 @@
 <script lang="ts">
-	import { Icon } from '../../general/icon';
-	import DatePopover from './DatePopover.svelte';
-	import type { XOR } from '../../../helpers/types';
-	import { Calendar, X } from 'lucide-svelte';
-	import { untrack } from 'svelte';
-	import { twMerge } from 'tailwind-merge';
+	import {Icon} from '../../general/icon';
+	import DateTimePopover from './DateTimePopover.svelte';
+	import type {XOR} from '../../../helpers/types';
+	import {CalendarClock, X} from 'lucide-svelte';
+	import {untrack} from 'svelte';
+	import {twMerge} from 'tailwind-merge';
+
+	type RoundProp = false | 0 | 5 | 10 | 15 | 20 | 30 | number[];
 
 	let {
 		value = $bindable(null),
-		format = (d: Date) => d.toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'}),
-		placeholder = 'Select date',
+		format = (d: Date) => d.toLocaleString('en-US', {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}),
+		placeholder = 'Select date and time',
 		disabled = false,
 		clearable = false,
 		min,
 		max,
-		weekStart = 1,
-		disabledDates,
-		disabledDays,
+		seconds = false,
+		round = false,
 		compact,
 		small,
 		class: classes = '',
@@ -28,27 +29,28 @@
 		clearable?: boolean;
 		min?: Date;
 		max?: Date;
-		weekStart?: 0 | 1;
-		disabledDates?: Date[];
-		disabledDays?: number[];
+		seconds?: boolean;
+		round?: RoundProp;
 		class?: string;
 	} = $props();
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 
-	// ── native input handler (mobile overlay) ─────────────────────────────────
-
 	function pad(n: number) { return String(n).padStart(2, '0'); }
 
 	function dateToNativeValue(d: Date): string {
-		return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+		const date = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+		const time = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+		return seconds ? `${date}T${time}:${pad(d.getSeconds())}` : `${date}T${time}`;
 	}
 
 	function handleNativeInput(e: Event) {
 		const v = (e.target as HTMLInputElement).value;
 		if (!v) { value = null; return; }
-		const [y, m, d] = v.split('-').map(Number);
-		value = new Date(y, m - 1, d);
+		const [date, time] = v.split('T');
+		const [y, m, d] = date.split('-').map(Number);
+		const [h, minValue, s] = time.split(':').map(Number);
+		value = new Date(y, m - 1, d, h ?? 0, minValue ?? 0, s ?? 0, 0);
 	}
 
 	function clearValue(event: MouseEvent) {
@@ -60,14 +62,12 @@
 		return window.matchMedia('(pointer: coarse)').matches;
 	}
 
-	// ── styles ────────────────────────────────────────────────────────────────
-
 	function containerClass(isOpen: boolean) {
 		return twMerge(
-		'relative w-full rounded-control bg-control border border-frame transition-colors cursor-pointer',
-		size === 'normal'  && 'h-10 text-sm',
+		'relative w-full rounded-control bg-control border border-frame transition-colors cursor-pointer select-none',
+		size === 'normal' && 'h-10 text-sm',
 		size === 'compact' && 'h-8 text-xs',
-		size === 'small'   && 'h-6 text-xs',
+		size === 'small' && 'h-6 text-xs',
 		isOpen && 'ring-2 ring-accent',
 		disabled && 'opacity-70 cursor-not-allowed',
 		classes,
@@ -77,21 +77,20 @@
 	const iconPad = size === 'normal' ? 'px-3' : 'px-2';
 </script>
 
-<DatePopover
+<DateTimePopover
 	{value}
 	{min}
 	{max}
+	{round}
+	{seconds}
 	{disabled}
-	{weekStart}
-	{disabledDates}
-	{disabledDays}
 	onconfirm={(next) => { value = next; }}
 >
-	{#snippet trigger(open, isOpen)}
-		<div class={containerClass(isOpen)} role="button" tabindex={disabled ? undefined : 0} onclick={(e) => { if (!shouldUseNativePicker()) open(e); }} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }} aria-expanded={isOpen}>
-			<!-- Native date input — always rendered; CSS enables pointer events on touch devices only -->
+	{#snippet trigger(open, openState)}
+		<div class={containerClass(openState)} role="button" tabindex={disabled ? undefined : 0} onclick={(e) => { if (!shouldUseNativePicker()) open(e); }} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }} aria-expanded={openState}>
 			<input
-				type="date"
+				type="datetime-local"
+				step={seconds ? 1 : 60}
 				value={value ? dateToNativeValue(value) : ''}
 				min={min ? dateToNativeValue(min) : undefined}
 				max={max ? dateToNativeValue(max) : undefined}
@@ -102,7 +101,7 @@
 
 			<div class="flex h-full flex-row items-center pointer-events-none">
 				<span class={twMerge('flex items-center text-muted-contrast shrink-0', iconPad)}>
-					<Icon icon={Calendar} size="4"/>
+					<Icon icon={CalendarClock} size="4"/>
 				</span>
 				<span class={twMerge('flex-1 truncate text-canvas-contrast select-none', size === 'normal' ? 'pr-3' : 'pr-2')}>
 					{#if value}
@@ -128,4 +127,4 @@
 			{/if}
 		</div>
 	{/snippet}
-</DatePopover>
+</DateTimePopover>

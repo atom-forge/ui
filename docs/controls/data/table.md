@@ -17,6 +17,7 @@ import { Table, type ColumnDef } from '@atom-forge/ui';
 | `data` | `T[]` | — | Row data array. `T` must extend `Record<string, any>`. |
 | `columns` | `ColumnDef<T>[]` | — | Bindable column definitions. |
 | `rowStyle` | `string \| StylingFn<T>` | — | Static class string or function returning classes/styles per row. |
+| `rowClick` | `(row, table, index, event) => void` | — | Optional row click handler. Rows become keyboard-focusable and activate on Enter/Space. Clicks on interactive child elements are ignored. |
 | `columnsEditable` | `boolean` | `false` | Enables a right-click context menu on the header to toggle column visibility. |
 | `class` | `string` | — | Extra Tailwind classes on the wrapper, merged via `twMerge`. |
 
@@ -99,6 +100,18 @@ type StylingResult = string | { class?: string; style?: string };
   rowStyle={(row) => row.active ? '' : 'opacity-50'}
 />
 ```
+
+### Row clicks
+
+```sveltehtml
+<Table
+  {data}
+  bind:columns
+  rowClick={(row) => openUser(row)}
+/>
+```
+
+When `rowClick` is provided, rows use pointer affordance and can be activated with Enter or Space. Clicks inside buttons, links, form controls, labels, or elements marked with `data-table-row-click-ignore` do not trigger the row handler.
 
 ### Editable columns
 
