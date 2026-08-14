@@ -20,6 +20,30 @@ export type OverlapStrategy = 'compress' | 'expand' | 'calendar' | 'calendar-v';
 
 export type BlockedRegion = { x: number; y: number; w: number; h: number };
 
+export type OrganizerSubdivision = {
+	minorEvery?: number;
+	majorEvery?: number;
+	alternateEvery?: number;
+	offset?: number;
+};
+
+export type OrganizerSubdivisions = {
+	x?: OrganizerSubdivision;
+	y?: OrganizerSubdivision;
+};
+
+export type OrganizerAxisMark = {
+	index: number;
+	minor: boolean;
+	major: boolean;
+	alternate: boolean;
+};
+
+export type OrganizerCellMeta = {
+	x: OrganizerAxisMark;
+	y: OrganizerAxisMark;
+};
+
 export type GhostState = {
 	left: string;
 	width: string;

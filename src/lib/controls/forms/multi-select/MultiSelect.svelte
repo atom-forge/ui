@@ -4,10 +4,11 @@
 	import {twMerge} from 'tailwind-merge';
 	import {ChevronDown, X} from 'lucide-svelte';
 	import {Icon} from '../../general/icon';
+	import {Button} from '../../general/button';
 	import {getPopupManager} from '../../overlays/popup';
 	import SortableList from '../../data/sortable/SortableList.svelte';
 	import MultiSelectDropdown from './MultiSelectDropdown.svelte';
-	import type {SelectOption, SelectOptionsSource} from '../select/Select.svelte';
+	import type {SelectButtonTrigger, SelectOption, SelectOptionsSource} from '../select/Select.svelte';
 	import type {XOR, ClassProp} from '../../../index';
 
 	type SortableOption = SelectOption & { id: string | number };
@@ -18,6 +19,8 @@
 		placeholder = 'Select...',
 		disabled = false,
 		searchable = true,
+		button,
+		hideKeyboardHints = false,
 		clearable = false,
 		sortable = false,
 		max,
@@ -34,6 +37,8 @@
 		placeholder?: string;
 		disabled?: boolean;
 		searchable?: boolean;
+		button?: SelectButtonTrigger;
+		hideKeyboardHints?: boolean;
 		clearable?: boolean;
 		sortable?: boolean;
 		max?: number;
@@ -157,7 +162,7 @@
 		isOpen = true;
 		await popupManager.open.component(
 			MultiSelectDropdown,
-			{options, initialValue: value, max, searchable, onToggle: handleToggle, optionSnippet},
+			{options, initialValue: value, max, searchable, hideKeyboardHints, onToggle: handleToggle, optionSnippet},
 			{anchor: triggerEl!, align: 'both'},
 		);
 		isOpen = false;
@@ -181,13 +186,37 @@
 	));
 </script>
 
-<button
-	bind:this={triggerEl}
-	onclick={openDropdown}
-	onkeydown={onTriggerKeydown}
-	class={triggerCls}
-	{disabled}
->
+{#if button}
+	<Button
+		bind:element={triggerEl}
+		label={button.label}
+		icon={button.icon}
+		endIcon={button.endIcon}
+		secondary={button.secondary}
+		destructive={button.destructive}
+		ghost={button.ghost}
+		link={button.link}
+		muted={button.muted}
+		accent={button.accent}
+		outline={button.outline}
+		pill={button.pill}
+		borderless={button.borderless}
+		{compact}
+		{small}
+		{disabled}
+		onclick={openDropdown}
+		onkeydown={onTriggerKeydown}
+		class={classes}
+		aria-haspopup="listbox"
+	/>
+{:else}
+	<button
+		bind:this={triggerEl}
+		onclick={openDropdown}
+		onkeydown={onTriggerKeydown}
+		class={triggerCls}
+		{disabled}
+	>
 	<span class="flex-1 flex flex-wrap gap-1 min-w-0" role="presentation">
 		{#if selectedOptions.length === 0}
 			<span class="text-muted-contrast">{placeholder}</span>
@@ -251,9 +280,10 @@
 			<Icon icon={X} pxSize={12}/>
 		</span>
 	{/if}
-	<Icon
-		icon={ChevronDown}
-		pxSize={14}
-		class={twMerge('text-muted-contrast shrink-0 transition-transform duration-150', isOpen && 'rotate-180')}
-	/>
-</button>
+		<Icon
+			icon={ChevronDown}
+			pxSize={14}
+			class={twMerge('text-muted-contrast shrink-0 transition-transform duration-150', isOpen && 'rotate-180')}
+		/>
+	</button>
+{/if}

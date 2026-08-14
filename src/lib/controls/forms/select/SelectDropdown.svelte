@@ -9,12 +9,14 @@
 		options,
 		value,
 		searchable,
+		hideKeyboardHints,
 		onSelect,
 		optionSnippet,
 	}: {
 		options: SelectOptionsSource; // Frissített típus
 		value?: string | number;
 		searchable?: boolean;
+		hideKeyboardHints?: boolean;
 		onSelect: (option: SelectOption) => void;
 		optionSnippet?: Snippet<[SelectOption, boolean]>;
 	} = $props();
@@ -45,6 +47,7 @@
 <SelectPopup
 	{items}
 	{searchable}
+	{hideKeyboardHints}
 	bind:query
 	onSelect={({data}) => { onSelect(data); popupManager.close(); }}
 	close={() => popupManager.close()}

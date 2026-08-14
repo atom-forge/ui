@@ -36,6 +36,8 @@ import type { SelectOption, SelectOptionsSource } from '$lib';
 | `placeholder` | `string` | `'Select...'` | Placeholder shown when nothing is selected. |
 | `disabled` | `boolean` | `false` | Disables the trigger. Chips remain visible. |
 | `searchable` | `boolean` | `true` | Shows a search input in the dropdown. |
+| `button` | `SelectButtonTrigger` | — | Renders a Button component as the trigger instead of the chip field. |
+| `hideKeyboardHints` | `boolean` | `false` | Hides the keyboard-navigation hint bar at the bottom of the dropdown. |
 | `clearable` | `boolean` | `false` | Shows a clear-all button when items are selected. |
 | `sortable` | `boolean` | `false` | Enables drag-and-drop chip reordering. |
 | `max` | `number` | — | Maximum selectable items. Further options are greyed out. |
@@ -102,6 +104,18 @@ Add `sortable` to enable drag-and-drop reordering. The `value` binding is kept i
 <MultiSelect {options} bind:value sortable />
 ```
 
+## Button trigger
+
+Use the same `button` prop as Select when the trigger should be a Button. No chevron is shown unless you provide `endIcon`.
+
+```sveltehtml
+<MultiSelect
+  {options}
+  bind:value
+  button={{label: 'Add tags', icon: Plus, secondary: true}}
+/>
+```
+
 ## Keyboard
 
 | Key | Action |
@@ -109,6 +123,8 @@ Add `sortable` to enable drag-and-drop reordering. The `value` binding is kept i
 | `ArrowDown / Up` | Navigate the dropdown list |
 | `Enter` | Toggle the highlighted option |
 | `Escape` | Close the dropdown |
+
+No option is highlighted when the dropdown opens. Press an arrow key to begin keyboard navigation.
 
 ## SelectOption type
 

@@ -1,6 +1,6 @@
 # Component Overview
 
-This document provides an overview of all components available in the **atom-forge** UI library, organized by category.
+This document provides an overview of the documented stable controls in the **atom-forge** UI library, organized by category. Additional exported modules are listed at the end so consumers can discover the full public surface.
 
 ---
 
@@ -38,6 +38,15 @@ Components for displaying content, user information, and UI status.
 - **[Carousel](../controls/display/carousel.md)**: A horizontally scrollable slide container with scroll-snap and navigation.
 - **[Empty State](../controls/display/empty-state.md)**: A centered placeholder shown when a section has no content.
 - **[Flip Card](../controls/display/flip-card.md)**: A 3D flip card with a front and back face.
+- **Skeleton**: Loading placeholders exported from `controls/display/skeleton`.
+
+---
+
+## Content
+Components for rendering structured content.
+
+- **Doc**: Document rendering primitives exported from `controls/content/doc`.
+- **Prose**: Prose content rendering primitives exported from `controls/content/prose`.
 
 ---
 
@@ -63,6 +72,17 @@ Standardized form controls and inputs for user data collection.
 
 ---
 
+## Editors
+Rich editing controls for structured authoring workflows.
+
+- **Block Editor**: Block-based document editor exported from `controls/editors/block-editor`.
+- **Diagram Editor**: Diagram editing controls exported from `controls/editors/diagram-editor`.
+- **Image Editor**: Image editing controls exported from `controls/editors/img-editor`.
+- **Markdown Editor**: Markdown editing controls exported from `controls/editors/markdown-editor`.
+- **Table Editor**: Table editing controls exported from `controls/editors/table-editor`.
+
+---
+
 ## Layout
 Structural components to help organize and navigate content.
 
@@ -81,10 +101,21 @@ Structural components to help organize and navigate content.
 ## Overlays
 Dynamic overlays that appear on top of the main application content.
 
+- **Command**: Command palette overlay primitives exported from `controls/overlays/command`.
 - **[Context Menu](../controls/overlays/context-menu.md)**: A popup menu built from a declarative configuration.
-- **[Drawer](../controls/overlays/drawer.md)**: A slide-in panel anchored to the left or right edge of the screen.
+- **[Drawer](../controls/overlays/drawer.md)**: A slide-in panel anchored to any screen edge.
 - **[Modal](../controls/overlays/modal.md)**: An imperative modal dialog system.
 - **[Popup](../controls/overlays/popup.md)**: A floating overlay system for anchored content like dropdowns and submenus.
 - **[Toast](../controls/overlays/toast.md)**: Lightweight notification messages stacked in a fixed overlay.
 - **[Tooltip](../controls/overlays/tooltip.md)**: Hover tooltips that appear with a delay.
 - **[Zen](../controls/overlays/zen.md)**: A fullscreen overlay for distraction-free focus mode.
+
+---
+
+## Scheduling
+Controls for calendar, timeline, and resource planning interfaces.
+
+- **Calendar**: Calendar scheduling primitives exported from `controls/scheduling/calendar`.
+- **Gantt**: Gantt chart planning primitives exported from `controls/scheduling/gantt`.
+- **[Organizer](../controls/scheduling/organizer.md)**: A unit-based scheduling surface for calendars, dashboards, and resource grids.
+- **Resource Manager**: Resource planning primitives exported from `controls/scheduling/resource-manager`.

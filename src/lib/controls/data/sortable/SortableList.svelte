@@ -1,18 +1,33 @@
+<script module lang="ts">
+	export type SortableChangeDetail<T extends { id: string | number }> = {
+		items: T[];
+		previousItems: T[];
+		item: T | undefined;
+		itemId: string | number;
+		fromIndex: number;
+		toIndex: number;
+		trigger: string;
+		source: string;
+	};
+</script>
+
 <script lang="ts" generics="T extends { id: string | number }">
+	import {flip} from "svelte/animate";
+	import type {ActionReturn} from "svelte/action";
+	import {getContext} from "svelte";
+	import {
+		dndzone,
+		dragHandle,
+		dragHandleZone,
+		SHADOW_ITEM_MARKER_PROPERTY_NAME,
+		type DndEvent,
+		type Options,
+	} from "svelte-dnd-action";
 	import {twMerge} from "tailwind-merge";
-	import {dnd} from "../../../helpers/actions";
-	import {getContext, onMount} from "svelte";
+	import EmptyState from "../../display/empty-state/EmptyState.svelte";
+	import type {IconDefinition} from "../../general/icon";
 	import type {GroupContext} from "./SortableGroup.svelte";
 	import type {Snippet} from "svelte";
-	import EmptyState from "../../display/empty-state/EmptyState.svelte";
-	import DropSlot from "./DropSlot.svelte";
-	import type {IconDefinition} from "../../general/icon";
-
-	// Stubs replaced by real implementations in onMount (never called during SSR)
-	let attachClosestEdge: typeof import('@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge').attachClosestEdge = (data) => data as any;
-	let extractClosestEdge: typeof import('@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge').extractClosestEdge = () => null;
-	let setCustomNativeDragPreview: Awaited<ReturnType<typeof dnd.getPreview>> = () => {};
-	let pointerOutsideOfPreview: Awaited<ReturnType<typeof dnd.getPointerOffset>> = () => ({x: 0, y: 0}) as any;
 
 	type Orientation = "vertical" | "horizontal" | "grid";
 
@@ -34,6 +49,8 @@
 		previewOffset?: (args: { container: HTMLElement }) => { x: number; y: number };
 		/** CSS selector for a drag handle inside each item. If provided, drag starts only from that element. */
 		dragHandleSelector?: string;
+		flipDurationMs?: number;
+		onchange?: (items: T[], detail: SortableChangeDetail<T>) => void;
 		item: Snippet<[T]>;
 		dropIndicator?: Snippet<[T | undefined]>;
 		empty?: EmptyStateProps;
@@ -46,78 +63,38 @@
 		items = $bindable([]),
 		id = "default-list",
 		orientation = "vertical",
-		grabbedClass = "rounded-control bg-surface-primary shadow-xl ring-1 ring-accent/35 opacity-95 scale-[1.01]",
+		grabbedClass = "shadow-xl opacity-95 scale-[1.01]",
 		draggingClass = "opacity-35",
 		dropIndicatorClass,
 		preservePreviewSize = true,
 		previewOffset,
 		dragHandleSelector,
+		flipDurationMs = 160,
+		onchange,
 		item: itemSnippet,
 		dropIndicator: dropIndicatorSnippet,
 		empty,
 		...props
 	}: Props = $props();
 
+	type SortableItem = T & Record<string, unknown>;
+	type SortableActionOptions = Options<SortableItem>;
+	type SortableZoneParams = {options: SortableActionOptions; dragHandleSelector?: string};
+	type SortableZoneAttributes = {
+		onconsider?: (event: CustomEvent<DndEvent<SortableItem>>) => void;
+		onfinalize?: (event: CustomEvent<DndEvent<SortableItem>>) => void;
+	};
+	type SortableAction = {
+		update?: (options: SortableActionOptions) => void;
+		destroy?: () => void;
+	};
+	type HandleAction = ReturnType<typeof dragHandle>;
+
 	const groupCtx = getContext<GroupContext | undefined>("dnd-group");
-	const registerToGroup = getContext<
-		| ((
-		listId: string,
-		getItems: () => T[],
-		setItems: (v: T[]) => void,
-	) => () => void)
-		| undefined
-	>("dnd-group-register");
 
-	onMount(() => {
-		let cleanup: (() => void) | undefined;
-
-		(async () => {
-			const [hitbox, monitorForElements, preview, pointer] = await Promise.all([
-				import('@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge'),
-				dnd.getMonitor(),
-				dnd.getPreview(),
-				dnd.getPointerOffset(),
-			]);
-			attachClosestEdge = hitbox.attachClosestEdge;
-			extractClosestEdge = hitbox.extractClosestEdge;
-			setCustomNativeDragPreview = preview;
-			pointerOutsideOfPreview = pointer;
-
-				const unmonitor = monitorForElements({
-				onDrop: () => {
-					insertIndex = -1;
-					draggingId = null;
-					dropHandled = false;
-				},
-				onDragStart: ({source}) => {
-					if (source.data.listId === id) {
-						draggingId = source.data.id as string | number;
-					}
-				},
-			});
-
-			if (registerToGroup) {
-				const unregister = registerToGroup(
-					id,
-					() => items,
-					(newItems) => { items = newItems as T[]; },
-				);
-				cleanup = () => { unmonitor(); unregister(); };
-			} else {
-				cleanup = unmonitor;
-			}
-		})();
-
-		return () => cleanup?.();
-	});
-
-	const isHorizontal = $derived(
-		orientation === "horizontal" || orientation === "grid",
-	);
-
-	let insertIndex = $state(-1);
 	let draggingId = $state<string | number | null>(null);
-	let dropHandled = false;
+	let displayItems = $state<SortableItem[]>(items as SortableItem[]);
+	let dragStartItems = $state<SortableItem[]>(items as SortableItem[]);
 
 	const cls = $derived(
 		twMerge(
@@ -128,164 +105,201 @@
 		),
 	);
 
-	// --- Utility: reorder same-list ---
-	function reorder(sourceId: string | number, toIndex: number) {
-		const startIndex = items.findIndex((i) => i.id === sourceId);
-		if (startIndex === -1) return;
-		if (toIndex === startIndex || toIndex === startIndex + 1) {
-			return;
-		}
-		const newItems = [...items];
-		const [moved] = newItems.splice(startIndex, 1);
-		const insertAt = toIndex > startIndex ? toIndex - 1 : toIndex;
-		newItems.splice(insertAt, 0, moved);
-		items = newItems;
+	const zoneType = $derived(groupCtx?.dndType ?? `sortable-list-${id}`);
+
+	const dndOptions = $derived<SortableActionOptions>({
+		items: displayItems,
+		type: zoneType,
+		flipDurationMs,
+		dropTargetStyle: {},
+		zoneTabIndex: -1,
+		zoneItemTabIndex: 0,
+		transformDraggedElement,
+	});
+
+	function isShadowItem(item: SortableItem) {
+		return Boolean(item?.[SHADOW_ITEM_MARKER_PROPERTY_NAME]);
 	}
 
-	// --- Utility: cross-list move ---
-	function crossListMove(sourceId: string | number, sourceListId: string, toIndex: number) {
-		if (!groupCtx) return;
-		groupCtx.onCrossListDrop({
-			sourceListId,
-			targetListId: id,
-			itemId: sourceId,
-			targetIndex: toIndex,
+	function withoutShadowItems(nextItems: SortableItem[]) {
+		return nextItems.filter(item => !isShadowItem(item));
+	}
+
+	function haveItemsChanged(previousItems: SortableItem[], nextItems: SortableItem[]) {
+		if (previousItems.length !== nextItems.length) return true;
+		return previousItems.some((item, index) => item.id !== nextItems[index]?.id);
+	}
+
+	function emitChange(nextItems: SortableItem[], event: CustomEvent<DndEvent<SortableItem>>) {
+		const previousItems = withoutShadowItems(dragStartItems);
+		if (!haveItemsChanged(previousItems, nextItems)) return;
+
+		const itemId = event.detail.info.id;
+		const item = previousItems.find(candidate => candidate.id === itemId)
+			?? nextItems.find(candidate => candidate.id === itemId);
+
+		onchange?.(nextItems as T[], {
+			items: nextItems as T[],
+			previousItems: previousItems as T[],
+			item: item as T | undefined,
+			itemId,
+			fromIndex: previousItems.findIndex(candidate => candidate.id === itemId),
+			toIndex: nextItems.findIndex(candidate => candidate.id === itemId),
+			trigger: event.detail.info.trigger,
+			source: event.detail.info.source,
 		});
 	}
 
-	// Compute candidate insertIndex — returns -1 if same-list no-op.
-	function computeInsertIndex(itemIdx: number, edge: string | null): number {
-		const candidate = edge === "top" || edge === "left" ? itemIdx : itemIdx + 1;
-		if (draggingId !== null) {
-			const srcIdx = items.findIndex((i) => i.id === draggingId);
-			if (srcIdx !== -1 && (candidate === srcIdx || candidate === srcIdx + 1)) return -1;
+	$effect(() => {
+		if (draggingId === null) {
+			displayItems = items as SortableItem[];
+			dragStartItems = items as SortableItem[];
 		}
-		return candidate;
+	});
+
+	function handleDnd(event: CustomEvent<DndEvent<SortableItem>>) {
+		if (draggingId === null) {
+			dragStartItems = items as SortableItem[];
+		}
+		draggingId = event.detail.info.id;
+		displayItems = event.detail.items;
 	}
 
-	// --- Item event handlers ---
-	const GRABBED_PADDING = 24;
-
-	function handleDragStart({source, nativeSetDragImage}: any) {
-		const padding = grabbedClass ? GRABBED_PADDING : 0;
-		// Default offset compensates for the padding so the preview appears at
-		// the same position relative to the cursor with or without grabbedClass.
-		const defaultOffset = grabbedClass
-			? () => ({x: GRABBED_PADDING - 16, y: GRABBED_PADDING - 8})
-			: pointerOutsideOfPreview({x: '16px', y: '8px'});
-		setCustomNativeDragPreview({
-			nativeSetDragImage,
-			getOffset: previewOffset ?? defaultOffset,
-			render({container}: { container: HTMLElement }) {
-				const el = document.querySelector(
-					`[data-dnd-id="${source.data.id}"][data-dnd-list="${id}"]`
-				);
-				if (el) {
-					const rect = el.getBoundingClientRect();
-					const inner = el.firstElementChild;
-					const clone = (inner ?? el).cloneNode(true) as HTMLElement;
-					if (preservePreviewSize) {
-						clone.style.boxSizing = 'border-box';
-						clone.style.width = `${rect.width}px`;
-						clone.style.minWidth = `${rect.width}px`;
-						clone.style.height = `${rect.height}px`;
-					}
-					if (grabbedClass) {
-						container.style.padding = `${padding}px`;
-						clone.className = twMerge(clone.className, grabbedClass);
-					}
-					container.appendChild(clone);
-				}
-			},
-		});
-	}
-
-	function handleItemDragEnter({self, source}: any) {
-		if (source.data.id === self.data.id) return;
-		const edge = extractClosestEdge(self.data);
-		const idx = items.findIndex((i) => i.id === self.data.id);
-		if (idx === -1) return;
-		const candidate = computeInsertIndex(idx, edge);
-		if (candidate !== -1) insertIndex = candidate;
-	}
-
-	function handleItemDrag({self, source}: any) {
-		if (source.data.id === self.data.id) return;
-		const edge = extractClosestEdge(self.data);
-		const idx = items.findIndex((i) => i.id === self.data.id);
-		if (idx === -1) return;
-		insertIndex = computeInsertIndex(idx, edge);
-	}
-
-	function handleItemDragLeave() { /* intentionally empty */
-	}
-
-	function handleDrop({source}: any) {
-		if (dropHandled) return;
-		dropHandled = true;
-		const toIndex = insertIndex !== -1 ? insertIndex : items.length;
-		const sourceId = source.data.id;
-		const sourceListId: string = source.data.listId;
-		insertIndex = -1;
+	function handleFinalize(event: CustomEvent<DndEvent<SortableItem>>) {
+		const nextItems = withoutShadowItems(event.detail.items);
+		items = nextItems as T[];
+		displayItems = nextItems;
+		emitChange(nextItems, event);
+		dragStartItems = nextItems;
 		draggingId = null;
-		if (sourceListId === id) {
-			reorder(sourceId, toIndex);
-		} else {
-			crossListMove(sourceId, sourceListId, toIndex);
+	}
+
+	function transformDraggedElement(element?: HTMLElement) {
+		if (!element) return;
+
+		element.style.outline = "none";
+		element.style.boxShadow = "none";
+
+		const target = element.firstElementChild instanceof HTMLElement
+			? element.firstElementChild
+			: element;
+
+		target.style.outline = "none";
+
+		if (grabbedClass) {
+			target.className = twMerge(target.className, grabbedClass);
 		}
+	}
+
+	function sortableZone(
+		node: HTMLElement,
+		params: SortableZoneParams,
+	): ActionReturn<SortableZoneParams, SortableZoneAttributes> {
+		let zoneAction: SortableAction | undefined;
+		let handleActions = new Map<Element, HandleAction>();
+		let usingHandles = false;
+
+		function destroyHandles() {
+			handleActions.forEach(action => action.destroy());
+			handleActions.clear();
+		}
+
+		function syncHandles(selector?: string) {
+			if (!selector) {
+				destroyHandles();
+				return;
+			}
+
+			const nextHandles = new Set<Element>();
+			node.querySelectorAll(selector).forEach(handleNode => {
+				nextHandles.add(handleNode);
+				if (!handleActions.has(handleNode)) {
+					handleActions.set(handleNode, dragHandle(handleNode as HTMLElement));
+				}
+			});
+
+			handleActions.forEach((action, handleNode) => {
+				if (!nextHandles.has(handleNode)) {
+					action.destroy();
+					handleActions.delete(handleNode);
+				}
+			});
+		}
+
+		function scheduleHandleSync(selector?: string) {
+			if (!selector) return;
+			queueMicrotask(() => syncHandles(selector));
+		}
+
+		function updateHandles(selector?: string) {
+			if (!selector) {
+				destroyHandles();
+				return;
+			}
+
+			syncHandles(selector);
+			scheduleHandleSync(selector);
+		}
+
+		function createZone(nextParams: SortableZoneParams) {
+			usingHandles = Boolean(nextParams.dragHandleSelector);
+			zoneAction = usingHandles
+				? dragHandleZone(node, nextParams.options)
+				: dndzone(node, nextParams.options);
+			updateHandles(nextParams.dragHandleSelector);
+		}
+
+		createZone(params);
+
+		return {
+			update(nextParams: SortableZoneParams) {
+				const shouldUseHandles = Boolean(nextParams.dragHandleSelector);
+
+				if (shouldUseHandles !== usingHandles) {
+					zoneAction?.destroy?.();
+					createZone(nextParams);
+					return;
+				}
+
+				zoneAction?.update?.(nextParams.options);
+				updateHandles(nextParams.dragHandleSelector);
+			},
+			destroy() {
+				destroyHandles();
+				zoneAction?.destroy?.();
+			},
+		};
 	}
 </script>
 
 <div
 	class={cls}
 	{...props}
-	use:dnd.dropTarget={{
-        getData: () => ({ listId: id, type: "list-container" }),
-        onDragLeave: () => { insertIndex = -1; },
-        onDrop: handleDrop,
-    }}
+	use:sortableZone={{options: dndOptions, dragHandleSelector}}
+	onconsider={handleDnd}
+	onfinalize={handleFinalize}
 >
-	<DropSlot atIndex={0} {insertIndex} draggingItem={items.find(i => i.id === draggingId)} {orientation} class={dropIndicatorClass} {dropIndicatorSnippet}/>
-
-	{#if items.length === 0 && empty}
+	{#if displayItems.length === 0 && empty}
 		<EmptyState icon={empty.icon} title={empty.title} description={empty.description}/>
 	{/if}
 
-	{#each items as item, index (item.id)}
+	{#each displayItems as sortableItem (sortableItem.id)}
 		<div
 			class={twMerge(
 				"transition-[opacity,transform,filter] duration-150",
-				draggingId === item.id ? draggingClass : "",
+				draggingId === sortableItem.id && !isShadowItem(sortableItem as SortableItem) ? draggingClass : "",
+				isShadowItem(sortableItem as SortableItem) && dropIndicatorClass ? dropIndicatorClass : "",
 			)}
-			data-dnd-id={item.id}
+			data-dnd-id={sortableItem.id}
 			data-dnd-list={id}
-			use:dnd.draggable={{
-                data: { id: item.id, index, listId: id, type: "list-item" },
-                dragHandleSelector,
-                onGenerateDragPreview: handleDragStart,
-            }}
-			use:dnd.dropTarget={{
-                getData: ({ input, element }) =>
-                    attachClosestEdge(
-                        { id: item.id, index, listId: id, type: "list-item" },
-                        {
-                            element,
-                            input,
-                            allowedEdges: isHorizontal
-                                ? ["left", "right"]
-                                : ["top", "bottom"],
-                        },
-                    ),
-                onDragEnter: handleItemDragEnter,
-                onDrag: handleItemDrag,
-                onDragLeave: handleItemDragLeave,
-                onDrop: handleDrop,
-            }}
+			data-is-dnd-shadow-item-hint={isShadowItem(sortableItem as SortableItem)}
+			animate:flip={{duration: flipDurationMs}}
 		>
-			{@render itemSnippet(item)}
+			{#if isShadowItem(sortableItem as SortableItem) && dropIndicatorSnippet}
+				{@render dropIndicatorSnippet(sortableItem as T)}
+			{:else}
+				{@render itemSnippet(sortableItem as T)}
+			{/if}
 		</div>
-
-		<DropSlot atIndex={index + 1} {insertIndex} draggingItem={items.find(i => i.id === draggingId)} {orientation} class={dropIndicatorClass} {dropIndicatorSnippet}/>
 	{/each}
-
 </div>

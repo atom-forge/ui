@@ -21,6 +21,7 @@ export type CellDef<T> = {
  */
 export type StylingResult = string | { class?: string, style?: string };
 export type StylingFn<T> = (row: T, table: Array<T>, index: number) => StylingResult;
+export type TableOverflow = 'ellipsis' | 'wrap' | 'clip';
 
 export type ColumnStyling<T> = {
 	header?: string
@@ -38,6 +39,10 @@ export type ColumnDef<T> =
 		label: string
 		fixed?: boolean
 		visible?: boolean
+		width?: string
+		minWidth?: string
+		maxWidth?: string
+		overflow?: TableOverflow
 		style?: ColumnStyling<T>
 	}
 	& CellDef<T>

@@ -13,6 +13,7 @@
     export interface GroupContext {
         rules: GroupRules | undefined;
         typeField: string;
+        dndType: string;
         /** Called when a cross-list drop has been resolved */
         onCrossListDrop: (args: {
             sourceListId: string;
@@ -48,6 +49,7 @@
     }: Props = $props();
 
     const registry: ListRegistry = new Map();
+    const dndType = `sortable-group-${Math.random().toString(36).slice(2)}`;
 
     function registerList(
         listId: string,
@@ -79,6 +81,7 @@
         get typeField() {
             return typeField;
         },
+        dndType,
         onCrossListDrop({ sourceListId, targetListId, itemId, targetIndex }) {
             const sourceList = registry.get(sourceListId);
             const targetList = registry.get(targetListId);

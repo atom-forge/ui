@@ -30,4 +30,5 @@ import type { ChildrenProp } from '../lib/helpers/types';
 | `/ui/checkbox` | `UI.Checkbox`, `UI.CheckboxGroupManager` sandbox. |
 | `/ui/radio` | `UI.RadioGroup`, `UI.RadioButtonView` sandbox. |
 | `/ui/switch` | `UI.Switch` sandbox. |
+| `/ui/drawer` | Drawer edge, size, and class override sandbox. |
 | `/ui/overlay` | Modal/Drawer shared-stack sandbox plus popup-backed controls (`Select`, `MultiSelect`, `DatePicker`, `TimePicker`, `TagEditor`, `ContextMenu`). |

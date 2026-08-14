@@ -19,6 +19,7 @@
 		compact, small, micro,
 		// Loading: true = spinner only, number = progress bar (0–100)
 		loading,
+		element = $bindable<HTMLButtonElement>(),
 		onclick = (event: MouseEvent) => {},
 		class: classes,
 		...props
@@ -38,6 +39,7 @@
 		borderless?: boolean
 		disabled?: boolean
 		loading?: boolean | number
+		element?: HTMLButtonElement
 		onclick?: (event: MouseEvent) => void
 	} = $props();
 
@@ -64,7 +66,7 @@
 	const buttonClass = $derived(twMerge(
 		// Base — shared by all
 		'group relative inline-flex items-center justify-start whitespace-nowrap',
-		'font-medium leading-5 rounded-control transition-all duration-200 select-none',
+		'font-medium leading-5 rounded-[var(--radius-control)] transition-all duration-200 select-none',
 		'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
 		'disabled:pointer-events-none disabled:opacity-50',
 		!isDisabled && 'cursor-pointer',
@@ -119,6 +121,7 @@
 </script>
 
 <button
+	bind:this={element}
 	class={buttonClass}
 	disabled={isDisabled}
 	onclick={isDisabled ? undefined : onclick}
@@ -153,4 +156,3 @@
 		{/if}
 	</span>
 </button>
-

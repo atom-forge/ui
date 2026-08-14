@@ -54,9 +54,13 @@ src/routes/organizer/
 | `resizable` | `boolean` | `true` | Enable resize from the bottom-right corner. |
 | `allowOverlap` | `boolean` | `false` | If `false`, a drop is rejected when it would cause overlap. |
 | `overlapStrategy` | `OverlapStrategy` | `'compress'` | How overlapping items are rendered. See below. |
-| `colHeader` | `Snippet<[colIndex: number]>` | — | Snippet for column headers (rendered above the grid). |
-| `rowHeader` | `Snippet<[rowIndex: number]>` | — | Snippet for row headers (rendered to the left of the grid). |
-| `cell` | `Snippet<[{x, y}]>` | — | Snippet for individual cell backgrounds. |
+| `subdivisions` | `OrganizerSubdivisions` | `{}` | Unit-based marker rules for x/y axes. Adds `minor`, `major`, and `alternate` metadata to header and cell snippets. |
+| `minColWidth` | `number` | `0` | Minimum width for each column in pixels. Enables horizontal body scrolling when the grid is wider than the container. |
+| `colHeader` | `Snippet<[OrganizerAxisMark]>` | — | Snippet for column headers (rendered above the grid). |
+| `rowHeader` | `Snippet<[OrganizerAxisMark]>` | — | Snippet for row headers (rendered to the left of the grid). |
+| `rowHeaderWidth` | `number \| string` | — | Fixed row header column width. Use this when the row header must stay visually stable during scroll. |
+| `footer` | `Snippet` | — | Optional footer rendered below the scrollable grid body. |
+| `cell` | `Snippet<[OrganizerCellMeta]>` | — | Snippet for individual cell backgrounds. |
 | `class` | `string` | `''` | Extra CSS classes on the root element. |
 
 ---
@@ -82,6 +86,30 @@ type OrganizerItemRendered = OrganizerItem & {
 };
 
 type OverlapStrategy = 'compress' | 'expand' | 'calendar';
+
+type OrganizerSubdivision = {
+  minorEvery?: number;
+  majorEvery?: number;
+  alternateEvery?: number;
+  offset?: number;
+};
+
+type OrganizerSubdivisions = {
+  x?: OrganizerSubdivision;
+  y?: OrganizerSubdivision;
+};
+
+type OrganizerAxisMark = {
+  index: number;
+  minor: boolean;
+  major: boolean;
+  alternate: boolean;
+};
+
+type OrganizerCellMeta = {
+  x: OrganizerAxisMark;
+  y: OrganizerAxisMark;
+};
 ```
 
 ---
@@ -118,10 +146,15 @@ The original `x`, `y`, `w`, `h` values are **never mutated** — layout is compu
   const startHour = 8;
   const rowHeight = 44;
 
-  function timeLabel(row) {
-    const h = startHour + Math.floor(row / 2);
-    const m = row % 2 === 0 ? '00' : '30';
-    return row % 2 === 0 ? `${h}:${m}` : '';
+  const subdivisions = {
+    y: { minorEvery: 3, majorEvery: 12, alternateEvery: 12 }
+  };
+
+  function timeLabel(unit) {
+    const totalMinutes = startHour * 60 + unit * 5;
+    const h = Math.floor(totalMinutes / 60);
+    const m = String(totalMinutes % 60).padStart(2, '0');
+    return `${h}:${m}`;
   }
 
   let events = $state([
@@ -137,21 +170,22 @@ The original `x`, `y`, `w`, `h` values are **never mutated** — layout is compu
   cols={5}
   rows={20}
   {rowHeight}
+  {subdivisions}
   allowOverlap
   overlapStrategy="calendar"
 >
-  {#snippet colHeader(c)}
-    <div class="text-center font-semibold py-2 border-b border-base-b">{days[c]}</div>
+  {#snippet colHeader(x)}
+    <div class="text-center font-semibold py-2 border-b border-base-b">{days[x.index]}</div>
   {/snippet}
 
-  {#snippet rowHeader(r)}
+  {#snippet rowHeader(y)}
     <div class="w-12 text-right pr-2 text-xs text-muted-c" style="height:{rowHeight}px">
-      {timeLabel(r)}
+      {#if y.major}{timeLabel(y.index)}{/if}
     </div>
   {/snippet}
 
-  {#snippet cell({ y })}
-    <div class="h-full border-r border-b border-base-b {y % 2 !== 0 ? 'opacity-30' : ''}"></div>
+  {#snippet cell({ x, y })}
+    <div class="h-full border-r border-base-b {y.major ? 'border-t' : y.minor ? 'border-t opacity-60' : ''} {y.alternate ? 'bg-muted/20' : ''}"></div>
   {/snippet}
 
   {#snippet item(ev)}
@@ -166,6 +200,52 @@ The original `x`, `y`, `w`, `h` values are **never mutated** — layout is compu
       {#if !isNarrow}
         <span class="opacity-75">{ev.y / 2 + 8}:00</span>
       {/if}
+    </div>
+  {/snippet}
+</Organizer>
+```
+
+## Fixed header and footer
+
+Column headers stay pinned to the top of the scrollable body. Row headers stay
+pinned to the left edge during horizontal scrolling. The optional footer is
+rendered outside the scrollable body. Set a constrained height on the organizer
+root when the body should scroll, and set `minColWidth` when columns need a
+minimum visual width. Set `rowHeaderWidth` when the left header column should
+not depend on content measurement.
+
+```sveltehtml
+<Organizer
+  bind:items={events}
+  cols={5}
+  rows={24}
+  rowHeight={44}
+  subdivisions={{ y: { minorEvery: 3, majorEvery: 12, alternateEvery: 12 } }}
+  minColWidth={160}
+  rowHeaderWidth={64}
+  class="h-96 border border-frame"
+>
+  {#snippet colHeader(x)}
+    <div class="border-b border-frame py-2 text-center text-xs font-medium">
+      {days[x.index]}
+    </div>
+  {/snippet}
+
+  {#snippet rowHeader(y)}
+    <div class="w-12 pr-2 text-right text-xs text-muted-contrast">
+      {#if y.major}{timeLabel(y.index)}{/if}
+    </div>
+  {/snippet}
+
+  {#snippet footer()}
+    <div class="border-t border-frame px-3 py-2 text-xs text-muted-contrast">
+      {events.length} events
+    </div>
+  {/snippet}
+
+  {#snippet item(ev)}
+    <div class="h-full w-full border border-frame bg-surface p-2">
+      {ev.title}
     </div>
   {/snippet}
 </Organizer>

@@ -11,6 +11,14 @@
 		onToggleColumn: (key: keyof T) => void;
 	} = $props();
 
+	function isVisible(column: ColumnDef<T>) {
+		return column.visible !== false;
+	}
+
+	function toggleColumn(column: ColumnDef<T>) {
+		column.visible = !isVisible(column);
+		onToggleColumn(column.key);
+	}
 </script>
 
 <Card class="rounded-md shadow-lg p-1 flex flex-col w-48">
@@ -18,10 +26,10 @@
 		{#each columns as col}
 			{#if !col.fixed}
 				<CheckboxView
-					status={col.visible ? 'checked' : 'unchecked'}
+					status={isVisible(col) ? 'checked' : 'unchecked'}
 					disabled={col.fixed}
 					label={col.label}
-					onclick={() => col.visible = !col.visible}
+					onclick={() => toggleColumn(col)}
 					compact
 				/>
 			{/if}

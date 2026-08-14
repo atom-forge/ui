@@ -1,6 +1,16 @@
 <script lang="ts">
 	import {GripHorizontal, GripVertical} from 'lucide-svelte';
 	import {SortableGroup, SortableList} from '../../../lib/controls/data/sortable';
+	import TagEditor from '../../../lib/controls/forms/tag-editor/TagEditor.svelte';
+	import MultiSelect from '../../../lib/controls/forms/multi-select/MultiSelect.svelte';
+	import {
+		BlockEditor,
+		BlockEditHeading,
+		BlockEditMarkdown,
+		BlockEditTextarea,
+		type Block,
+	} from '../../../lib/controls/editors/block-editor';
+	import type {SelectOption} from '../../../lib/controls/forms/select/Select.svelte';
 
 	type Task = {
 		id: string;
@@ -49,11 +59,50 @@
 		{id: 'sort-5', title: 'Keep SortableJS as fallback option', type: 'task'},
 	]);
 
+	let tagValue = $state(['svelte', 'dnd', 'library', 'qa']);
+	const tagOptions = ['svelte', 'dnd', 'library', 'qa', 'forms', 'editor', 'sortable', 'accessibility'];
+
+	let multiValue = $state<(string | number)[]>(['design', 'frontend', 'qa', 'docs']);
+	const multiOptions: SelectOption[] = [
+		{value: 'design', label: 'Design'},
+		{value: 'frontend', label: 'Frontend'},
+		{value: 'qa', label: 'QA'},
+		{value: 'docs', label: 'Docs'},
+		{value: 'release', label: 'Release'},
+		{value: 'research', label: 'Research'},
+	];
+
+	let editorBlocks = $state<Block[]>([
+		{id: 'block-title', type: 'heading', data: {text: 'Sortable consumer audit', level: 2}},
+		{id: 'block-copy', type: 'text', data: {text: 'This block editor reorders through SortableList with a drag handle inside each block toolbar.'}},
+		{id: 'block-notes', type: 'markdown', data: {text: '- Drag the toolbar handle\n- Check that editor focus survives\n- Reorder without leaking placeholders'}},
+	]);
+
+	const blockComponents = {
+		heading: BlockEditHeading,
+		text: BlockEditTextarea,
+		markdown: BlockEditMarkdown,
+	};
+
+	const blockLabels = {
+		heading: 'Heading',
+		text: 'Text',
+		markdown: 'Markdown',
+	};
+
 	const taskOrder = $derived(tasks.map(item => item.title).join(' / '));
 	const chipOrder = $derived(chips.map(item => item.label).join(', '));
+	const tagOrder = $derived(tagValue.join(', '));
+	const multiOrder = $derived(multiValue.join(', '));
+	const blockOrder = $derived(editorBlocks.map(block => block.type).join(' / '));
+	let lastChange = $state('No onchange yet');
 
 	function laneOrder(items: LaneItem[]) {
 		return items.map(item => item.title).join(', ') || 'Empty';
+	}
+
+	function recordChange(label: string, _items: { id: string | number }[], detail: { itemId: string | number; fromIndex: number; toIndex: number; source: string }) {
+		lastChange = `${label}: ${detail.itemId} ${detail.fromIndex} -> ${detail.toIndex} (${detail.source})`;
 	}
 </script>
 
@@ -70,7 +119,10 @@
 					<h2 class="text-sm font-semibold">Default placement preview</h2>
 					<p class="text-xs text-muted-contrast">Drag from the handle to see the new line indicator and native preview.</p>
 				</div>
-				<p class="max-w-md truncate text-right text-xs text-muted-contrast">{taskOrder}</p>
+				<div class="min-w-0 text-right">
+					<p class="max-w-md truncate text-xs text-muted-contrast">{taskOrder}</p>
+					<p class="max-w-md truncate text-xs text-muted-contrast">{lastChange}</p>
+				</div>
 			</div>
 
 			<SortableList
@@ -79,6 +131,7 @@
 				class="gap-2"
 				dragHandleSelector="[data-task-handle]"
 				draggingClass="opacity-30 scale-[0.99]"
+				onchange={(items, detail) => recordChange('Default list', items, detail)}
 			>
 				{#snippet item(task)}
 					<div class="flex items-center gap-3 rounded-control border border-frame bg-surface-primary px-3 py-2 shadow-sm">
@@ -114,7 +167,8 @@
 					class="flex-wrap gap-2"
 					dragHandleSelector="[data-chip-handle]"
 					dropIndicatorClass="self-auto"
-					grabbedClass="rounded-full bg-surface-primary px-3 py-1.5 shadow-xl ring-1 ring-accent/40"
+					grabbedClass="rounded-full bg-surface-primary px-3 py-1.5 shadow-xl"
+					onchange={(items, detail) => recordChange('Horizontal chips', items, detail)}
 				>
 					{#snippet item(chip)}
 						<div class="flex items-center gap-1.5 rounded-full border border-frame bg-surface-primary px-3 py-1.5 text-sm shadow-sm">
@@ -136,7 +190,8 @@
 					id="sortable-custom"
 					class="gap-1"
 					dragHandleSelector="[data-custom-handle]"
-					grabbedClass="rounded-control bg-control shadow-xl ring-2 ring-accent/40"
+					grabbedClass="rounded-control bg-control shadow-xl"
+					onchange={(items, detail) => recordChange('Custom indicator', items, detail)}
 				>
 					{#snippet item(task)}
 						<div class="flex items-center gap-2 rounded-control bg-control px-3 py-2 text-sm">
@@ -166,7 +221,7 @@
 			<SortableGroup class="grid gap-4 md:grid-cols-3">
 				<div class="flex min-h-64 flex-col gap-3 rounded-control border border-frame bg-surface-primary p-3">
 					<h3 class="text-xs font-semibold uppercase tracking-widest text-muted-contrast">Backlog</h3>
-					<SortableList bind:items={backlog} id="backlog" class="min-h-40 gap-2" dragHandleSelector="[data-lane-handle]">
+					<SortableList bind:items={backlog} id="backlog" class="min-h-40 gap-2" dragHandleSelector="[data-lane-handle]" onchange={(items, detail) => recordChange('Backlog', items, detail)}>
 						{#snippet item(item)}
 							<div class="flex items-center gap-2 rounded-control border border-frame bg-canvas px-3 py-2 text-sm">
 								<GripVertical data-lane-handle size={14} class="cursor-grab text-muted-contrast"/>
@@ -179,7 +234,7 @@
 
 				<div class="flex min-h-64 flex-col gap-3 rounded-control border border-frame bg-surface-primary p-3">
 					<h3 class="text-xs font-semibold uppercase tracking-widest text-muted-contrast">Active</h3>
-					<SortableList bind:items={active} id="active" class="min-h-40 gap-2" dragHandleSelector="[data-lane-handle]">
+					<SortableList bind:items={active} id="active" class="min-h-40 gap-2" dragHandleSelector="[data-lane-handle]" onchange={(items, detail) => recordChange('Active', items, detail)}>
 						{#snippet item(item)}
 							<div class="flex items-center gap-2 rounded-control border border-frame bg-canvas px-3 py-2 text-sm">
 								<GripVertical data-lane-handle size={14} class="cursor-grab text-muted-contrast"/>
@@ -192,7 +247,7 @@
 
 				<div class="flex min-h-64 flex-col gap-3 rounded-control border border-frame bg-surface-primary p-3">
 					<h3 class="text-xs font-semibold uppercase tracking-widest text-muted-contrast">Done</h3>
-					<SortableList bind:items={done} id="done" class="min-h-40 gap-2" dragHandleSelector="[data-lane-handle]">
+					<SortableList bind:items={done} id="done" class="min-h-40 gap-2" dragHandleSelector="[data-lane-handle]" onchange={(items, detail) => recordChange('Done', items, detail)}>
 						{#snippet item(item)}
 							<div class="flex items-center gap-2 rounded-control border border-frame bg-canvas px-3 py-2 text-sm">
 								<GripVertical data-lane-handle size={14} class="cursor-grab text-muted-contrast"/>
@@ -203,6 +258,56 @@
 					<p class="mt-auto text-xs text-muted-contrast">{laneOrder(done)}</p>
 				</div>
 			</SortableGroup>
+		</section>
+
+		<section class="flex flex-col gap-4">
+			<div>
+				<h2 class="text-sm font-semibold">Real SortableList consumers</h2>
+				<p class="text-xs text-muted-contrast">These components use SortableList internally, so this catches integration issues beyond the bare list.</p>
+			</div>
+
+			<div class="grid gap-6 lg:grid-cols-2">
+				<div class="flex flex-col gap-3 rounded-control border border-frame bg-surface-primary p-4">
+					<div>
+						<h3 class="text-xs font-semibold uppercase tracking-widest text-muted-contrast">TagEditor</h3>
+						<p class="mt-1 text-xs text-muted-contrast">{tagOrder}</p>
+					</div>
+					<TagEditor
+						bind:value={tagValue}
+						options={tagOptions}
+						sortable
+						clearable
+						placeholder="Add sortable tags..."
+					/>
+				</div>
+
+				<div class="flex flex-col gap-3 rounded-control border border-frame bg-surface-primary p-4">
+					<div>
+						<h3 class="text-xs font-semibold uppercase tracking-widest text-muted-contrast">MultiSelect</h3>
+						<p class="mt-1 text-xs text-muted-contrast">{multiOrder}</p>
+					</div>
+					<MultiSelect
+						bind:value={multiValue}
+						options={multiOptions}
+						sortable
+						clearable
+						placeholder="Select sortable chips..."
+					/>
+				</div>
+			</div>
+
+			<div class="flex flex-col gap-3 rounded-control border border-frame bg-surface-primary p-4">
+				<div>
+					<h3 class="text-xs font-semibold uppercase tracking-widest text-muted-contrast">BlockEditor</h3>
+					<p class="mt-1 text-xs text-muted-contrast">{blockOrder}</p>
+				</div>
+				<BlockEditor
+					bind:blocks={editorBlocks}
+					components={blockComponents}
+					typeLabels={blockLabels}
+					joinable="text"
+				/>
+			</div>
 		</section>
 	</div>
 </div>

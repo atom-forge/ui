@@ -16,6 +16,7 @@
 		onSelect,
 		itemRenderer,
 		searchable = true,
+		hideKeyboardHints = false,
 		autoFocus = true,
 		placeholder = 'Search...',
 		query = $bindable(''),
@@ -28,6 +29,7 @@
 		onSelect: (item: { value: string | number; data: any }) => void;
 		itemRenderer: Snippet<[any, boolean]>;
 		searchable?: boolean;
+		hideKeyboardHints?: boolean;
 		autoFocus?: boolean;
 		placeholder?: string;
 		query?: string;
@@ -69,7 +71,7 @@
 			});
 		} else {
 			processResult(p);
-			highlighted = 0;
+			highlighted = -1;
 			loading = false;
 		}
 	});
@@ -202,12 +204,14 @@
 			{/if}
 		</div>
 
-		<div class="flex items-center gap-1.5 px-4 py-2 border-t border-frame shrink-0">
-			<Kbd keys={['↑']}/>
-			<Kbd keys={['↓']}/>
-			<span class="mx-1 w-px h-3 bg-frame"></span>
-			<Kbd keys={['↩']}/>
-			<span class="ml-auto"><Kbd keys={['Esc']}/></span>
-		</div>
+		{#if !hideKeyboardHints}
+			<div class="flex items-center gap-1.5 px-4 py-2 border-t border-frame shrink-0">
+				<Kbd keys={['↑']}/>
+				<Kbd keys={['↓']}/>
+				<span class="mx-1 w-px h-3 bg-frame"></span>
+				<Kbd keys={['↩']}/>
+				<span class="ml-auto"><Kbd keys={['Esc']}/></span>
+			</div>
+		{/if}
 	</div>
 </Card>

@@ -11,6 +11,7 @@
 		initialValue,
 		max,
 		searchable,
+		hideKeyboardHints,
 		onToggle,
 		optionSnippet,
 	}: {
@@ -18,6 +19,7 @@
 		initialValue: (string | number)[];
 		max?: number;
 		searchable?: boolean;
+		hideKeyboardHints?: boolean;
 		onToggle: (opt: SelectOption, newValues: (string | number)[]) => void;
 		optionSnippet?: Snippet<[SelectOption, boolean]>;
 	} = $props();
@@ -60,6 +62,7 @@
 <SelectPopup
 	{items}
 	{searchable}
+	{hideKeyboardHints}
 	bind:query
 	onSelect={({data}) => toggle(data)}
 	close={() => popupManager.close()}

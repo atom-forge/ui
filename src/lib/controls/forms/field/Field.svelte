@@ -5,6 +5,7 @@
 
 	let {
 		label,
+		info,
 		hint,
 		error,
 		required = false,
@@ -19,6 +20,7 @@
 		class: classes,
 	}: ClassProp & ChildrenProp & {
 		label?: string;
+		info?: string;
 		hint?: string;
 		error?: string;
 		required?: boolean;
@@ -52,8 +54,11 @@
 				{#if optional}<span class="text-muted-contrast text-xs ml-1">(optional)</span>{/if}
 			</label>
 		{/if}
+		{#if info}
+			<span class="ml-auto text-xs text-muted-contrast leading-snug">{info}</span>
+		{/if}
 		{#if action}
-			<span class="ml-auto">{@render action()}</span>
+			<span class={!info ? 'ml-auto' : undefined}>{@render action()}</span>
 		{/if}
 	</div>
 	<!-- control cell -->
@@ -72,7 +77,7 @@
 {:else}
 	<!-- vertical layout — single column -->
 	<div class={twMerge('flex flex-col gap-1 min-w-0', classes)}>
-		{#if label || labelSnippet || action}
+		{#if label || labelSnippet || info || action}
 			<div class="flex items-center gap-1">
 				{#if labelSnippet}
 					{@render labelSnippet()}
@@ -83,8 +88,11 @@
 						{#if optional}<span class="text-muted-contrast text-xs ml-1">(optional)</span>{/if}
 					</label>
 				{/if}
+				{#if info}
+					<span class="ml-auto text-xs text-muted-contrast leading-snug">{info}</span>
+				{/if}
 				{#if action}
-					<span class="ml-auto">{@render action()}</span>
+					<span class={!info ? 'ml-auto' : undefined}>{@render action()}</span>
 				{/if}
 			</div>
 		{/if}

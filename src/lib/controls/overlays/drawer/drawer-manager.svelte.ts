@@ -2,12 +2,13 @@ import type {Component} from 'svelte';
 import {getContext, setContext} from 'svelte';
 import {getOverlayStackManager, type OverlayOptions, type OverlayStackManager, type OverlayState} from '../shared/overlay-manager.svelte';
 
-export type DrawerPosition = 'left' | 'right';
+export type DrawerPosition = 'left' | 'right' | 'top' | 'bottom';
 export type DrawerSize = 'normal' | 'compact' | 'small';
 
 export type DrawerOptions = OverlayOptions & {
 	position?: DrawerPosition;
 	size?: DrawerSize;
+	class?: string;
 };
 
 export type DrawerState = OverlayState<DrawerOptions>;

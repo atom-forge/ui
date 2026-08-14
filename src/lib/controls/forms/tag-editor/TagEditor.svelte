@@ -23,12 +23,17 @@
 		sortable  = false,
 		lowercase,
 		uppercase,
+		primary,
+		secondary,
+		danger,
+		accent,
 		compact,
 		small,
 		class: classes,
 		chip: chipSnippet,
 		option: optionSnippet,
 	}: XOR<{ lowercase: true }, { uppercase: true }, {}>
+		& XOR<{}, { primary: true }, { secondary: true }, { danger: true }, { accent: true }>
 		& XOR<{ compact: true }, { small: true }, {}>
 		& ClassProp
 		& {
@@ -44,6 +49,7 @@
 	} = $props();
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
+	const chipVariant = untrack(() => primary ? 'primary' : secondary ? 'secondary' : danger ? 'danger' : accent ? 'accent' : 'primary');
 	const popupManager = getPopupManager();
 
 	let containerEl = $state<HTMLDivElement>();
@@ -150,14 +156,24 @@
 	}
 
 	const containerCls = $derived(twMerge(
-		'flex flex-wrap items-center gap-1 w-full px-3 rounded-surface border bg-control transition-colors cursor-text',
-		size === 'normal'  && 'min-h-10 py-1.5 text-sm',
-		size === 'compact' && 'min-h-8 py-1 text-xs',
-		size === 'small'   && 'min-h-6 py-0.5 text-xs px-2',
+		'flex flex-wrap items-center gap-1 w-full rounded-surface border bg-control transition-colors cursor-text',
+		size === 'normal'  && 'min-h-10 p-2 text-sm',
+		size === 'compact' && 'min-h-8 p-1.5 text-xs',
+		size === 'small'   && 'min-h-6 p-1 text-xs',
 		isOpen  ? 'border-accent ring-2 ring-accent/20' : 'border-frame hover:border-accent',
 		disabled && 'opacity-50 cursor-not-allowed',
 		classes,
 	));
+
+	const chipCls = $derived(twMerge(
+		'inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium shrink-0',
+		chipVariant === 'primary' && 'bg-primary text-primary-contrast',
+		chipVariant === 'secondary' && 'bg-secondary text-secondary-contrast',
+		chipVariant === 'danger' && 'bg-error text-error-contrast',
+		chipVariant === 'accent' && 'bg-accent text-accent-contrast',
+	));
+
+	const sortableChipCls = $derived(twMerge(chipCls, 'cursor-grab active:cursor-grabbing select-none'));
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
@@ -167,13 +183,13 @@
 			bind:items={sortableItems}
 			orientation="horizontal"
 			id="tag-editor-chips"
-			class="contents"
+			class="flex flex-wrap gap-1"
 		>
 			{#snippet item(si)}
 				{#if chipSnippet}
 					{@render chipSnippet(si.tag, () => removeTag(si.tag))}
 				{:else}
-					<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-accent text-accent-contrast text-xs font-medium cursor-grab active:cursor-grabbing select-none shrink-0">
+					<span class={sortableChipCls}>
 						{si.tag}
 						<!-- svelte-ignore a11y_click_events_have_key_events a11y_interactive_supports_focus -->
 						<span
@@ -194,7 +210,7 @@
 			{#if chipSnippet}
 				{@render chipSnippet(tag, () => removeTag(tag))}
 			{:else}
-				<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-accent text-accent-contrast text-xs font-medium shrink-0">
+				<span class={chipCls}>
 					{tag}
 					<!-- svelte-ignore a11y_click_events_have_key_events a11y_interactive_supports_focus -->
 					<span

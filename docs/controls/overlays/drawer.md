@@ -1,6 +1,6 @@
 # Drawer
 
-A slide-in panel anchored to the left or right edge of the screen. Opened imperatively via `getDrawerManager()`. Supports async resolution — `open()` returns a Promise that resolves when the drawer closes.
+A slide-in panel anchored to any screen edge. Opened imperatively via `getDrawerManager()`. Supports async resolution — `open()` returns a Promise that resolves when the drawer closes.
 
 ## Import
 
@@ -28,7 +28,7 @@ Opens a drawer and returns a `Promise<T>` that resolves when `drawer.close(resul
 |-----------|------|-------------|
 | `component` | `Component` | Svelte component to render inside the drawer. |
 | `props` | `object` | Props passed to the component. |
-| `options` | `DrawerOptions` | Position, size, closable, key. |
+| `options` | `DrawerOptions` | Position, size, class, closable, key. |
 
 ### `drawer.close(result?)`
 
@@ -40,18 +40,29 @@ Closes the topmost drawer and resolves its promise with `result`.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `position` | `'left' \| 'right'` | `'right'` | Which edge the drawer slides from. |
-| `size` | `'normal' \| 'compact' \| 'small'` | `'normal'` | Panel width. |
+| `position` | `'left' \| 'right' \| 'top' \| 'bottom'` | `'right'` | Which edge the drawer slides from. |
+| `size` | `'normal' \| 'compact' \| 'small'` | `'normal'` | Panel width for left/right drawers, panel height for top/bottom drawers. |
+| `class` | `string` | — | Extra Tailwind classes merged onto the drawer panel. Can override the default width or height. |
 | `closable` | `boolean` | `true` | Whether clicking the backdrop closes the drawer. |
 | `key` | `string` | — | Prevents opening another drawer with the same key while one is already active. |
 
 ### Size reference
 
-| Size | Width |
-|------|-------|
-| `small` | `w-80` (320px) |
-| `compact` | `w-96` (384px) |
-| `normal` | `w-128` (512px) |
+| Size | Left/right width | Top/bottom height |
+|------|------------------|-------------------|
+| `small` | `w-80` (320px) | `h-48` (192px) |
+| `compact` | `w-96` (384px) | `h-64` (256px) |
+| `normal` | `w-128` (512px) | `h-96` (384px) |
+
+`class` is merged after the default panel classes, so size utilities can override the named size:
+
+```ts
+drawer.open(MyPanel, {}, {
+  position: 'bottom',
+  size: 'compact',
+  class: 'h-19',
+});
+```
 
 ---
 

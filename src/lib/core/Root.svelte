@@ -1,14 +1,18 @@
 <script lang="ts">
 	import {beforeNavigate} from '$app/navigation';
-	import {createDrawerManager, createModalManager, createPopupManager, createToastManager, PopupContainer, ToastContainer} from "../index";
+	import {createModalManager} from "../controls/overlays/modal";
+	import {createPopupManager, PopupContainer} from "../controls/overlays/popup";
+	import {createToastManager, ToastContainer} from "../controls/overlays/toast";
+	import {createDrawerManager} from "../controls/overlays/drawer";
 	import type {ChildrenProp} from "../helpers/types";
 	import {createThemeManager} from "./theme-manager.svelte";
 	import {onMount} from "svelte";
 	import SharedOverlayContainer from "../controls/overlays/shared/SharedOverlayContainer.svelte";
 
 	let {
-		children
-	}: & ChildrenProp = $props();
+		children,
+		manageBodyStyle = true
+	}: ChildrenProp & {manageBodyStyle?: boolean} = $props();
 
 	const themeManager = createThemeManager();
 
@@ -19,8 +23,10 @@
 
 	$effect(() => {
 		document.documentElement.classList.toggle('dark', themeManager.dark);
-		document.body.style.background = 'var(--color-canvas)';
-		document.body.style.color = 'var(--color-canvas-contrast)';
+		if (manageBodyStyle) {
+			document.body.style.background = 'var(--color-canvas)';
+			document.body.style.color = 'var(--color-canvas-contrast)';
+		}
 		localStorage.setItem('dark', JSON.stringify(themeManager.dark));
 	});
 

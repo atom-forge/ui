@@ -8,6 +8,7 @@
         currentIndex?: number;
         showArrows?: boolean;
         loop?: boolean;
+        showcase?: number | [number, number];
         children: Snippet<[{ item: T; index: number }]>;
         [key: string]: unknown;
     }
@@ -18,6 +19,7 @@
         currentIndex = $bindable(0),
         showArrows = true,
         loop = false,
+        showcase,
         children,
         ...props
     }: Props = $props();
@@ -25,6 +27,23 @@
     let scrollEl = $state<HTMLElement | null>(null);
     let userScrolling = false;
     let scrollTimer: ReturnType<typeof setTimeout>;
+    let showcaseTimer: ReturnType<typeof setTimeout> | undefined;
+
+    function getShowcaseDelay() {
+        if (typeof showcase === 'number') {
+            return showcase > 0 ? showcase * 1000 : undefined;
+        }
+
+        if (Array.isArray(showcase)) {
+            const [min, max] = showcase;
+            const start = Math.min(min, max);
+            const end = Math.max(min, max);
+            if (end <= 0) return undefined;
+            return (Math.max(0, start) + Math.random() * (end - Math.max(0, start))) * 1000;
+        }
+
+        return undefined;
+    }
 
     function scrollToIndex(index: number, behavior: ScrollBehavior = 'smooth') {
         if (!scrollEl) return;
@@ -34,6 +53,21 @@
     $effect(() => {
         const idx = currentIndex;
         if (!userScrolling) scrollToIndex(idx);
+    });
+
+    $effect(() => {
+        const delay = getShowcaseDelay();
+        const itemCount = items.length;
+        const idx = currentIndex;
+
+        if (!delay || itemCount <= 1) return;
+
+        clearTimeout(showcaseTimer);
+        showcaseTimer = setTimeout(() => {
+            currentIndex = (idx + 1) % itemCount;
+        }, delay);
+
+        return () => clearTimeout(showcaseTimer);
     });
 
     function handleScroll() {

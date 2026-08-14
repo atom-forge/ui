@@ -30,9 +30,26 @@ import {TagEditor} from '$lib';
 | `sortable`    | `boolean`  | `false`         | Enables drag-and-drop reordering.                                       |
 | `uppercase`   | `boolean`  | —               | Normalizes every tag to uppercase. Mutually exclusive with `lowercase`. |
 | `lowercase`   | `boolean`  | —               | Normalizes every tag to lowercase. Mutually exclusive with `uppercase`. |
+| `primary`     | `boolean`  | `true`          | Primary default chip color. Mutually exclusive with other chip colors.  |
+| `secondary`   | `boolean`  | —               | Secondary default chip color. Mutually exclusive with other chip colors. |
+| `danger`      | `boolean`  | —               | Danger default chip color. Mutually exclusive with other chip colors.   |
+| `accent`      | `boolean`  | —               | Accent default chip color. Mutually exclusive with other chip colors.   |
 | `compact`     | `boolean`  | —               | Compact size. Mutually exclusive with `small`.                          |
 | `small`       | `boolean`  | —               | Small size. Mutually exclusive with `compact`.                          |
 | `class`       | `string`   | —               | Extra classes forwarded to the wrapper element.                         |
+
+## Chip color
+
+The built-in chip renderer uses the primary color by default. Use one chip color prop at a time:
+
+```sveltehtml
+<TagEditor bind:value={tags} />
+<TagEditor bind:value={tags} secondary />
+<TagEditor bind:value={tags} danger />
+<TagEditor bind:value={tags} accent />
+```
+
+When a custom `chip` snippet is provided, these color props do not affect the custom chip.
 
 ## Options
 

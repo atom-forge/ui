@@ -36,6 +36,28 @@
 		});
 	}
 
+	function openTopDrawer() {
+		drawer.open(OverlayDrawerPanel, {
+			title: `Top drawer ${++drawerCount}`,
+			openModal,
+			openDrawer
+		}, {
+			position: 'top',
+			size: 'compact'
+		});
+	}
+
+	function openBottomDrawer() {
+		drawer.open(OverlayDrawerPanel, {
+			title: `Bottom drawer ${++drawerCount}`,
+			openModal,
+			openDrawer
+		}, {
+			position: 'bottom',
+			class: 'h-19'
+		});
+	}
+
 	function openLockedDrawer() {
 		drawer.open(OverlayDrawerPanel, {
 			title: `Locked drawer ${++drawerCount}`,
@@ -79,6 +101,8 @@
 		<div class="flex flex-wrap gap-2">
 			<Button label="Open modal" onclick={openModal}/>
 			<Button label="Open drawer" onclick={openDrawer}/>
+			<Button label="Top drawer" onclick={openTopDrawer}/>
+			<Button label="Bottom h-19 drawer" onclick={openBottomDrawer}/>
 			<Button secondary label="Locked modal" onclick={openLockedModal}/>
 			<Button secondary label="Locked drawer" onclick={openLockedDrawer}/>
 			<Button muted label="Dedup modal" onclick={openDedupModal}/>

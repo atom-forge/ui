@@ -1,8 +1,24 @@
 <script lang="ts" module>
+	import type {IconDefinition} from '../../general/icon';
+
 	export type SelectOption = { value: string | number; label: any };
 	export type SelectOptionsSource = SelectOption[] | {
 		search: (query: string) => Promise<SelectOption[]>;
 		get: (values: (string | number)[]) => Promise<SelectOption[]>;
+	};
+	export type SelectButtonTrigger = {
+		label: string;
+		icon?: IconDefinition;
+		endIcon?: IconDefinition;
+		secondary?: boolean;
+		destructive?: boolean;
+		ghost?: boolean;
+		link?: boolean;
+		muted?: boolean;
+		accent?: boolean;
+		outline?: boolean;
+		pill?: boolean;
+		borderless?: boolean;
 	};
 </script>
 
@@ -12,6 +28,7 @@
 	import {twMerge} from 'tailwind-merge';
 	import {ChevronDown, X} from 'lucide-svelte';
 	import {Icon} from '../../general/icon';
+	import {Button} from '../../general/button';
 	import {getPopupManager} from '../../overlays/popup';
 	import SelectDropdown from './SelectDropdown.svelte';
 	import type {XOR, ClassProp} from '../../../index';
@@ -22,6 +39,8 @@
 		placeholder = 'Select...',
 		disabled = false,
 		searchable = true,
+		button,
+		hideKeyboardHints = false,
 		clearable = false,
 		compact,
 		small,
@@ -36,6 +55,8 @@
 		placeholder?: string;
 		disabled?: boolean;
 		searchable?: boolean;
+		button?: SelectButtonTrigger;
+		hideKeyboardHints?: boolean;
 		clearable?: boolean;
 		option?: Snippet<[SelectOption, boolean]>;
 		trigger?: Snippet<[SelectOption]>;
@@ -98,6 +119,7 @@
 				options,
 				value,
 				searchable,
+				hideKeyboardHints,
 				onSelect: (opt: SelectOption) => {
 					if (clearable && opt.value === value) {
 						value = undefined;
@@ -124,7 +146,7 @@
 	}
 
 	const triggerCls = $derived(twMerge(
-		'w-full flex items-center gap-2 px-3 rounded-surface border bg-control text-left transition-colors',
+		'w-full flex items-center gap-2 px-3 rounded-[var(--radius-surface)] border bg-control text-left transition-colors',
 		size === 'normal'  && 'h-10 text-sm',
 		size === 'compact' && 'h-8 text-xs',
 		size === 'small'   && 'h-6 text-xs px-2',
@@ -134,34 +156,59 @@
 	));
 </script>
 
-<button
-	bind:this={triggerEl}
-	onclick={openDropdown}
-	onkeydown={onTriggerKeydown}
-	class={triggerCls}
-	{disabled}
->
-	<span class="flex-1 truncate min-w-0 {value !== undefined ? 'text-canvas-contrast' : 'text-muted-contrast'}">
-		{#if selectedOption && triggerSnippet}
-			{@render triggerSnippet(selectedOption)}
-		{:else}
-			{selectedOption?.label ?? (value !== undefined ? String(value) : placeholder)}
-		{/if}
-	</span>
-	{#if clearable && value !== undefined}
-		<!-- svelte-ignore a11y_click_events_have_key_events a11y_interactive_supports_focus -->
-		<span
-			role="button"
-			tabindex="0"
-			onclick={e => { e.stopPropagation(); value = undefined; cachedSelected = undefined; resolvedSelectedOption = undefined; }}
-			class="text-muted-contrast hover:text-canvas-contrast shrink-0"
-		>
-			<Icon icon={X} pxSize={12}/>
-		</span>
-	{/if}
-	<Icon
-		icon={ChevronDown}
-		pxSize={14}
-		class={twMerge('text-muted-contrast shrink-0 transition-transform duration-150', isOpen && 'rotate-180')}
+{#if button}
+	<Button
+		bind:element={triggerEl}
+		label={button.label}
+		icon={button.icon}
+		endIcon={button.endIcon}
+		secondary={button.secondary}
+		destructive={button.destructive}
+		ghost={button.ghost}
+		link={button.link}
+		muted={button.muted}
+		accent={button.accent}
+		outline={button.outline}
+		pill={button.pill}
+		borderless={button.borderless}
+		{compact}
+		{small}
+		{disabled}
+		onclick={openDropdown}
+		onkeydown={onTriggerKeydown}
+		class={classes}
+		aria-haspopup="listbox"
 	/>
-</button>
+{:else}
+	<button
+		bind:this={triggerEl}
+		onclick={openDropdown}
+		onkeydown={onTriggerKeydown}
+		class={triggerCls}
+		{disabled}
+	>
+		<span class="flex-1 truncate min-w-0 {value !== undefined ? 'text-canvas-contrast' : 'text-muted-contrast'}">
+			{#if selectedOption && triggerSnippet}
+				{@render triggerSnippet(selectedOption)}
+			{:else}
+				{selectedOption?.label ?? (value !== undefined ? String(value) : placeholder)}
+			{/if}
+		</span>
+		{#if clearable && value !== undefined}
+			<!-- svelte-ignore a11y_click_events_have_key_events a11y_interactive_supports_focus -->
+			<span
+				role="button"
+				tabindex="0"
+				onclick={e => { e.stopPropagation(); value = undefined; cachedSelected = undefined; resolvedSelectedOption = undefined; }}
+				class="text-muted-contrast hover:text-canvas-contrast shrink-0"
+			>
+				<Icon icon={X} pxSize={12}/>
+			</span>
+		{/if}
+		<Icon
+			icon={ChevronDown}
+			pxSize={14}
+			class={twMerge('text-muted-contrast shrink-0 transition-transform duration-150', isOpen && 'rotate-180')}
+		/>
+	</button>
+{/if}

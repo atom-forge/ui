@@ -89,6 +89,7 @@
 		<Drawer
 			position={options.position || 'right'}
 			size={options.size || 'normal'}
+			class={options.class}
 		>
 			<Component {...item.props}/>
 		</Drawer>

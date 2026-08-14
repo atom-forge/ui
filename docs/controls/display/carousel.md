@@ -15,6 +15,7 @@ A horizontally scrollable slide container with scroll-snap, optional arrow navig
 | `currentIndex` | `number` (bindable)                       | `0`     | Active slide index. |
 | `showArrows`   | `boolean`                                 | `true`  | Show built-in prev/next arrow buttons. |
 | `loop`         | `boolean`                                 | `false` | Wrap around from last slide to first. |
+| `showcase`     | `number \| [number, number]`              | —       | Auto-advance delay in seconds. A tuple picks a random delay between the two values for each slide. |
 | `children`     | `Snippet<[{ item: T; index: number }]>`   | —       | (Required) Renders each slide. |
 | `class`        | `string`                                  | —       | Extra Tailwind classes on the root element. |
 
@@ -62,8 +63,29 @@ A horizontally scrollable slide container with scroll-snap, optional arrow navig
 <CarouselIndicator total={slides.length} bind:currentIndex />
 ```
 
+### Showcase Mode
+
+Use `showcase` to automatically advance slides. The value represents how long each slide remains visible:
+
+```sveltehtml
+<Carousel items={slides} showcase={4}>
+    {#snippet children(slide)}
+        <!-- slide content -->
+    {/snippet}
+</Carousel>
+
+<Carousel items={slides} showcase={[4, 6]}>
+    {#snippet children(slide)}
+        <!-- slide content -->
+    {/snippet}
+</Carousel>
+```
+
+When the carousel reaches the last slide, showcase mode advances back to the first slide. The timer restarts after manual navigation, indicator changes, or user scrolling.
+
 ## Behaviour
 
 - **Scroll → index**: An `onscroll` handler (debounced 100 ms) computes the current slide from `scrollLeft` and updates `currentIndex`.
 - **Index → scroll**: A `$effect` calls `scrollTo` whenever `currentIndex` changes externally (e.g. indicator click or `goTo()`). Manual scrolling is guarded by a `userScrolling` flag to prevent interference.
+- **Showcase**: When `showcase` is set, a timeout advances `currentIndex` after the configured delay. `[min, max]` picks a new random delay for each slide.
 - **Snap**: `snap-x snap-mandatory` with `snap-center` on each slide ensures pixel-perfect alignment after every scroll gesture.

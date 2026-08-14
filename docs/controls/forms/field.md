@@ -15,6 +15,7 @@ import { Field, FieldGroup, FieldSpan } from '@atom-forge/ui';
 | Prop           | Group    | Type                         | Default      | Description                                                                                         |
 |----------------|----------|------------------------------|--------------|-----------------------------------------------------------------------------------------------------|
 | `label`        | Content  | `string`                     | —            | Label text above (or beside) the control.                                                           |
+| `info`         | Content  | `string`                     | —            | Right-aligned informational text rendered on the same row as the label.                             |
 | `hint`         | Content  | `string`                     | —            | Helper text shown below the control.                                                                |
 | `error`        | Content  | `string`                     | —            | Error message shown below the control. Takes precedence over `hint`.                                |
 | `required`     | Content  | `boolean`                    | `false`      | Appends a red `*` to the label.                                                                     |
@@ -49,7 +50,7 @@ No props. Wraps any content in a `col-span-2` div so it stretches across both co
 ### Basic (vertical)
 
 ```sveltehtml
-<Field label="Email address" hint="We'll never share your email." required>
+<Field label="Email address" info="Required" hint="We'll never share your email." required>
   <Input bind:value={email} placeholder="you@example.com"/>
 </Field>
 
@@ -113,4 +114,3 @@ No props. Wraps any content in a `col-span-2` div so it stretches across both co
 - `error` takes precedence over `hint` — if both are set, only the error is shown.
 - In `layout="horizontal"`, `Field` renders two grid children (label cell + control cell) that slot into a `FieldGroup`'s two-column grid.
 - `FieldSpan` is only meaningful inside a `FieldGroup`.
-

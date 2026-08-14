@@ -20,6 +20,8 @@ import type { SelectOption, SelectOptionsSource } from '@atom-forge/ui';
 | `placeholder` | `string` | `'Select...'` | Text shown when no value is selected. |
 | `disabled` | `boolean` | `false` | Disables the trigger button. |
 | `searchable` | `boolean` | `true` | Shows a search input inside the dropdown. |
+| `button` | `SelectButtonTrigger` | — | Renders a Button component as the trigger instead of the select-field trigger. |
+| `hideKeyboardHints` | `boolean` | `false` | Hides the keyboard-navigation hint bar at the bottom of the dropdown. |
 | `clearable` | `boolean` | `false` | Shows an × button to clear the value. Selecting the same item again also clears it. |
 | `compact` | `boolean` | — | Compact size (h-8). Mutually exclusive with `small`. |
 | `small` | `boolean` | — | Small size (h-6). Mutually exclusive with `compact`. |
@@ -40,11 +42,28 @@ type SelectOptionsSource =
       search: (query: string) => Promise<SelectOption[]>;
       get: (values: (string | number)[]) => Promise<SelectOption[]>;
     };
+
+type SelectButtonTrigger = {
+  label: string;
+  icon?: IconDefinition;
+  endIcon?: IconDefinition;
+  secondary?: boolean;
+  destructive?: boolean;
+  ghost?: boolean;
+  link?: boolean;
+  muted?: boolean;
+  accent?: boolean;
+  outline?: boolean;
+  pill?: boolean;
+  borderless?: boolean;
+};
 ```
 
 ---
 
 ## Usage
+
+No option is highlighted when the dropdown opens. Press an arrow key to begin keyboard navigation.
 
 ### Static options
 
@@ -68,6 +87,24 @@ type SelectOptionsSource =
 
 ```sveltehtml
 <Select {options} bind:value clearable/>
+```
+
+### Hide keyboard hints
+
+```sveltehtml
+<Select {options} bind:value hideKeyboardHints/>
+```
+
+### Button trigger
+
+Use `button` when the trigger should be a Button rather than a select field. It accepts Button styling options; no chevron is shown unless you provide `endIcon`.
+
+```sveltehtml
+<Select
+  {options}
+  bind:value
+  button={{label: 'Filter', icon: Filter, secondary: true}}
+/>
 ```
 
 ### Async search
