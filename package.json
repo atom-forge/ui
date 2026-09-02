@@ -1,6 +1,6 @@
 {
 	"name": "@atom-forge/ui",
-	"version": "0.0.31",
+	"version": "0.0.32",
 	"style": "./core/theme.css",
 	"author": {
 		"name": "Gergely Laborci",
