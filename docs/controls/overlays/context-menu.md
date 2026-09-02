@@ -36,6 +36,7 @@ Renders a horizontal divider.
 |-------|------|-------------|
 | `label` | `string` | Item text. |
 | `icon` | `IconDefinition` | Optional leading icon. |
+| `centered` | `boolean` | Centers the item's content. Items are left-aligned by default. |
 | `warning` | `boolean` | Renders the label in `text-destructive`. |
 | `disabled` | `boolean` | Greys out and disables the item. |
 | `chevron` | `boolean` | Forces a chevron icon on the right (auto-shown for submenus). |
@@ -102,4 +103,10 @@ Closes the popup chain and resolves the awaited promise with `resolveWith`.
 ```sveltehtml
 { label: 'Confirm', resolveWith: true }
 { label: 'Cancel',  resolveWith: false }
+```
+
+### Centered item
+
+```ts
+{ label: 'No results', centered: true, disabled: true }
 ```

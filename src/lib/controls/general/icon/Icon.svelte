@@ -2,7 +2,7 @@
 	import type {AnyProp, ClassProp, XOR} from "../../../index";
 	import {untrack} from "svelte";
 	import {twMerge} from "tailwind-merge";
-	import {IconDefiner, type IconDefinition} from "./icon-definition";
+	import {InlineSvgIcon, IconDefiner, SvgIcon, type IconDefinition} from "./icon-definition";
 
 	let {
 		icon,
@@ -32,11 +32,42 @@
 </script>
 
 {#if icon}
-	{@const Component = icon instanceof IconDefiner ? icon.component : icon}
-	<Component size={pxSize}
-	           class={icon instanceof IconDefiner ? twMerge(classes, icon.classes) : classes}
-	           stroke={strokeWidth}
-	           strokeWidth={strokeWidth}
-	           {...props}
-	/>
+	{@const definition = icon instanceof IconDefiner ? icon.component : icon}
+	{@const iconClasses = twMerge(classes, icon instanceof IconDefiner ? icon.classes : definition instanceof InlineSvgIcon || definition instanceof SvgIcon ? definition.classes : undefined)}
+	{#if definition instanceof InlineSvgIcon}
+		<span
+			class={iconClasses}
+			style:width={`${pxSize}px`}
+			style:height={`${pxSize}px`}
+			style:color={definition.colorValue}
+			{...props}
+		>
+			{@html definition.source}
+		</span>
+	{:else if definition instanceof SvgIcon}
+		<img
+			src={definition.source.href}
+			alt=""
+			width={pxSize}
+			height={pxSize}
+			class={iconClasses}
+			{...props}
+		/>
+	{:else}
+		{@const Component = definition}
+		<Component size={pxSize}
+		           class={iconClasses}
+		           stroke={strokeWidth}
+		           strokeWidth={strokeWidth}
+		           {...props}
+		/>
+	{/if}
 {/if}
+
+<style>
+	span :global(svg) {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+</style>

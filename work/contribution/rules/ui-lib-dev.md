@@ -18,6 +18,13 @@ applies_to: Any task that creates or modifies components in the atom-forge/ui li
 - **All documentation is in English** — never use Hungarian or any other language.
 - **Bun**: Use `bun` for development (not `npm` or `pnpm`).
 
+## Releases
+
+- **Git-based publishing only**: Never run `npm publish` or `bun run release` directly.
+- **Release command**: Use `bun run pub <patch|minor|major|version>` after the implementation changes have been committed.
+- `bun run pub` bumps `package.json`, updates `CHANGELOG.md`, creates the release commit and version tag, then pushes both the branch and tag.
+- Pushing a `v*` tag triggers `.github/workflows/publish.yml`, which builds and publishes the package through GitHub Actions.
+
 ---
 
 ## New Component Workflow

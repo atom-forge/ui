@@ -5,6 +5,7 @@ type Separator = { separator: true };
 type Item = {
 	icon?: IconDefinition;
 	label: string;
+	centered?: boolean;
 	warning?: boolean;
 	disabled?: boolean;
 	chevron?: boolean;
