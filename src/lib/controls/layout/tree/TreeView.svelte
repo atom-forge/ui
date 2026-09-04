@@ -2,7 +2,6 @@
 	import type {ClassProp} from "../../../index";
 	import {setContext, type Snippet, untrack} from 'svelte';
 	import {twMerge} from "tailwind-merge";
-	import {dnd as dndAction} from '../../../helpers/actions';
 	import {TREE_VIEW_CONTEXT, type TreeDropTarget, type TreeViewContext} from './context';
 	import TreeItem from './TreeItem.svelte';
 	import type {TreeDropContext, TreeDropDecision, TreeDropPosition, TreeDndOptions, TreeMove, TreeNode} from './types';
@@ -75,9 +74,9 @@
 		return decision === true || (typeof decision === 'object' && decision.allowed === true);
 	}
 
-	function resolveDrop(sourceData: Record<string, unknown>, target: TreeNode | null, position: TreeDropPosition): TreeDropContext | null {
-		if (!dnd || typeof sourceData.nodeId !== 'string') return null;
-		const source = findNode(sourceData.nodeId);
+	function resolveDrop(nodeId: string | null, target: TreeNode | null, position: TreeDropPosition): TreeDropContext | null {
+		if (!dnd || !nodeId) return null;
+		const source = findNode(nodeId);
 		if (!source) return null;
 
 		let parent: TreeNode | null;
@@ -143,6 +142,7 @@
 		isSelected: (id: string) => selectedId === id,
 		get dnd() { return dnd; },
 		setDragging: (id: string | null) => { draggingId = id; },
+		draggingId: () => draggingId,
 		isDragging: (id: string) => draggingId === id,
 		resolveDrop,
 		setDropTarget,
@@ -152,12 +152,8 @@
 
 	setContext(TREE_VIEW_CONTEXT, treeview);
 
-	function resolveRootDrop(sourceData: Record<string, unknown>) {
-		return resolveDrop(sourceData, null, 'after');
-	}
-
-	function isPrimaryDropTarget(location: {current: {dropTargets: Array<{element: Element}>}}, element: Element): boolean {
-		return location.current.dropTargets[0]?.element === element;
+	function resolveRootDrop() {
+		return resolveDrop(draggingId, null, 'after');
 	}
 
 </script>
@@ -168,22 +164,23 @@
 	{/each}
 	{#if dnd && data.length > 0}
 		<div
+			role="presentation"
 			class={twMerge('h-3 rounded transition-colors', isRootDropTarget && 'bg-accent/15')}
-			use:dndAction.dropTarget={{
-				getData: () => ({position: 'after'}),
-				canDrop: ({source}) => Boolean(resolveRootDrop(source.data)),
-				onDragEnter: ({source, self, location}) => {
-					if (isPrimaryDropTarget(location, self.element) && resolveRootDrop(source.data)) {
-						setDropTarget({nodeId: null, position: 'after'});
-					}
-				},
-				onDragLeave: () => { if (isRootDropTarget) setDropTarget(null); },
-				onDrop: ({source, self, location}) => {
-					if (!isPrimaryDropTarget(location, self.element)) return;
-					const drop = resolveRootDrop(source.data);
-					if (drop) move(drop);
-					else setDropTarget(null);
-				},
+			ondragover={(event) => {
+				if (!resolveRootDrop()) return;
+				event.preventDefault();
+				if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+				setDropTarget({nodeId: null, position: 'after'});
+			}}
+			ondragleave={(event) => {
+				const target = event.currentTarget as HTMLElement;
+				if (!target.contains(event.relatedTarget as Node) && isRootDropTarget) setDropTarget(null);
+			}}
+			ondrop={(event) => {
+				event.preventDefault();
+				const drop = resolveRootDrop();
+				if (drop) move(drop);
+				else setDropTarget(null);
 			}}
 		></div>
 	{/if}

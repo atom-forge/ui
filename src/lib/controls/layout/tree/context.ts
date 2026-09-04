@@ -14,8 +14,9 @@ export type TreeViewContext = {
 	isSelected: (id: string) => boolean;
 	dnd?: TreeDndOptions;
 	setDragging: (id: string | null) => void;
+	draggingId: () => string | null;
 	isDragging: (id: string) => boolean;
-	resolveDrop: (sourceData: Record<string, unknown>, target: TreeNode | null, position: TreeDropPosition) => TreeDropContext | null;
+	resolveDrop: (nodeId: string | null, target: TreeNode | null, position: TreeDropPosition) => TreeDropContext | null;
 	setDropTarget: (target: TreeDropTarget | null) => void;
 	isDropTarget: (nodeId: string | null, position: TreeDropPosition) => boolean;
 	move: (drop: TreeDropContext) => void;

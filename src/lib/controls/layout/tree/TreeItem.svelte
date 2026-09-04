@@ -3,7 +3,6 @@
 	import {getContext} from 'svelte';
 	import {slide} from 'svelte/transition';
 	import {twMerge} from 'tailwind-merge';
-	import {dnd as dndAction} from '../../../helpers/actions';
 	import {Icon} from "../../general/icon";
 	import {TREE_VIEW_CONTEXT, type TreeViewContext} from './context';
 	import TreeItem from './TreeItem.svelte';
@@ -26,10 +25,12 @@
 	const isDropBefore = $derived(treeview.isDropTarget(node.id, 'before'));
 	const isDropInside = $derived(treeview.isDropTarget(node.id, 'inside'));
 	const isDropAfter = $derived(treeview.isDropTarget(node.id, 'after'));
+	const isDndEnabled = $derived(Boolean(treeview.dnd));
 
 	const rowClass = $derived(twMerge(
 		'flex items-center p-1.5 rounded-md cursor-pointer select-none relative transition-colors',
 		isSelected ? 'bg-secondary' : 'hover:bg-secondary/50',
+		isDndEnabled && 'cursor-grab active:cursor-grabbing',
 		isDropInside && 'bg-accent/15 ring-1 ring-inset ring-accent',
 		isDragging && 'opacity-40',
 	));
@@ -42,25 +43,8 @@
 		return 'inside';
 	}
 
-	function resolveDrop(sourceData: Record<string, unknown>, element: Element, clientY: number) {
-		return treeview.resolveDrop(sourceData, node, getDropPosition(element, clientY));
-	}
-
-	function positionFromData(value: unknown): TreeDropPosition {
-		return value === 'before' || value === 'after' ? value : 'inside';
-	}
-
-	function clientYForPosition(element: Element, position: TreeDropPosition): number {
-		const rect = element.getBoundingClientRect();
-		if (position === 'before') return rect.top;
-		if (position === 'after') return rect.bottom;
-		return rect.top + rect.height / 2;
-	}
-
-	function setCurrentDrop(sourceData: Record<string, unknown>, element: Element, clientY: number) {
-		const drop = resolveDrop(sourceData, element, clientY);
-		if (drop) treeview.setDropTarget({nodeId: node.id, position: drop.position});
-		else treeview.setDropTarget(null);
+	function resolveDrop(element: Element, clientY: number) {
+		return treeview.resolveDrop(treeview.draggingId(), node, getDropPosition(element, clientY));
 	}
 
 	function handleClick() {
@@ -71,6 +55,36 @@
 			treeview.onNodeClick(node);
 		}
 	}
+
+	function handleDragStart(event: DragEvent) {
+		if (!isDndEnabled) {
+			event.preventDefault();
+			return;
+		}
+		event.dataTransfer?.setData('text/plain', node.id);
+		if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+		treeview.setDragging(node.id);
+	}
+
+	function handleDragOver(event: DragEvent) {
+		const drop = resolveDrop(event.currentTarget as HTMLElement, event.clientY);
+		if (!drop) return;
+		event.preventDefault();
+		if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+		treeview.setDropTarget({nodeId: node.id, position: drop.position});
+	}
+
+	function handleDragLeave(event: DragEvent) {
+		const target = event.currentTarget as HTMLElement;
+		if (!target.contains(event.relatedTarget as Node)) treeview.setDropTarget(null);
+	}
+
+	function handleDrop(event: DragEvent) {
+		event.preventDefault();
+		const drop = resolveDrop(event.currentTarget as HTMLElement, event.clientY);
+		if (drop) treeview.move(drop);
+		else treeview.setDropTarget(null);
+	}
 </script>
 
 <div class="relative">
@@ -79,28 +93,15 @@
 		tabindex="0"
 		class={rowClass}
 		style:margin-left="{level * 1.25}rem"
-		use:dndAction.draggable={{
-			data: {nodeId: node.id},
-			canDrag: () => Boolean(treeview.dnd),
-			onDragStart: () => treeview.setDragging(node.id),
-			onDrop: () => {
-				treeview.setDragging(null);
-				treeview.setDropTarget(null);
-			},
+		draggable={isDndEnabled}
+		ondragstart={handleDragStart}
+		ondragend={() => {
+			treeview.setDragging(null);
+			treeview.setDropTarget(null);
 		}}
-		use:dndAction.dropTarget={{
-			getData: ({input, element}) => ({position: getDropPosition(element, input.clientY)}),
-			canDrop: ({source, element, input}) => Boolean(resolveDrop(source.data, element, input.clientY)),
-			onDragEnter: ({source, self}) => setCurrentDrop(source.data, self.element, clientYForPosition(self.element, positionFromData(self.data.position))),
-			onDrag: ({source, self, location}) => setCurrentDrop(source.data, self.element, location.current.input.clientY),
-			onDragLeave: () => treeview.setDropTarget(null),
-			onDrop: ({source, self}) => {
-				const clientY = clientYForPosition(self.element, positionFromData(self.data.position));
-				const drop = resolveDrop(source.data, self.element, clientY);
-				if (drop) treeview.move(drop);
-				else treeview.setDropTarget(null);
-			},
-		}}
+		ondragover={handleDragOver}
+		ondragleave={handleDragLeave}
+		ondrop={handleDrop}
 		onclick={handleClick}
 		onkeydown={(e) => e.key === 'Enter' && handleClick()}
 	>
