@@ -9,6 +9,7 @@
 		<a href="/ui/drawer" class="text-accent hover:underline">Drawer</a>
 		<a href="/ui/overlay" class="text-accent hover:underline">Overlay</a>
 		<a href="/ui/sortable" class="text-accent hover:underline">Sortable</a>
+		<a href="/ui/tree" class="text-accent hover:underline">TreeView</a>
 		<a href="/ui/grid-table" class="text-accent hover:underline">GridTable</a>
 		<a href="/ui/table" class="text-accent hover:underline">Table</a>
 		<a href="/ui/organizer" class="text-accent hover:underline">Organizer</a>

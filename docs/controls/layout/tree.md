@@ -18,6 +18,7 @@ import { TreeView, type TreeNode } from '@atom-forge/ui';
 | `selectedId` | `string` | — | ID of the currently selected node (highlighted). |
 | `onNodeClick` | `(node: TreeNode) => void` | — | Called when any node is clicked. |
 | `row` | `Snippet<[TreeNode]>` | — | Custom row renderer. Overrides the default icon + label layout. |
+| `dnd` | `TreeDndOptions` | — | Enables validated drag-and-drop tree reordering. |
 | `class` | `string` | — | Extra Tailwind classes on the wrapper. |
 
 ---
@@ -83,6 +84,41 @@ type TreeNode = {
 
 <TreeView {data} row={customRow} onNodeClick={...}/>
 ```
+
+### Drag and drop
+
+Pass `dnd` to enable node moves. The component prevents cycles, rejects no-op moves, validates child kinds, and includes the entire dragged subtree when enforcing `maxDepth`. The component does not modify `data`; apply the emitted move in `onMove`.
+
+```sveltehtml
+<script lang="ts">
+  import { TreeView, type TreeNode, type TreeMove } from '@atom-forge/ui';
+
+  function moveNode(move: TreeMove) {
+    // Update local state and persist the move.
+  }
+</script>
+
+<TreeView
+  {data}
+  dnd={{
+    getNodeKind: (node) => node.type ?? 'document',
+    allowedChildren: {
+      folder: true,
+      document: ['image'],
+      image: false,
+    },
+    maxDepth: 3,
+    canDrop: ({ node, parent }) => !node.data?.locked && !parent?.data?.locked,
+    onMove: moveNode,
+  }}
+/>
+```
+
+`allowedChildren` uses the destination parent kind. `true` accepts every child kind, a string array accepts only those kinds, and `false` accepts none. An omitted parent kind also accepts none. Root-level moves are always allowed by this rule.
+
+`maxDepth` is zero-based: root nodes are at depth `0`. A node with descendants can only move where its deepest descendant remains at or below the configured maximum.
+
+`canDrop` receives the proposed `TreeDropContext` and may return either a boolean or `{ allowed, reason? }` for application-specific validation.
 
 ---
 
