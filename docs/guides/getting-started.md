@@ -2,6 +2,8 @@
 
 UI is a Svelte 5 component library built with Tailwind CSS 4. It provides composable, themeable UI components — from basic inputs and buttons to overlays, charts, and data tables.
 
+AI coding agents: start with the [AI Consumer Entry Point](./ai-entrypoint.md) for a task-driven reading workflow. To choose components rather than configure the library, use the [capability map](./component-overview.md#choose-by-task).
+
 ---
 
 ## Requirements
@@ -9,8 +11,8 @@ UI is a Svelte 5 component library built with Tailwind CSS 4. It provides compos
 - Svelte 5
 - SvelteKit
 - Tailwind CSS 4
-- `lucide-svelte` (peer dep for icons)
-- `tailwind-merge` (peer dep)
+
+Svelte and SvelteKit are declared peer dependencies. Tailwind CSS 4 is part of the consuming application's styling setup. The library declares `lucide-svelte` and `tailwind-merge` as dependencies; if your application imports either directly, declare it in your application's dependencies too.
 
 ### Optional: prose components (`content/prose`)
 
@@ -29,7 +31,7 @@ Without this plugin the prose components will render without typographic styling
 
 ### Optional: code highlighting (`DocShowCode`, `BlockViewCode`)
 
-`DocShowCode` and `BlockViewCode` use `svelte-highlight` for syntax highlighting. The library ships the highlighter logic but **not** the theme CSS — you must import a theme yourself:
+`DocShowCode` and `BlockViewCode` use `svelte-highlight` for syntax highlighting. The library ships the highlighter logic but **not** the theme CSS — you must import a theme yourself. If importing `svelte-highlight` directly, declare it in your application's dependencies:
 
 ```ts
 // e.g. in your layout or app entry
@@ -50,7 +52,9 @@ npm install @atom-forge/ui
 
 ## CSS setup
 
-Add these lines to your app's CSS entry point (`src/app.css`):
+First integrate Tailwind CSS 4 into your application's build (for example, install `tailwindcss` and `@tailwindcss/vite` and register the Tailwind plugin in `vite.config.ts`, alongside the SvelteKit plugin). Installing `@atom-forge/ui` alone does not process Tailwind directives.
+
+Then add these lines to your app's CSS entry point (`src/app.css`):
 
 ```css
 @import "tailwindcss";
@@ -76,7 +80,7 @@ The `@source` directive for `node_modules` is required because Tailwind CSS 4 do
 Import your CSS and wrap the root layout with `<Root>`. This single component:
 
 - Registers all overlay managers (Modal, Toast, Drawer, Popup)
-- Sets up dark mode with `localStorage` persistence and `prefers-color-scheme` detection
+- Provides theme state and persists changes to `localStorage`; initial preference detection requires the app-level script below
 - Renders portal targets and overlay containers
 
 ```sveltehtml
@@ -87,7 +91,7 @@ Import your CSS and wrap the root layout with `<Root>`. This single component:
   let { children } = $props();
 </script>
 
-<Root dark>
+<Root>
   {@render children()}
 </Root>
 ```
@@ -96,10 +100,10 @@ Import your CSS and wrap the root layout with `<Root>`. This single component:
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `dark` | `boolean` | `false` | Start in dark mode if no preference is saved. Overrides `prefers-color-scheme`. |
-| `light` | `boolean` | `false` | Start in light mode if no preference is saved. Overrides `prefers-color-scheme`. |
+| `children` | `Snippet` | — | Content rendered beneath the theme and overlay providers. |
+| `manageBodyStyle` | `boolean` | `true` | Applies the canvas background and text colors to `document.body`. |
 
-Without either prop, `prefers-color-scheme` determines the initial value. On subsequent visits, the saved `localStorage` value takes precedence over both props.
+Root has no `dark` or `light` props. On mount it initializes theme state from the `<html>` element's `dark` class, not directly from saved preferences or `prefers-color-scheme`. Install the [pre-load script](#preventing-flash-on-load) below to apply those preferences before Root mounts; otherwise an initially unclassed document starts light.
 
 ---
 
@@ -110,6 +114,43 @@ All components are exported from the root package:
 ```ts
 import { Button, Input, Card, Select, Switch } from '@atom-forge/ui';
 ```
+
+### Alternative: the UI namespace
+
+The flat `UI` object provides the same public components and UI manager functions under a single import. It references the existing implementations; named exports remain available and can be mixed with namespace usage.
+
+```sveltehtml
+<script lang="ts">
+  import { UI } from '@atom-forge/ui';
+  let enabled = $state(false);
+</script>
+
+<UI.Root>
+  <UI.Button label="Save"/>
+  <UI.Checkbox label="Enabled" bind:value={enabled}/>
+</UI.Root>
+```
+
+Context-bound APIs are also available, including `UI.getThemeManager()`, `UI.getModalManager()`, `UI.getDrawerManager()`, `UI.getPopupManager()`, `UI.getToastManager()`, `UI.getCheckboxGroupManager()`, and `UI.getBlockAPI()`. Existing manager creation and context setter functions are included as well.
+
+Retrieve managers during initialization of a component **inside** the appropriate provider (`Root`, `CheckboxGroupManager`, or `BlockEditor`). Then call the retrieved manager from event handlers. The namespace does not create global manager instances or change context requirements.
+
+```sveltehtml
+<!-- A child component rendered inside UI.Root -->
+<script lang="ts">
+  import { UI } from '@atom-forge/ui';
+
+  const toast = UI.getToastManager();
+</script>
+
+<UI.Button label="Notify" onclick={() => toast.show('File saved!', { type: 'success' })}/>
+```
+
+For dialogs, retrieve `const modal = UI.getModalManager()` during initialization, then call the existing `await modal.open(DialogComponent, props)` API from an event handler. Drawer and popup managers work the same way as their named-export counterparts.
+
+Types, general-purpose helpers (such as `debounce`), and utility namespaces remain separate named exports. There is no `UI.Modal` component: the existing modal API consists of `UI.ModalContainer` and the modal manager functions.
+
+The namespace's properties are readonly in TypeScript and preserve the original component and function types. Because the object references the entire component collection, namespace usage may retain more code than direct named imports. Prefer named imports when minimizing bundle size is important; equivalent tree-shaking is not guaranteed.
 
 ---
 
@@ -174,7 +215,7 @@ The script is intentionally render-blocking (no `async`/`defer`) so it always ru
 
 ## Overlay managers
 
-`Root` provides four imperative managers for overlay UI. All return `Promise<T>` that resolves when the overlay closes.
+Root provides four imperative managers for overlay UI. Modal and Drawer opening APIs return result promises; Popup opening APIs also return promises, with replacement and pending-open limitations documented in [Popup](../controls/overlays/popup.md#setup-and-limitations). Toast's `show()` returns an identifier. Retrieve all context getters during descendant component initialization, then use the managers in event handlers.
 
 ### Toast
 
@@ -205,7 +246,7 @@ const popup = getPopupManager();
 const result = await popup.open.component(ContextMenu, { config: [...] }, { anchor: event });
 ```
 
-None of these require manual container placement — `<Root>` handles everything.
+None of these require manual container placement beneath `<Root>`. Root does not supply application validation or complete overlay accessibility; see [Overlays](./overlays.md#application-responsibilities).
 
 ---
 
@@ -215,6 +256,10 @@ None of these require manual container placement — `<Root>` handles everything
 - [Button](../controls/general/button.md) — full prop reference for the most used component
 - [Modal](../controls/overlays/modal.md) — async modal pattern in depth
 - [Table](../controls/data/table.md) — generic typed data table
+- [Forms](./forms.md) — labeled inputs and local validation
+- [Overlays](./overlays.md) — selection and context-safe composition
+- [Data Display](./data-display.md) — filtering, paging, and empty states
+- [Sortable Lists](./sortable-lists.md) — reordering and cross-list transfers
 
 ---
 

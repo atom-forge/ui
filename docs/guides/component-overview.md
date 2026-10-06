@@ -1,6 +1,32 @@
 # Component Overview
 
-This document provides an overview of the documented stable controls in the **atom-forge** UI library, organized by category. Additional exported modules are listed at the end so consumers can discover the full public surface.
+Choose tools by the task they solve, then follow the linked documentation for setup, behavior, API, and limitations. The category index below includes documented public modules; inclusion does not imply a stability guarantee. Import documented public symbols from `@atom-forge/ui`, not from the source-folder paths.
+
+For a recommended reading workflow, start with the [AI Consumer Entry Point](./ai-entrypoint.md).
+
+## Choose by task
+
+| Task | Tools to compare | Selection guidance |
+|---|---|---|
+| Select one value | [NativeSelect](../controls/forms/native-select.md), [Select](../controls/forms/select.md), [Radio](../controls/forms/radio.md) | Native select behavior, searchable/custom dropdown, or directly visible choices. |
+| Select several values | [MultiSelect](../controls/forms/multi-select.md), [Checkbox](../controls/forms/checkbox.md) | Dropdown selection or visible checkbox choices; read each binding contract. |
+| Edit string tags | [TagEditor](../controls/forms/tag-editor.md) | Free-form strings; compare MultiSelect for predefined option values. |
+| Build a labeled input | [Field](../controls/forms/field.md), [Input](../controls/forms/input.md), [Textarea](../controls/forms/textarea.md) | Compose the label/hint/error wrapper with the appropriate control; see [Forms](./forms.md). |
+| Enter dates or times | [DatePicker](../controls/forms/date-picker.md), [TimePicker](../controls/forms/time-picker.md), [DateTimePicker](../controls/forms/date-time-picker.md) | Match the required date/time value shape; these are inputs, not scheduling surfaces. |
+| Show a binary setting | [Switch](../controls/forms/switch.md), [Checkbox](../controls/forms/checkbox.md) | On/off setting or checked selection; do not assume identical prop names. |
+| Show tabular records | [Table](../controls/data/table.md), [Pagination](../controls/layout/pagination.md), [EmptyState](../controls/display/empty-state.md) | Compose record display and application-managed paging/state; see [Data Display](./data-display.md). |
+| Visualize measurements | [BarChart](../controls/data/bar-chart.md), [Charts](../controls/data/charts.md), [Heatmap](../controls/data/heatmap.md), [MeterGroup](../controls/data/meter-group.md) | Compare bars, Chart.js plots, two-dimensional values, or parts of a total. |
+| Show progress or loading | [ProgressBar](../controls/forms/progress-bar.md), [ProgressRing](../controls/data/progress-ring.md), [Skeleton](../controls/display/skeleton.md) | Measured progress or content-shaped loading placeholders. |
+| Reorder or transfer items | [SortableList / SortableGroup](../controls/data/sortable.md) | One-list ordering or cross-list transfer; see [Sortable Lists](./sortable-lists.md). |
+| Organize navigation or panels | [Tabs](../controls/layout/tabs.md), [Accordion](../controls/layout/accordion.md), [Tree](../controls/layout/tree.md), [Splitter](../controls/layout/splitter.md) | Peer views, expandable sections, hierarchy, or resizable panels. |
+| Open supplementary UI | [Modal](../controls/overlays/modal.md), [Drawer](../controls/overlays/drawer.md), [Popup](../controls/overlays/popup.md) | Dialog, edge panel, or anchored content; see [Overlays](./overlays.md). |
+| Expose actions | [ContextMenu](../controls/overlays/context-menu.md), [CommandPalette](../controls/overlays/command.md) | Contextual menu or searchable commands; the command palette requires application-managed visibility. |
+| Explain or notify | [Tooltip](../controls/overlays/tooltip.md), [Toast](../controls/overlays/toast.md), [EmptyState](../controls/display/empty-state.md) | Hover explanation, transient feedback, or persistent no-content state. |
+| Render prose or documentation | [Prose](../controls/content/prose.md), [Doc](../controls/content/doc.md) | Readable content or API/code/example documentation primitives. |
+| Edit content | [MarkdownEditor](../controls/editors/markdown-editor.md), [BlockEditor](../controls/editors/block-editor.md), [TableEditor](../controls/editors/table-editor.md), [DiagramEditor](../controls/editors/diagram-editor.md), [ImgEditor](../controls/editors/img-editor.md) | Choose the editor matching the underlying data model, not just its visual appearance. |
+| Schedule dates and resources | [Calendar](../controls/scheduling/calendar.md), [Gantt](../controls/scheduling/gantt.md), [Organizer](../controls/scheduling/organizer.md), [ResourceManager](../controls/scheduling/resource-manager.md) | Compare calendar events, task timelines, custom unit grids, and resource assignments. |
+
+## Category index
 
 ---
 
@@ -24,7 +50,7 @@ Components for visualizing, presenting, and manipulating complex data sets.
 - **[Meter Group](../controls/data/meter-group.md)**: A segmented horizontal bar that visualizes proportions within a total.
 - **[Progress Ring](../controls/data/progress-ring.md)**: A circular SVG progress indicator.
 - **[Sortable](../controls/data/sortable.md)**: Components for drag-and-drop sorting and list reordering.
-- **[Table](../controls/data/table.md)**: A generic, type-safe data table with sorting, sticky headers, and custom cell rendering.
+- **[Table](../controls/data/table.md)**: A generic, type-safe data table with sticky headers and custom cell rendering; sorting is application-owned.
 - **[Timeline](../controls/data/timeline.md)**: A flexible timeline component that renders items along a vertical or horizontal line.
 
 ---
@@ -38,15 +64,15 @@ Components for displaying content, user information, and UI status.
 - **[Carousel](../controls/display/carousel.md)**: A horizontally scrollable slide container with scroll-snap and navigation.
 - **[Empty State](../controls/display/empty-state.md)**: A centered placeholder shown when a section has no content.
 - **[Flip Card](../controls/display/flip-card.md)**: A 3D flip card with a front and back face.
-- **Skeleton**: Loading placeholders exported from `controls/display/skeleton`.
+- **[Skeleton](../controls/display/skeleton.md)**: Content-shaped loading placeholders.
 
 ---
 
 ## Content
 Components for rendering structured content.
 
-- **Doc**: Document rendering primitives exported from `controls/content/doc`.
-- **Prose**: Prose content rendering primitives exported from `controls/content/prose`.
+- **[Doc](../controls/content/doc.md)**: API tables, code displays, and example presentation primitives.
+- **[Prose](../controls/content/prose.md)**: Composable prose and Markdown rendering primitives.
 
 ---
 
@@ -57,6 +83,7 @@ Standardized form controls and inputs for user data collection.
 - **[Code Input](../controls/forms/code-input.md)**: A segmented input for OTPs, PIN codes, and license keys.
 - **[Color](../controls/forms/color.md)**: A styled color input for hex value selection.
 - **[Date Picker](../controls/forms/date-picker.md)**: A single-date selector with a popup calendar.
+- **[Date Time Picker](../controls/forms/date-time-picker.md)**: Combined date and time entry.
 - **[Field](../controls/forms/field.md)**: A wrapper pairing a form control with a label, hint, and error message.
 - **[Input](../controls/forms/input.md)**: A styled text input supporting icons, prefix/suffix slots, and variants.
 - **[Multi-Select](../controls/forms/multi-select.md)**: A control for selecting multiple items from a fixed list.
@@ -75,11 +102,11 @@ Standardized form controls and inputs for user data collection.
 ## Editors
 Rich editing controls for structured authoring workflows.
 
-- **Block Editor**: Block-based document editor exported from `controls/editors/block-editor`.
-- **Diagram Editor**: Diagram editing controls exported from `controls/editors/diagram-editor`.
-- **Image Editor**: Image editing controls exported from `controls/editors/img-editor`.
-- **Markdown Editor**: Markdown editing controls exported from `controls/editors/markdown-editor`.
-- **Table Editor**: Table editing controls exported from `controls/editors/table-editor`.
+- **[Block Editor](../controls/editors/block-editor.md)**: Structured block editing, preview components, and the block context API.
+- **[Diagram Editor](../controls/editors/diagram-editor.md)**: Node-and-edge diagram editing.
+- **[Image Editor](../controls/editors/img-editor.md)**: Image loading, crop/transform controls, and edit-chain metadata; raster export is application-owned.
+- **[Markdown Editor](../controls/editors/markdown-editor.md)**: Markdown text editing with formatting controls.
+- **[Table Editor](../controls/editors/table-editor.md)**: Editable table data and read-only table preview.
 
 ---
 
@@ -101,7 +128,7 @@ Structural components to help organize and navigate content.
 ## Overlays
 Dynamic overlays that appear on top of the main application content.
 
-- **Command**: Command palette overlay primitives exported from `controls/overlays/command`.
+- **[Command](../controls/overlays/command.md)**: Searchable command palette and command item API.
 - **[Context Menu](../controls/overlays/context-menu.md)**: A popup menu built from a declarative configuration.
 - **[Drawer](../controls/overlays/drawer.md)**: A slide-in panel anchored to any screen edge.
 - **[Modal](../controls/overlays/modal.md)**: An imperative modal dialog system.
@@ -115,7 +142,7 @@ Dynamic overlays that appear on top of the main application content.
 ## Scheduling
 Controls for calendar, timeline, and resource planning interfaces.
 
-- **Calendar**: Calendar scheduling primitives exported from `controls/scheduling/calendar`.
-- **Gantt**: Gantt chart planning primitives exported from `controls/scheduling/gantt`.
+- **[Calendar](../controls/scheduling/calendar.md)**: Calendar views and event editing callbacks.
+- **[Gantt](../controls/scheduling/gantt.md)**: Task timeline, progress, and dependency visualization.
 - **[Organizer](../controls/scheduling/organizer.md)**: A unit-based scheduling surface for calendars, dashboards, and resource grids.
-- **Resource Manager**: Resource planning primitives exported from `controls/scheduling/resource-manager`.
+- **[Resource Manager](../controls/scheduling/resource-manager.md)**: Resource assignment planning.

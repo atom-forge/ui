@@ -4,7 +4,7 @@ A unit-based scheduling surface for dashboards, calendars, planners, and resourc
 
 ## Import
 
-```sveltehtml
+```ts
 import { Organizer } from '@atom-forge/ui';
 import type { OrganizerTypes } from '@atom-forge/ui';
 ```
@@ -285,3 +285,15 @@ When `allowOverlap={false}`, a drop or resize that would collide with another it
 The grid body owns the native scroll position. Column and row headers live in separate layers and are visually synced to the body scroll position. This keeps the headers fixed while still supporting horizontal and vertical scrolling. The footer is outside the scroll body and remains fixed below it.
 
 Use `rowHeaderWidth` for stable row header sizing when row labels are narrow or when the row header contains absolutely positioned marker labels.
+
+## When to use
+
+Use for a custom editable grid whose positions and durations map to application-defined units.
+
+## Alternatives
+
+Use [Timeline](../data/timeline.md) for a read-only event narrative or [Sortable](../data/sortable.md) for order-only dragging. Organizer itself has no calendar/date domain model.
+
+## Setup and limitations
+
+Bind items with unique string IDs; map dates/resources to x/y/w/h outside the component. Mouse movement shows a ghost and only a valid mouseup commits a replacement items array; no public change/resize callback is exposed. Blocked and overlap checks apply to drag/resize candidates, not externally supplied data. Supply positive cols/rowHeight and feasible dimensions. Fixed rows controls rendered height, not a maximum y constraint, so an item can move beyond the visible grid. Calendar/calendar-v strategies fall back to compress when resizable is true; use directional resize or false for lane layout. Expand currently uses the same base positioning as compress. There is no touch/keyboard drag or resize implementation, timezone/date arithmetic, persistence, or virtualization; background cells scale with rows × cols.

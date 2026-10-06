@@ -4,7 +4,7 @@ An absolute-positioned overlay indicator for notification counts or status dots.
 
 ## Import
 
-```sveltehtml
+```ts
 import { Badge } from '@atom-forge/ui';
 ```
 
@@ -47,3 +47,15 @@ import { Badge } from '@atom-forge/ui';
   <Button ghost label="No badge"/>
 </Badge>
 ```
+
+## When to use
+
+Use for a count or status dot over another element, such as unread notifications.
+
+## Alternatives
+
+Use [Chip](chip.md) for inline status text rather than an overlay.
+
+## Setup and behavior
+
+The indicator is presentational and ignores pointer events. Counts are visible only when greater than zero; `dot` remains visible without a count unless `hidden` is set. Supply an accessible notification description on the wrapped control.

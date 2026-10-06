@@ -4,7 +4,7 @@ Renders a horizontal stack of overlapping Avatar components. When the list excee
 
 ## Import
 
-```sveltehtml
+```ts
 import { AvatarGroup } from '@atom-forge/ui';
 ```
 
@@ -42,3 +42,15 @@ import { AvatarGroup } from '@atom-forge/ui';
   { name: 'Carol', src: '/avatars/carol.jpg' },
 ]} compact/>
 ```
+
+## When to use
+
+Use for a compact preview of participants, owners, or assignees.
+
+## Alternatives
+
+Render individual [Avatar](avatar.md) components when names, tooltips, or per-person actions must remain available.
+
+## Setup and behavior
+
+The first `max` entries are shown in array order; overflow is a count, not an expandable menu. Supply a nonnegative integer `max` and at most one size prop. Group entries expose only name, image, and color: the group does not forward tooltip or click handlers to each avatar.

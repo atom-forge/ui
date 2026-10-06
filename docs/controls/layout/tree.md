@@ -4,7 +4,7 @@ A collapsible tree view for hierarchical data. Supports node selection, custom r
 
 ## Import
 
-```sveltehtml
+```ts
 import { TreeView, type TreeNode } from '@atom-forge/ui';
 ```
 
@@ -28,10 +28,11 @@ import { TreeView, type TreeNode } from '@atom-forge/ui';
 ```ts
 type TreeNode = {
   id: string;
-  label: string;
+  label?: string;
   icon?: IconDefinition;
+  type?: string;
   children?: TreeNode[];
-  [key: string]: any;  // Arbitrary extra data
+  data?: Record<string, any>; // Arbitrary extra data
 };
 ```
 
@@ -42,7 +43,7 @@ type TreeNode = {
 ### Basic
 
 ```sveltehtml
-<script>
+<script lang="ts">
   import { TreeView, type TreeNode } from '@atom-forge/ui';
 
   const data: TreeNode[] = [
@@ -74,15 +75,15 @@ type TreeNode = {
 ```sveltehtml
 {#snippet customRow(node)}
   <div class="flex items-center gap-2">
-    <Icon icon={node.icon ?? IconFile} size="4" class="text-muted-c"/>
+    <Icon icon={node.icon ?? IconFile} size="4" class="text-muted-contrast"/>
     <span class="truncate">{node.label}</span>
-    {#if node.modified}
+    {#if node.data?.modified}
       <span class="ml-auto text-xs text-accent">M</span>
     {/if}
   </div>
 {/snippet}
 
-<TreeView {data} row={customRow} onNodeClick={...}/>
+<TreeView {data} row={customRow} onNodeClick={(node) => console.log(node.id)}/>
 ```
 
 ### Drag and drop
@@ -124,8 +125,20 @@ Pass `dnd` to enable node moves. The component prevents cycles, rejects no-op mo
 
 ## Behavior
 
-- Nodes with `children` show a chevron — click to expand/collapse.
+- Nodes with nonempty `children` show a chevron — click to expand/collapse.
 - Leaf nodes (no children) show a small dot indicator.
 - Expanded state is managed internally via a `Set<string>` of node IDs.
 - Indentation increases by `1.25rem` per level.
 - A subtle vertical guide line connects children to their parent.
+
+## When to use
+
+Use for expandable hierarchical navigation with optional validated node moves.
+
+## Alternatives
+
+Use [Table](../data/table.md) for flat records or [Sortable](../data/sortable.md) for flat list reorder/transfer.
+
+## Setup and limitations
+
+Use globally unique node IDs. TreeView owns expansion but selectedId is controlled: update it in onNodeClick. Clicking a nonempty branch row also toggles expansion; it is not limited to the chevron. Row snippet and click callback are captured at initialization. Store custom fields under node.data to match public types. Drag/drop emits a proposed move but never mutates data or persists it. There is no lazy-loading callback, expanded-ID binding, virtualization, or multi-selection API. Native HTML drag/drop has no equivalent keyboard reorder contract; do not assume a complete ARIA tree interaction model.

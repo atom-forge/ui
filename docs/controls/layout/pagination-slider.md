@@ -6,7 +6,7 @@ The component handles internal state and debounced output — the bound `page` o
 
 ## Import
 
-```sveltehtml
+```ts
 import { PaginationSlider } from '@atom-forge/ui';
 ```
 
@@ -28,7 +28,7 @@ import { PaginationSlider } from '@atom-forge/ui';
 ## Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
   let page = $state(1);
   const total    = 500;
   const pageSize = 25;
@@ -49,3 +49,15 @@ import { PaginationSlider } from '@atom-forge/ui';
 
 - The readout (e.g. `3/20 · 51–75 of 500`) is intentionally **not** built into the component — derive and render it yourself to match your layout.
 - Resetting `page` from outside (e.g. on filter/folder change) is reflected immediately in the slider.
+
+## When to use
+
+Use to scrub through many pages when nearby numbered buttons are less useful.
+
+## Alternatives
+
+Use [Pagination](pagination.md) for explicit numbered pages; do not pass it this component’s item count.
+
+## Setup and limitations
+
+Bind 1-indexed `page`. Total pages are `max(1, ceil(total / pageSize))`; supply positive pageSize and nonnegative total. Drag and previous/next buttons both commit after a 150 ms debounce, not immediately and not exclusively at pointer release. External page changes update the internal position through an effect, but do not cancel a pending commit, so an earlier user value can overwrite a reset. Page is not automatically clamped after total changes. Derive the readout and fetch data from committed page state.

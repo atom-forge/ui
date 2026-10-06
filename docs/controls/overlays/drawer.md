@@ -4,17 +4,17 @@ A slide-in panel anchored to any screen edge. Opened imperatively via `getDrawer
 
 ## Import
 
-```sveltehtml
+```ts
 import { getDrawerManager } from '@atom-forge/ui';
 ```
 
-`AtomForge` automatically provides the drawer manager and renders the overlay. No manual setup is needed.
+`Root` automatically provides the drawer manager and renders the overlay. No manual setup is needed.
 
 ---
 
 ## DrawerManager API
 
-Obtain the manager anywhere inside the `<AtomForge>` tree:
+Obtain the manager anywhere inside the `<Root>` tree:
 
 ```ts
 const drawer = getDrawerManager();
@@ -32,7 +32,7 @@ Opens a drawer and returns a `Promise<T>` that resolves when `drawer.close(resul
 
 ### `drawer.close(result?)`
 
-Closes the topmost drawer and resolves its promise with `result`.
+Closes the most recently opened drawer and resolves its promise with `result`.
 
 ---
 
@@ -43,7 +43,7 @@ Closes the topmost drawer and resolves its promise with `result`.
 | `position` | `'left' \| 'right' \| 'top' \| 'bottom'` | `'right'` | Which edge the drawer slides from. |
 | `size` | `'normal' \| 'compact' \| 'small'` | `'normal'` | Panel width for left/right drawers, panel height for top/bottom drawers. |
 | `class` | `string` | — | Extra Tailwind classes merged onto the drawer panel. Can override the default width or height. |
-| `closable` | `boolean` | `true` | Whether clicking the backdrop closes the drawer. |
+| `closable` | `boolean` | `true` | Whether backdrop clicks and Escape close the drawer. |
 | `key` | `string` | — | Prevents opening another drawer with the same key while one is already active. |
 
 ### Size reference
@@ -69,7 +69,7 @@ drawer.open(MyPanel, {}, {
 ## Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
   import MyPanel from './MyPanel.svelte';
   const drawer = getDrawerManager();
 
@@ -88,7 +88,7 @@ drawer.open(MyPanel, {}, {
 ### Inside the drawer component
 
 ```sveltehtml
-<script>
+<script lang="ts">
   const drawer = getDrawerManager();
 </script>
 
@@ -124,3 +124,15 @@ The visible backdrop uses the overridable `.overlay-backdrop` class from the lib
 ```
 
 CSS cascades per property. If a future override needs to remove a backdrop-related declaration such as blur, the override must provide a competing declaration for that property. The default drawer backdrop does not use `backdrop-filter`.
+
+## When to use
+
+Use for an edge-anchored inspector, settings panel, or secondary task.
+
+## Alternatives
+
+Use [Modal](modal.md) for centered blocking confirmation, [Popup](popup.md) for anchored content, or [Splitter](../layout/splitter.md) for a persistent pane.
+
+## Setup and limitations
+
+Render under Root and obtain getDrawerManager during descendant component initialization. Await open for completion, treating undefined as dismissal/navigation or duplicate-key suppression. Keys deduplicate within drawer kind; a matching modal key is separate. Close targets the last drawer, not necessarily the overall topmost overlay. Closable controls both backdrop and Escape dismissal; programmatic close still works. The shared renderer does not supply focus trapping/restoration, accessible dialog naming, or global body overflow locking. Supply those in panel content if the workflow requires them.

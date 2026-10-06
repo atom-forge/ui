@@ -4,7 +4,7 @@ A toggle switch with optional label and icon pair for on/off states.
 
 ## Import
 
-```sveltehtml
+```ts
 import { Switch } from '@atom-forge/ui';
 ```
 
@@ -41,7 +41,7 @@ Icons are only visible in `normal` size.
 ## Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
   let enabled = $state(false);
 </script>
 
@@ -70,3 +70,15 @@ Icons are only visible in `normal` size.
 <!-- Disabled -->
 <Switch bind:value={enabled} disabled/>
 ```
+
+## When to use
+
+Use for a boolean setting that can be understood as on/off.
+
+## Alternatives
+
+Use [Checkbox](checkbox.md) for selection or agreement, and [Radio](radio.md) for more than two mutually exclusive choices.
+
+## Setup and behavior
+
+Choose `value` or `checked`, not both; alias choice and size are captured at initialization. Initialize a `checked` binding to a boolean. The native checkbox change handler assigns the binding before calling `onchange(boolean)`; external binding changes do not fire that callback. There is no async pending state or rollback: implement persistence separately. The component does not forward IDs, names, or arbitrary attributes to the hidden input.

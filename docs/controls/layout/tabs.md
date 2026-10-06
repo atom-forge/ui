@@ -4,7 +4,7 @@ A tab navigation system with two visual variants (`line` and `button`). Built fr
 
 ## Import
 
-```sveltehtml
+```ts
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@atom-forge/ui';
 ```
 
@@ -96,3 +96,15 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@atom-forge/ui';
   ...
 </Tabs>
 ```
+
+## When to use
+
+Use to select one of several peer content panels within the same view.
+
+## Alternatives
+
+Use [Accordion](accordion.md) for independently expandable sections, [Stepper](stepper.md) for sequential progress, or links for route navigation.
+
+## Setup and limitations
+
+Tab, TabList, TabPanel, and TabPanels must be descendants of Tabs, which supplies context; Root is not needed. InitialTabId is required and read once, as is variant. There is no active-ID binding: `onTabChange` reports selection calls and may fire when clicking the already active tab. Changing initialTabId later does not select another tab. Inactive panels are unmounted, so lift persistent state above panels. Optional TabPanels `smooth` animates measured height and resets scroll on switches; `scrollClass` styles that scroll wrapper. Tabs does not implement tablist/tab/tabpanel ARIA roles, roving focus, or arrow-key navigation.

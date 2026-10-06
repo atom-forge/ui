@@ -4,6 +4,12 @@ Boolean toggle control with optional group management and three color variants.
 
 ---
 
+## Import
+
+```ts
+import { Checkbox, CheckboxView, CheckboxGroupManager, createCheckboxGroupManager } from '@atom-forge/ui';
+```
+
 ## Components
 
 | Component | Description |
@@ -54,11 +60,11 @@ Three variants for the checked/active state. At most one applies; they are mutua
 
 | Variant | Box color | Hover |
 |---------|-----------|-------|
-| *(default)* | `bg-control-v border-base-b text-control-c` | `hover:bg-secondary` |
-| `primary` | `bg-primary border-primary text-primary-c` | `hover:bg-primary/10` |
-| `accent` | `bg-accent border-accent text-accent-c` | `hover:bg-accent/10` |
+| *(default)* | `bg-control-v border-frame text-control-contrast` | `hover:bg-secondary` |
+| `primary` | `bg-primary border-primary text-primary-contrast` | `hover:bg-primary/10` |
+| `accent` | `bg-accent border-accent text-accent-contrast` | `hover:bg-accent/10` |
 
-Unchecked state is always `bg-control border-base-b` regardless of variant.
+Unchecked state is always `bg-control border-frame` regardless of variant.
 
 ```sveltehtml
 <Checkbox label="Default"  value={true} />
@@ -109,7 +115,7 @@ Grouped checkboxes share state through a `CheckboxGroupManager`. All checkboxes 
 Call `createCheckboxGroupManager()` in the script block of the nearest common ancestor. The checkboxes do not need to be direct children.
 
 ```sveltehtml
-<script>
+<script lang="ts">
   import { createCheckboxGroupManager, Checkbox } from '@atom-forge/ui';
   createCheckboxGroupManager();
 </script>
@@ -167,3 +173,15 @@ Checkboxes register themselves in `onMount` and unregister on destroy (cleanup r
 - `aria-disabled` — set when disabled
 - `tabindex="0"` — keyboard focusable (omitted when disabled)
 - `onkeydown` — Space and Enter activate the checkbox
+
+## When to use
+
+Use for independent boolean choices, including select-all groups with an indeterminate master.
+
+## Alternatives
+
+Use [Radio](radio.md) for mutually exclusive choices and [Switch](switch.md) for an on/off setting. CheckboxView is appropriate only when the caller owns all state.
+
+## Setup and behavior
+
+Choose one binding (`value` or `checked`); the alias is selected at initialization, so initialize `checked` to a boolean when using it. `onchange` is called by the internal state-setting path, including group-manager updates, not as an observer of arbitrary external assignments. Standalone bindings reflect external changes; grouped visual state is manager-owned and has no effect syncing later external assignments into that manager. Group registration happens on mount. Master checkboxes display aggregate status but do not update their boolean binding or fire `onchange` for that aggregate. Group-wide operations do not exclude disabled members; disabled prevents local interaction, not manager-driven changes.

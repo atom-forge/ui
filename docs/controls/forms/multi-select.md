@@ -5,15 +5,15 @@ Select multiple items from a list. Stores the `value` field of each selected opt
 ## Import
 
 ```ts
-import { MultiSelect } from '$lib';
-import type { SelectOption, SelectOptionsSource } from '$lib';
+import { MultiSelect } from '@atom-forge/ui';
+import type { SelectOption, SelectOptionsSource } from '@atom-forge/ui';
 ```
 
 ## Basic usage
 
 ```sveltehtml
 <script lang="ts">
-  import { MultiSelect } from '$lib';
+  import { MultiSelect } from '@atom-forge/ui';
 
   const options = [
     { value: 'hu', label: 'Hungary' },
@@ -21,7 +21,7 @@ import type { SelectOption, SelectOptionsSource } from '$lib';
     { value: 'fr', label: 'France' },
   ];
 
-  let value = $state<string[]>([]);
+  let value = $state<(string | number)[]>([]);
 </script>
 
 <MultiSelect {options} bind:value placeholder="Select countries..." />
@@ -73,11 +73,11 @@ Receives `(opt: SelectOption, isHighlighted: boolean)`.
 
 Pass an object with `search` and `get` methods as `options`.
 `search(query)` fetches results on demand.
-`get(values)` resolves pre-selected values on mount so their labels remain visible.
+`get(values)` resolves selected labels in sortable mode. Non-sortable mode currently caches only options selected in the dropdown; see Setup and behavior below.
 
 ```sveltehtml
 <script lang="ts">
-  import { MultiSelect, type SelectOption } from '$lib';
+  import { MultiSelect, type SelectOption } from '@atom-forge/ui';
 
   const source = {
     search: async (query: string): Promise<SelectOption[]> => {
@@ -90,7 +90,7 @@ Pass an object with `search` and `get` methods as `options`.
     },
   };
 
-  let selected = $state<string[]>([]);
+  let selected = $state<(string | number)[]>([]);
 </script>
 
 <MultiSelect options={source} bind:value={selected} placeholder="Search users…" />
@@ -107,6 +107,8 @@ Add `sortable` to enable drag-and-drop reordering. The `value` binding is kept i
 ## Button trigger
 
 Use the same `button` prop as Select when the trigger should be a Button. No chevron is shown unless you provide `endIcon`.
+
+Variant flags remain optional booleans, including dynamic values and explicit `false`. The trigger forwards at most one active variant to Button: the first truthy flag in the order `destructive` → `secondary` → `ghost` → `link` → `muted` → `accent`. If none is truthy, it uses the primary style. Variant changes are reactive.
 
 ```sveltehtml
 <MultiSelect
@@ -134,3 +136,15 @@ type SelectOption = {
   label: any;
 };
 ```
+
+## When to use
+
+Use to choose multiple string or numeric IDs and optionally reorder selected chips.
+
+## Alternatives
+
+Use [Select](select.md) for one ID or [TagEditor](tag-editor.md) for free-form strings instead of an ID/label model.
+
+## Setup and behavior
+
+Render below `Root` for popup context. Bind an array of unique IDs with consistent string/number types. Toggling updates selection without closing the dropdown; there is no public change callback. The open dropdown snapshots the initial selection rather than tracking later external assignments. `max` prevents additions but does not trim externally supplied values. Static, non-sortable chips follow options-array order, not selected-value order. Async search has no built-in debounce. **Current limitation:** non-sortable async mode displays only cached options selected in the dropdown; it does not call `get()` to hydrate preselected labels. Sortable mode calls `get(value)` but synchronizes resolved items back into the value array, so unresolved IDs may be dropped. Do not rely on it to preserve unavailable IDs.

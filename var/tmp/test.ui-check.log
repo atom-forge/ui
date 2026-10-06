@@ -1,0 +1,154 @@
+$ svelte-kit sync && svelte-check --tsconfig ./tsconfig.json
+You have specified a baseUrl and/or paths in your tsconfig.json which interferes with SvelteKit's auto-generated tsconfig.json. Remove it to avoid problems with intellisense. For path aliases, use `kit.alias` instead: https://svelte.dev/docs/kit/configuration#alias
+Loading svelte-check in workspace: /Users/elvis/Work/AtomForge/ui
+Getting Svelte diagnostics...
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/select/Select.svelte:165:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		endIcon={button.endIcon}
+		secondary={button.secondary}
+		destructive={button.destructive}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/select/Select.svelte:166:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		secondary={button.secondary}
+		destructive={button.destructive}
+		ghost={button.ghost}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/select/Select.svelte:167:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		destructive={button.destructive}
+		ghost={button.ghost}
+		link={button.link}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/select/Select.svelte:168:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		ghost={button.ghost}
+		link={button.link}
+		muted={button.muted}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/select/Select.svelte:169:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		link={button.link}
+		muted={button.muted}
+		accent={button.accent}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/select/Select.svelte:170:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		muted={button.muted}
+		accent={button.accent}
+		outline={button.outline}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/multi-select/MultiSelect.svelte:195:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		endIcon={button.endIcon}
+		secondary={button.secondary}
+		destructive={button.destructive}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/multi-select/MultiSelect.svelte:196:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		secondary={button.secondary}
+		destructive={button.destructive}
+		ghost={button.ghost}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/multi-select/MultiSelect.svelte:197:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		destructive={button.destructive}
+		ghost={button.ghost}
+		link={button.link}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/multi-select/MultiSelect.svelte:198:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		ghost={button.ghost}
+		link={button.link}
+		muted={button.muted}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/multi-select/MultiSelect.svelte:199:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		link={button.link}
+		muted={button.muted}
+		accent={button.accent}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/forms/multi-select/MultiSelect.svelte:200:3
+Error: Type 'boolean | undefined' is not assignable to type 'true | undefined'.
+  Type 'false' is not assignable to type 'true'. (ts)
+		muted={button.muted}
+		accent={button.accent}
+		outline={button.outline}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/scheduling/organizer/Organizer.svelte:112:23
+Error: 'scroller' is possibly 'undefined'. (ts)
+		function handleScroll() {
+			scheduleScrollSync(scroller.scrollLeft, scroller.scrollTop);
+		}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/controls/scheduling/organizer/Organizer.svelte:112:44
+Error: 'scroller' is possibly 'undefined'. (ts)
+		function handleScroll() {
+			scheduleScrollSync(scroller.scrollLeft, scroller.scrollTop);
+		}
+
+/Users/elvis/Work/AtomForge/ui/node_modules/@editorjs/editorjs/types/utils/popover/popover-item-type.ts:4:1
+Error: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled. 
+ */
+export enum PopoverItemType {
+  /** Regular item with icon, title and other properties */
+
+/Users/elvis/Work/AtomForge/ui/node_modules/@editorjs/editorjs/types/utils/popover/popover-event.ts:5:1
+Error: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled. 
+ */
+export enum PopoverEvent {
+  /**
+
+/Users/elvis/Work/AtomForge/ui/node_modules/@editorjs/editorjs/types/tools/adapters/tool-type.ts:4:1
+Error: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled. 
+ */
+export enum ToolType {
+  /**
+
+/Users/elvis/Work/AtomForge/ui/node_modules/@editorjs/editorjs/types/events/block/BlockAdded.ts:6:1
+Error: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled. 
+ */
+export const BlockAddedMutationType = 'block-added';
+
+/Users/elvis/Work/AtomForge/ui/node_modules/@editorjs/editorjs/types/events/block/BlockChanged.ts:6:1
+Error: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled. 
+ */
+export const BlockChangedMutationType = 'block-changed';
+
+/Users/elvis/Work/AtomForge/ui/node_modules/@editorjs/editorjs/types/events/block/BlockMoved.ts:6:1
+Error: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled. 
+ */
+export const BlockMovedMutationType = 'block-moved';
+
+/Users/elvis/Work/AtomForge/ui/node_modules/@editorjs/editorjs/types/events/block/BlockRemoved.ts:6:1
+Error: A top-level 'export' modifier cannot be used on value declarations in a CommonJS module when 'verbatimModuleSyntax' is enabled. 
+ */
+export const BlockRemovedMutationType = 'block-removed';
+
+/Users/elvis/Work/AtomForge/ui/src/lib/dev/grid-table/GridTable.svelte:184:17
+Error: Argument of type '"bg-secondary"' is not assignable to parameter of type 'never'. (ts)
+		if (hoverRow && hoveredRow === rowIndex) {
+			classes.push('bg-secondary');
+		}
+
+/Users/elvis/Work/AtomForge/ui/src/lib/dev/grid-table/GridTable.svelte:188:17
+Error: Argument of type '"bg-muted"' is not assignable to parameter of type 'never'. (ts)
+		if (hoverCell && hoveredCell?.row === rowIndex && hoveredCell.column === columnIndex) {
+			classes.push('bg-muted');
+		}
+
+====================================
+svelte-check found 23 errors and 0 warnings in 11 files
+error: script "check" exited with code 1

@@ -5,7 +5,7 @@ An interactive input that manages a list of string tags. Type and press `Enter` 
 ## Import
 
 ```ts
-import {TagEditor} from '$lib';
+import {TagEditor} from '@atom-forge/ui';
 ```
 
 ## Basic usage
@@ -97,3 +97,15 @@ Receives `(item: string, isHighlighted: boolean)`.
 - Tags are normalized (trimmed, and optionally uppercased/lowercased) before being added.
 - The dropdown uses `onmousedown` so clicking a suggestion does not cause the input to lose focus before the tag is added.
 - When `sortable` is enabled, the `value` binding is kept in sync with the drag order.
+
+## When to use
+
+Use for editable string tags, with optional suggestions and free-form additions.
+
+## Alternatives
+
+Use [MultiSelect](multi-select.md) when stored IDs differ from display labels, or [Chip](../general/chip.md) for non-editable labels.
+
+## Setup and behavior
+
+Render below `Root`: popup context is read even without suggestions. Bind `string[]`; additions trim, normalize, and skip empty/duplicate values, but externally supplied values are not normalized. `allowNew={false}` requires an options source to make additions possible; it does not validate external values. Async suggestions are delayed 200 ms but requests are not cancelled or guarded against stale results. Handle errors and request ordering in the source. Sortable items are initialized from the initial value and then write order back through an effect; later external replacements are not rebuilt into the sortable list. There is no public change event. Disabled styling does not suppress every chip removal/reorder path, so enforce read-only state at the application boundary when required.

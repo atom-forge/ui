@@ -8,6 +8,7 @@
 	import {getPopupManager} from '../../overlays/popup';
 	import SortableList from '../../data/sortable/SortableList.svelte';
 	import MultiSelectDropdown from './MultiSelectDropdown.svelte';
+	import {buttonTriggerVariant} from '../select/utils';
 	import type {SelectButtonTrigger, SelectOption, SelectOptionsSource} from '../select/Select.svelte';
 	import type {XOR, ClassProp} from '../../../index';
 
@@ -48,6 +49,12 @@
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 	const popupManager = getPopupManager();
+	const buttonVariant = $derived(buttonTriggerVariant(button));
+	const buttonSize = $derived.by((): XOR<{}, {compact: true}, {small: true}> => {
+		if (small) return {small: true};
+		if (compact) return {compact: true};
+		return {};
+	});
 
 	let triggerEl = $state<HTMLButtonElement>();
 	let isOpen = $state(false);
@@ -192,17 +199,11 @@
 		label={button.label}
 		icon={button.icon}
 		endIcon={button.endIcon}
-		secondary={button.secondary}
-		destructive={button.destructive}
-		ghost={button.ghost}
-		link={button.link}
-		muted={button.muted}
-		accent={button.accent}
+		{...buttonVariant}
 		outline={button.outline}
 		pill={button.pill}
 		borderless={button.borderless}
-		{compact}
-		{small}
+		{...buttonSize}
 		{disabled}
 		onclick={openDropdown}
 		onkeydown={onTriggerKeydown}

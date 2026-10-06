@@ -4,7 +4,7 @@ A compact inline badge for labels, statuses, and metadata. Supports semantic col
 
 ## Import
 
-```sveltehtml
+```ts
 import { Chip } from '@atom-forge/ui';
 ```
 
@@ -55,3 +55,15 @@ import { Chip } from '@atom-forge/ui';
   {/snippet}
 </Chip>
 ```
+
+## When to use
+
+Use for compact inline labels, statuses, or metadata.
+
+## Alternatives
+
+Use [Badge](badge.md) for a count over another control; use [TagEditor](../forms/tag-editor.md) to edit a list of tags.
+
+## Setup and behavior
+
+The root is a span, not an interactive control. `start` overrides `icon`; `end` only renders supplied content and does not implement removal. Provide an accessible action yourself when composing a removable chip.

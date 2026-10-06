@@ -4,7 +4,7 @@ A page navigation control. Displays first/last pages, sibling pages around the c
 
 ## Import
 
-```sveltehtml
+```ts
 import { Pagination } from '@atom-forge/ui';
 ```
 
@@ -27,7 +27,7 @@ import { Pagination } from '@atom-forge/ui';
 ## Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
   let page = $state(1);
 </script>
 
@@ -48,3 +48,15 @@ import { Pagination } from '@atom-forge/ui';
 | `page` in middle | `1 … 4 5 6 … N` |
 | `page` near end | `1 … N-2 N-1 N` |
 | All pages fit (≤ `2*siblings + 3`) | No ellipsis |
+
+## When to use
+
+Use for numbered navigation when the total page count is known.
+
+## Alternatives
+
+Use [PaginationSlider](pagination-slider.md) for scrubbing through many pages; it takes an item count and page size instead of a page count.
+
+## Setup and limitations
+
+Pagination is controlled: pass 1-indexed `page` and update it in required `onchange(page)`. It does not bind or mutate page and calls the handler only for a different page within 1…total. Fetching, URL synchronization, and loading states belong to the caller. Normalize page after filters change; supplied pages/totals are not clamped. A page-1 button is still rendered for `total <= 1`. Choose at most one size prop.

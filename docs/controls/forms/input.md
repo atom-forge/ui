@@ -4,7 +4,7 @@ A styled text input supporting multiple types, sizes, icons, prefix/suffix slots
 
 ## Import
 
-```sveltehtml
+```ts
 import { Input } from '@atom-forge/ui';
 ```
 
@@ -42,9 +42,17 @@ import { Input } from '@atom-forge/ui';
 ## Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
+  import { Input } from '@atom-forge/ui';
+  import { Search as IconSearch } from 'lucide-svelte';
+
   let name = $state('');
-  let age  = $state('');
+  let age = $state('');
+  let pass = $state('');
+  let amount = $state('');
+  let url = $state('');
+  let email = $state('');
+  let q = $state('');
 </script>
 
 <!-- Basic -->
@@ -65,7 +73,7 @@ import { Input } from '@atom-forge/ui';
 <!-- Prefix / suffix snippet -->
 <Input bind:value={url}>
   {#snippet prefix()}
-    <span class="text-muted-c text-xs">https://</span>
+    <span class="text-muted-contrast text-xs">https://</span>
   {/snippet}
 </Input>
 
@@ -87,3 +95,15 @@ import { Input } from '@atom-forge/ui';
   <Button label="Go" icon={IconSearch}/>
 </ButtonBar>
 ```
+
+## When to use
+
+Use for short text, passwords, or nonnegative integer/decimal text with affixes.
+
+## Alternatives
+
+Use [Textarea](textarea.md) for multiple lines, [CodeInput](code-input.md) for fixed-length codes, and [Slider](slider.md) for bounded numeric adjustment.
+
+## Setup and behavior
+
+Bind a string, including for numeric modes. On input, formatting runs, the binding is assigned, and then the supplied `oninput` receives the native event. Integer mode removes everything except digits; float mode permits one decimal point but no sign, exponent, or locale decimal separator. External values are not normalized automatically. Extra attributes go to the inner input; `class` styles the wrapper. `invalid` is visual only: supply validation and accessible error attributes yourself. The exported `focus()` method is available through `bind:this`; size is fixed at initialization.

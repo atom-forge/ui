@@ -7,7 +7,7 @@ animated placement previews, and a bindable Svelte-friendly list API.
 
 ## Import
 
-```sveltehtml
+```ts
 import { SortableList, SortableGroup } from '@atom-forge/ui';
 ```
 
@@ -111,7 +111,7 @@ Only trigger drag from a specific element inside the item:
 <SortableList bind:items={tasks} dragHandleSelector="[data-handle]" class="gap-2">
   {#snippet item(task)}
     <div class="flex items-center gap-2 rounded border border-frame bg-control p-3">
-      <GripVertical data-handle class="cursor-grab text-muted-c" />
+      <GripVertical data-handle class="cursor-grab text-muted-contrast" />
       <span>{task.title}</span>
     </div>
   {/snippet}
@@ -125,7 +125,7 @@ The selector can target regular elements or SVG/icon elements.
 ```sveltehtml
 <SortableList
   bind:items={tasks}
-  grabbedClass="rounded-md bg-surface-primary shadow-xl ring-2 ring-accent/40 scale-[1.02]"
+  grabbedClass="rounded-md bg-surface shadow-xl ring-2 ring-accent/40 scale-[1.02]"
   draggingClass="opacity-30 blur-[1px]"
 >
   {#snippet item(task)}...{/snippet}
@@ -200,10 +200,22 @@ the same group and remain isolated from lists outside that group.
 older custom DnD surfaces. New sortable list UIs should prefer `SortableList`
 and `SortableGroup`.
 
-```sveltehtml
+```ts
 import { DropIndicator, DropSlot, dnd } from '@atom-forge/ui';
 ```
 
 The low-level `dnd` helper still wraps `@atlaskit/pragmatic-drag-and-drop`.
 It is separate from the current `SortableList` implementation, which uses
 `svelte-dnd-action`.
+
+## When to use
+
+Use for flat list reorder, grid reorder, or cross-list transfer with committed array updates.
+
+## Alternatives
+
+Use [Tree](../layout/tree.md) for validated hierarchical moves or [Organizer](../scheduling/organizer.md) for coordinate-based dragging.
+
+## Setup and limitations
+
+Bind items and supply stable unique IDs across every zone that can exchange items. Independent lists also need distinct list IDs: ungrouped lists with the same ID share a DnD type. SortableGroup is the only context provider needed, not Root. Hover/consider changes update an internal preview; finalize assigns items before calling onchange, which fires only if membership/order changed. During transfer, fromIndex or toIndex may be -1 for a list the item enters/leaves. Callbacks are notifications, not cancellable validation hooks; legacy rules/typeField and preview props do not enforce restrictions in this implementation. There is no dedicated disabled prop. Persist on onchange and handle application-level rejection explicitly.

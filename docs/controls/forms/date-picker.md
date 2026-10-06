@@ -50,7 +50,7 @@ import { DatePicker, DatePickerBody, DatePopover } from '@atom-forge/ui';
 ### With constraints
 
 ```sveltehtml
-<script>
+<script lang="ts">
   const today = new Date();
 </script>
 
@@ -60,15 +60,27 @@ import { DatePicker, DatePickerBody, DatePopover } from '@atom-forge/ui';
 ### Custom format
 
 ```sveltehtml
-<DatePicker bind:value={date} format={d => d.toLocaleDateString('hu-HU')} />
+<DatePicker bind:value={date} format={d => d.toLocaleDateString('en-GB')} />
 ```
 
 ### Action popover
 
 ```sveltehtml
-<DatePopover value={date} confirmLabel="Mentés" onconfirm={saveDate}>
+<DatePopover value={date} confirmLabel="Save" onconfirm={saveDate}>
   {#snippet trigger(open, isOpen)}
     <Button secondary outline label="Choose date" onclick={open} aria-expanded={isOpen} />
   {/snippet}
 </DatePopover>
 ```
+
+## When to use
+
+Use for a nullable local calendar date with a desktop calendar and native touch picker.
+
+## Alternatives
+
+Use [DateTimePicker](date-time-picker.md) for a local date plus time or [TimePicker](time-picker.md) for a time-only string. Use DatePickerBody for an inline calendar without popup context.
+
+## Setup and behavior
+
+Render DatePicker and DatePopover below `Root` for popup context, including on touch devices. Bind `Date | null`. Desktop selection is a draft until OK; cancelling does not commit it. Coarse-pointer native input writes immediately and does not use the confirmation callback flow. Calendar constraints restrict available days, but do not validate externally assigned values. The native input gets min/max only, not disabledDates or disabledDays. Dates use local calendar fields; formatting does not change storage or timezone.

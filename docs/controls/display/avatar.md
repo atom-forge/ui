@@ -4,7 +4,7 @@ A circular user representation component. Renders an image when `src` is provide
 
 ## Import
 
-```sveltehtml
+```ts
 import { Avatar } from '@atom-forge/ui';
 ```
 
@@ -60,3 +60,15 @@ Set `tooltip` to show the full name on hover. Works with both initials and image
 <Avatar name="Alice Johnson" tooltip/>
 <Avatar src="/avatars/alice.jpg" name="Alice Johnson" tooltip/>
 ```
+
+## When to use
+
+Use for a person or entity represented by an image or initials.
+
+## Alternatives
+
+Use [AvatarGroup](avatar-group.md) for overlapping people and overflow counts; use [Icon](../general/icon.md) for a generic symbol.
+
+## Setup and behavior
+
+Choose at most one size prop. Missing `src` produces initials (or `?` without a name), but a failed image URL does not automatically fall back to initials. `tooltip` requires a name; it needs no popup manager and uses Root’s portal target when available, otherwise document.body. The image alt text comes from `name`.

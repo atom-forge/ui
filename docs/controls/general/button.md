@@ -1,10 +1,10 @@
 # Button
 
-A clickable element for triggering actions. Supports 7 variants, an outline modifier, 3 sizes, loading states, and icon composition.
+A clickable element for triggering actions. Supports 7 variants, an outline modifier, 4 sizes, loading states, and icon composition.
 
 ## Import
 
-```sveltehtml
+```ts
 import { Button } from '@atom-forge/ui';
 ```
 
@@ -16,15 +16,15 @@ import { Button } from '@atom-forge/ui';
 
 | Prop       | Type             | Group | Description                                                    |
 |------------|------------------|-------|----------------------------------------------------------------|
-| `label`    | `string`         | —     | Button text. Mutually exclusive with `children`.               |
+| `label`    | `string`         | —     | Button text; not rendered when `children` is provided.               |
 | `icon`     | `IconDefinition` | —     | Icon at the start.                                             |
 | `endIcon`  | `IconDefinition` | —     | Icon at the end.                                               |
-| `children` | `Snippet`        | —     | Custom content slot. Mutually exclusive with `label` / `icon`. |
+| `children` | `Snippet`        | —     | Custom content snippet. Takes precedence over label and icons when not loading. |
 
 ### Variants
 
 One variant is active at a time — the first truthy prop wins in this order:
-`destructive` › `secondary` › `ghost` › `link` › `muted` › `accent` › `primary` (default)
+`destructive` › `secondary` › `ghost` › `link` › `muted` › `accent` › primary style (default; no variant prop)
 
 | Prop          | Default | Group   | Description                                                                                                        |
 |---------------|---------|---------|--------------------------------------------------------------------------------------------------------------------|
@@ -119,7 +119,7 @@ Pass any `lucide-svelte` icon component directly — no wrapper needed.
 Providing only `icon` (no `label`, `endIcon`, or `children`) automatically makes the button square.
 
 ```sveltehtml
-<script>
+<script lang="ts">
   import { Plus, ArrowRight, Trash } from 'lucide-svelte';
 </script>
 
@@ -149,7 +149,7 @@ Providing only `icon` (no `label`, `endIcon`, or `children`) automatically makes
 The progress fill is `bg-current/15`, so it inherits the variant's text color automatically.
 
 ```sveltehtml
-<script>
+<script lang="ts">
   let progress = $state(0);
 </script>
 
@@ -209,11 +209,13 @@ Classes are merged with `twMerge`, so they cleanly override conflicting defaults
 
 ## ButtonBar integration
 
-`ButtonBar` groups buttons together. It automatically forces `outline` weight on all children and handles sizing, borders, and rounded corners.
+`ButtonBar` groups buttons together. It groups children with CSS for shared borders and corners; set child variants and sizes explicitly.
 
 ```sveltehtml
+<script lang="ts">
 import { ButtonBar, Button } from '@atom-forge/ui';
 import { Bold, Italic, Underline } from 'lucide-svelte';
+</script>
 
 <ButtonBar>
   <Button icon={Bold} />
@@ -221,17 +223,27 @@ import { Bold, Italic, Underline } from 'lucide-svelte';
   <Button icon={Underline} />
 </ButtonBar>
 
-<ButtonBar sm>
-  <Button label="Cut" />
-  <Button label="Copy" />
-  <Button label="Paste" />
+<ButtonBar>
+  <Button label="Cut" compact />
+  <Button label="Copy" compact />
+  <Button label="Paste" compact />
 </ButtonBar>
 ```
 
 ---
 
-## Animations
+## Transitions
 
-- **Click pulse** — a ring fade-out animation plays on every click (`button-outline-fade-out`).
-- **Press & release** — scales down on mousedown (`scale-95`), springs back with an elastic bounce on release.
-- Both animations are suppressed inside a `ButtonBar` and when `disabled`.
+The button uses CSS transitions for visual state changes. It does not implement click-pulse or press/release spring animations.
+
+## When to use
+
+Use for actions, form submission, and icon-only commands.
+
+## Alternatives
+
+Use an anchor for navigation: `link` changes appearance but still renders a button. Use [ButtonBar](../layout/button-bar.md) to visually group actions.
+
+## Setup and behavior
+
+Additional attributes are forwarded to the native button. Set `type="button"` for non-submit actions inside forms and an `aria-label` for icon-only actions. `loading={true}` replaces content with a spinner; nonzero numeric loading also keeps the label and draws a percentage fill. `loading={0}` draws a zero-width fill but does not disable the button. Numeric progress is not clamped. Variant and size props are mutually exclusive; icon-only layout is determined at initialization.

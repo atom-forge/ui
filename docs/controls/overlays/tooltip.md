@@ -4,7 +4,7 @@ A hover tooltip that follows the cursor and appears after a configurable delay. 
 
 ## Import
 
-```sveltehtml
+```ts
 import { Tooltip } from '@atom-forge/ui';
 ```
 
@@ -53,7 +53,7 @@ import { Tooltip } from '@atom-forge/ui';
   {#snippet content()}
     <div class="flex flex-col gap-1">
       <p class="font-semibold">Alice Johnson</p>
-      <p class="text-muted-c">alice@example.com</p>
+      <p class="text-muted-contrast">alice@example.com</p>
     </div>
   {/snippet}
   <Button label="Rich tooltip"/>
@@ -74,3 +74,15 @@ import { Tooltip } from '@atom-forge/ui';
   <Button label="Fixed"/>
 </Tooltip>
 ```
+
+## When to use
+
+Use for supplementary hover text, not information required to complete a task.
+
+## Alternatives
+
+Use [Field](../forms/field.md) hints for always-available help or [Popup](popup.md) for interactive content.
+
+## Setup and limitations
+
+No popup-manager context is required. Root supplies the preferred portal target; without it the tooltip falls back to document.body. Content takes precedence over label. Mouse leave cancels the delay and hides the tooltip; fixed mode positions when shown rather than continuously tracking element scroll/resize. Positioning uses viewport heuristics, not measured collision avoidance for arbitrary tooltip sizes. There is no focus trigger, Escape handling, tooltip role, or automatic aria-describedby connection. Keep essential help and action labels available without hover.

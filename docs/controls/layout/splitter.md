@@ -4,7 +4,7 @@ A resizable split-panel container. The two panels are separated by a draggable d
 
 ## Import
 
-```sveltehtml
+```ts
 import { Splitter } from '@atom-forge/ui';
 ```
 
@@ -89,3 +89,15 @@ When the divider is focused, arrow keys resize by 1% per press. Hold `Shift` for
   </Splitter>
 </div>
 ```
+
+## When to use
+
+Use for two simultaneously visible panes with a user-adjustable divider.
+
+## Alternatives
+
+Use [Tabs](tabs.md) for mutually exclusive panels or [Accordion](accordion.md) for content disclosure rather than sizing.
+
+## Setup and limitations
+
+Provide a sized parent: the root uses full height. Orientation names describe the divider (`vertical` = left/right). InitialSize is clamped once at initialization; there is no size binding or later reset prop. Supply feasible minSize (0–50). Drag emits resize during movement and resizeend on release; each keyboard resize emits both callbacks immediately. Persist percentages from resizeend when needed. There is no built-in persistence, disabled mode, or multi-pane API.

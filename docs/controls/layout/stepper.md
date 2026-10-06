@@ -2,6 +2,12 @@
 
 A navigational component that guides users through a sequential process. Displays completed, current, and upcoming steps with connecting lines. Supports horizontal and vertical orientations.
 
+## Import
+
+```ts
+import { Stepper } from '@atom-forge/ui';
+```
+
 ## Props
 
 | Prop          | Type                          | Default          | Description |
@@ -34,8 +40,8 @@ type Step = {
 ## Usage
 
 ```sveltehtml
-<script>
-    import { Stepper } from 'atom-forge';
+<script lang="ts">
+    import { Stepper } from '@atom-forge/ui';
 
     const steps = [
         { id: 'info',    label: 'Basic info',  description: 'Fill in your details.' },
@@ -49,3 +55,15 @@ type Step = {
 
 <Stepper {steps} bind:current readonly={false} />
 ```
+
+## When to use
+
+Use to show progress through a sequential workflow.
+
+## Alternatives
+
+Use [Tabs](tabs.md) for peer content views or [Timeline](../data/timeline.md) for events rather than workflow state.
+
+## Setup and limitations
+
+Bind current to a valid step ID. Completed means positioned before the current step, not independently validated. `readonly={false}` permits navigation only to completed steps; forward progression remains application-owned. No validation, page content, persistence, or change callback is supplied. An invalid current ID leaves all steps upcoming. Compact sizing is captured at initialization.

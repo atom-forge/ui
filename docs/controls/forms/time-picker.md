@@ -4,7 +4,7 @@ A time form control built on reusable time picker body and popover layers. It pr
 
 ## Import
 
-```sveltehtml
+```ts
 import { TimePicker, TimePickerBody, TimePopover } from '@atom-forge/ui';
 ```
 
@@ -64,7 +64,7 @@ import { TimePicker, TimePickerBody, TimePopover } from '@atom-forge/ui';
 <!-- Rounding -->
 <TimePicker bind:value round={0}/>       <!-- nearest hour: 09:23 → 09:00 -->
 <TimePicker bind:value round={10}/>      <!-- nearest 10 min: 09:23 → 09:20 -->
-<TimePicker bind:value round={15}/>      <!-- nearest 15 min: 09:07 → 09:15 -->
+<TimePicker bind:value round={15}/>      <!-- nearest 15 min: 09:08 → 09:15 -->
 <TimePicker bind:value round={30}/>      <!-- nearest 30 min -->
 
 <!-- Snap to list: nearest of 0, 15, 30, 45 -->
@@ -77,9 +77,21 @@ import { TimePicker, TimePickerBody, TimePopover } from '@atom-forge/ui';
 ### Action popover
 
 ```sveltehtml
-<TimePopover value={time} round={5} confirmLabel="Mentés" onconfirm={saveTime}>
+<TimePopover value={time} round={5} confirmLabel="Save" onconfirm={saveTime}>
   {#snippet trigger(open, isOpen)}
     <Button secondary outline label="Choose time" onclick={open} aria-expanded={isOpen} />
   {/snippet}
 </TimePopover>
 ```
+
+## When to use
+
+Use for a nullable time-of-day string without a date or timezone.
+
+## Alternatives
+
+Use [DateTimePicker](date-time-picker.md) when date and time must travel together. TimePickerBody provides inline spinners without a popup.
+
+## Setup and behavior
+
+Render TimePicker and TimePopover below `Root`. Bind `string | null`, not Date. Desktop drafts commit on OK; native coarse-pointer changes commit immediately. Native rounding uses nearest total-minute intervals, while desktop spinner options constrain minutes within the selected hour; do not assume identical rounding behavior. External values are not automatically rounded. Supply a nonempty, valid minute list for array rounding. There are no min/max time props, timezone handling, or public picker change callbacks.

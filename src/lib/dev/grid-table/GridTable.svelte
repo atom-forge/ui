@@ -178,7 +178,7 @@
 	}
 
 	function getCellHoverOverlayClass(rowIndex: number, columnIndex: number) {
-		const classes = [];
+		const classes: string[] = [];
 
 		if (hoverRow && hoveredRow === rowIndex) {
 			classes.push('bg-secondary');

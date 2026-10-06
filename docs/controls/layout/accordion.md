@@ -4,6 +4,12 @@ Expandable content panels with support for single or multiple open items, differ
 
 ---
 
+## Import
+
+```ts
+import { Accordion, AccordionItem, Collapsible } from '@atom-forge/ui';
+```
+
 ## Components
 
 | Component | Description |
@@ -55,7 +61,7 @@ A simplified wrapper around `AccordionItem` that doesn't require an `Accordion` 
 ### Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
   let isOpen = $state(false);
 </script>
 
@@ -149,3 +155,15 @@ The `AccordionManager` uses a `Set<string>` to track active item IDs.
 - If `multiple` is true, it can contain any number of IDs.
 
 State is reactive using Svelte 5 `$state` runes.
+
+## When to use
+
+Use for progressive disclosure of related sections; use Collapsible for one independently controlled section.
+
+## Alternatives
+
+Use [Tabs](tabs.md) for one active content view or [Tree](tree.md) for hierarchical data.
+
+## Setup and limitations
+
+AccordionItem requires Accordion context; Collapsible creates its own context. Root is not required. Use unique, stable item IDs. Accordion starts closed and has no public active-item binding; Collapsible exposes `bind:open`, synchronized through effects. Multiple/size/borderless/joined manager settings are captured at initialization. Closed content is conditionally unmounted, so keep state outside panels if it must survive closing. Headers are native buttons, but no expanded/controls ARIA attributes are added by the component.

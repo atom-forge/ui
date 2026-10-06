@@ -1,10 +1,10 @@
 # Card
 
-A surface container with a rounded border and configurable shadow elevation. Uses the `raised` semantic color layer.
+A surface container with a rounded border and configurable shadow elevation. Uses the `surface` semantic color layer.
 
 ## Import
 
-```sveltehtml
+```ts
 import { Card } from '@atom-forge/ui';
 ```
 
@@ -37,3 +37,15 @@ Shadow levels map to Tailwind: `0→none`, `1→sm`, `2→shadow`, `3→md`, `4�
   <p>Flat card, no shadow.</p>
 </Card>
 ```
+
+## When to use
+
+Use as a bordered surface around related content.
+
+## Alternatives
+
+Use [EmptyState](empty-state.md) for an empty-content message; use [FlipCard](flip-card.md) only when a two-face interaction is intentional.
+
+## Setup and behavior
+
+Card provides no header/footer API, internal padding, or interaction logic. Add spacing through `class` and compose content with `children`. It uses `bg-surface` / `text-surface-contrast`, clips overflow, and forwards extra attributes to its div. Elevation accepts integer levels 0–6 or their string equivalents.

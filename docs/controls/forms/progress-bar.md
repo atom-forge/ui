@@ -4,7 +4,7 @@ A horizontal progress indicator with an accent fill, striped texture, and smooth
 
 ## Import
 
-```sveltehtml
+```ts
 import { ProgressBar } from '@atom-forge/ui';
 ```
 
@@ -41,9 +41,25 @@ import { ProgressBar } from '@atom-forge/ui';
 <ProgressBar value={80} small/>
 
 <!-- Animated -->
-<script>
+<script lang="ts">
+  import { onMount } from 'svelte';
   let progress = $state(0);
-  setInterval(() => { if (progress < 100) progress++ }, 50);
+  onMount(() => {
+    const timer = setInterval(() => { if (progress < 100) progress++ }, 50);
+    return () => clearInterval(timer);
+  });
 </script>
-<ProgressBar {value} />
+<ProgressBar value={progress} />
 ```
+
+## When to use
+
+Use for read-only determinate progress against a known maximum.
+
+## Alternatives
+
+Use [ProgressRing](../data/progress-ring.md) for compact circular progress, [MeterGroup](../data/meter-group.md) for contributions, or [Slider](slider.md) for user input.
+
+## Setup and behavior
+
+Percentage is `value / max * 100` when `max > 0`, otherwise zero. Values are not clamped; validate the range in the caller. There is no indeterminate mode, binding, or completion event. The root uses `role="none"` and only a percentage title, not progressbar ARIA semantics; provide accessible progress text separately. Size and wrapper classes are captured at initialization.

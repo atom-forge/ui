@@ -4,7 +4,7 @@ A popup-based dropdown select. Accepts a static options array or an async search
 
 ## Import
 
-```sveltehtml
+```ts
 import { Select } from '@atom-forge/ui';
 import type { SelectOption, SelectOptionsSource } from '@atom-forge/ui';
 ```
@@ -15,7 +15,7 @@ import type { SelectOption, SelectOptionsSource } from '@atom-forge/ui';
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string \| number` | — | Bindable selected value. |
+| `value` | `string \| number \| undefined` | `undefined` | Bindable selected value. |
 | `options` | `SelectOptionsSource` | `[]` | Static array or async source object with `search` and `get` methods. |
 | `placeholder` | `string` | `'Select...'` | Text shown when no value is selected. |
 | `disabled` | `boolean` | `false` | Disables the trigger button. |
@@ -68,7 +68,7 @@ No option is highlighted when the dropdown opens. Press an arrow key to begin ke
 ### Static options
 
 ```sveltehtml
-<script>
+<script lang="ts">
   import { Select } from '@atom-forge/ui';
 
   const options = [
@@ -77,7 +77,7 @@ No option is highlighted when the dropdown opens. Press an arrow key to begin ke
     { value: 'cherry', label: 'Cherry' },
   ];
 
-  let value = $state();
+  let value = $state<string | number | undefined>();
 </script>
 
 <Select {options} bind:value placeholder="Pick a fruit..."/>
@@ -99,6 +99,8 @@ No option is highlighted when the dropdown opens. Press an arrow key to begin ke
 
 Use `button` when the trigger should be a Button rather than a select field. It accepts Button styling options; no chevron is shown unless you provide `endIcon`.
 
+Variant flags remain optional booleans, including dynamic values and explicit `false`. The trigger forwards at most one active variant to Button: the first truthy flag in the order `destructive` → `secondary` → `ghost` → `link` → `muted` → `accent`. If none is truthy, it uses the primary style. Variant changes are reactive.
+
 ```sveltehtml
 <Select
   {options}
@@ -114,7 +116,7 @@ Pass an object with `search` and `get` methods as `options`.
 `get(values)` resolves pre-selected values on load so the trigger can display the correct label.
 
 ```sveltehtml
-<script>
+<script lang="ts">
   import { Select } from '@atom-forge/ui';
 
   const source = {
@@ -128,7 +130,7 @@ Pass an object with `search` and `get` methods as `options`.
     },
   };
 
-  let value = $state<string | undefined>();
+  let value = $state<string | number | undefined>();
 </script>
 
 <Select options={source} bind:value placeholder="Search..."/>
@@ -136,18 +138,31 @@ Pass an object with `search` and `get` methods as `options`.
 
 ### Custom rendering
 
-Extra fields on option objects are accessible via `(opt as any).field`:
+Use a script-side caster for extra option fields; avoid assertions inside template expressions:
 
 ```sveltehtml
+<script lang="ts">
+  import { Select, as } from '@atom-forge/ui';
+  import type { SelectOption } from '@atom-forge/ui';
+
+  const toColorOption = as<SelectOption & { dot: string }>;
+  const options = [
+    { value: 'active', label: 'Active', dot: 'bg-accent' },
+    { value: 'inactive', label: 'Inactive', dot: 'bg-muted' },
+  ];
+  let value = $state<string | number | undefined>();
+</script>
+
 <Select {options} bind:value>
   {#snippet trigger(opt)}
+    {@const colorOption = toColorOption(opt)}
     <span class="flex items-center gap-2">
-      <span class="w-2 h-2 rounded-full {(opt as any).dot}"></span>
+      <span class="w-2 h-2 rounded-full {colorOption.dot}"></span>
       {opt.label}
     </span>
   {/snippet}
   {#snippet option(opt, isHighlighted)}
-    <div class={isHighlighted ? 'bg-accent text-accent-c' : 'hover:bg-base-b'}>
+    <div class={isHighlighted ? 'bg-accent text-accent-contrast' : 'hover:bg-secondary'}>
       {opt.label}
     </div>
   {/snippet}
@@ -161,3 +176,15 @@ Extra fields on option objects are accessible via `(opt as any).field`:
 <Select {options} bind:value compact/>   <!-- h-8 -->
 <Select {options} bind:value small/>     <!-- h-6 -->
 ```
+
+## When to use
+
+Use for one string or numeric ID from static options or a searchable async source, especially when custom option rendering is needed.
+
+## Alternatives
+
+Use [NativeSelect](native-select.md) for a browser-native picker without search, [Radio](radio.md) for visible single-choice options, or [MultiSelect](multi-select.md) for several IDs.
+
+## Setup and behavior
+
+Render below `Root`, which provides popup context and a PopupContainer. Bind `value` to `$state<string | number | undefined>`; `undefined` means no selection. Matching uses strict equality, so keep ID types consistent. Selection updates the binding and closes the popup; there is no public `onchange` prop. Static search compares `String(label)` case-insensitively. Async `search(query)` runs when the dropdown opens and on query changes, without built-in debounce; `get([value])` resolves labels after mount and on value changes. Implement request throttling and error handling in the source. Label-resolution requests are not cancelled or guarded against stale responses. Button-trigger mode shows `button.label`, not the selected-label snippet or field clear button.

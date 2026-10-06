@@ -4,7 +4,7 @@ A 3D flip card with a front and back face. Supports hover, click, and manual tri
 
 ## Import
 
-```sveltehtml
+```ts
 import { FlipCard } from '@atom-forge/ui';
 ```
 
@@ -62,7 +62,7 @@ type Follow = {
 ### Manual control
 
 ```sveltehtml
-<script>
+<script lang="ts">
   let flipped = $state(false);
 </script>
 
@@ -91,3 +91,15 @@ type Follow = {
 - The wrapper uses `perspective: 1000px` for the 3D effect.
 - Both faces use `backface-hidden` so only the active face is visible.
 - `FlipCard` fills its parent (`h-full w-full`), so always place it inside a sized container.
+
+## When to use
+
+Use for a deliberately two-sided presentation with a visual flip transition.
+
+## Alternatives
+
+Use [Card](card.md) for a static surface or [Accordion](../layout/accordion.md) for content disclosure without a 3D effect.
+
+## Setup and behavior
+
+Render under `Root`: the component reads theme context even without `follow`. Supply a sized parent, one of `front` / `children`, and optional `back`. Bind `flipped` for external control. Hover mode toggles on both enter and leave rather than setting an absolute state. Click mode bubbles clicks from face content; prefer manual mode for faces containing actions. There is no built-in keyboard flip handler, focus management between faces, or reduced-motion switch.

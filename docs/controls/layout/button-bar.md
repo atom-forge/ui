@@ -4,7 +4,7 @@ A pure visual wrapper that groups its children into a unified bar. Borders, roun
 
 ## Import
 
-```sveltehtml
+```ts
 import { ButtonBar, ButtonBarItem } from '@atom-forge/ui';
 ```
 
@@ -35,7 +35,7 @@ import { ButtonBar, ButtonBarItem } from '@atom-forge/ui';
 | `children` | `Snippet` | — | Component to wrap. |
 | `class` | `string` | — | Extra Tailwind classes. |
 
-`ButtonBarItem` applies `self-stretch` so it fills the bar's full height, and adds `bg-control px-2` for a consistent visual container.
+`ButtonBarItem` applies `self-stretch` so it fills the bar's full height, and adds `bg-secondary px-2` for a consistent visual container.
 
 ---
 
@@ -105,3 +105,15 @@ span > :global(*) {
 ```
 
 This reliably overrides any component's own styles without relying on Tailwind arbitrary selectors.
+
+## When to use
+
+Use to visually join adjacent actions or a mixed input/action row.
+
+## Alternatives
+
+Use a flex container for separated actions, [Tabs](tabs.md) for active-panel selection, or [Radio](../forms/radio.md) for a choice value.
+
+## Setup and limitations
+
+No context, shared size, selected value, or event routing is provided. Set variants/sizes on each child. Only direct DOM children have border/radius/shadow stripped; additional wrappers change which surface is affected. ButtonBarItem supplies a secondary background and stretch alignment. The bar is not automatically a toolbar or keyboard-navigation group; add semantics and behavior in the caller.

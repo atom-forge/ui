@@ -81,8 +81,8 @@ export * from "./controls/scheduling/resource-manager/index.js";
 export * from "./controls/content/doc/index.js";
 export * from "./controls/content/prose/index.js";
 
-// UI (bits-ui based)
-export {UI} from "./ui/index.js"
+// Alternative namespace
+export {UI} from "./ui.js";
 
 // Core
 export {default as Root} from "./core/Root.svelte"

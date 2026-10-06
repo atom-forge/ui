@@ -4,7 +4,7 @@ A thin wrapper around `lucide-svelte`, inline SVG, and SVG URL icons with unifie
 
 ## Import
 
-```sveltehtml
+```ts
 import { Icon, defineIcon, svgIcon } from '@atom-forge/ui';
 import { Plus } from 'lucide-svelte';
 ```
@@ -92,3 +92,15 @@ The `stroke` prop uses a 1–7 scale:
 | 5 | 1.5 |
 | 6 | 1.75 |
 | 7 | 2.0 |
+
+## When to use
+
+Use to render Lucide components or SVG definitions through the same sizing API.
+
+## Alternatives
+
+Pass an `IconDefinition` directly to controls with an `icon` prop instead of nesting an Icon manually.
+
+## Setup and behavior
+
+Size and stroke are resolved at initialization; remount to change those settings. String sizes are parsed as integers, so use numeric values for fractional Tailwind units. `IconDefiner` stroke overrides the `stroke` prop. Inline SVG is inserted with `{@html}` without sanitization; accept only trusted markup. URL SVGs render as images and cannot inherit color. Give the containing action an accessible name.

@@ -2,6 +2,12 @@
 
 A segmented horizontal (or vertical) bar that visualises proportions within a total. Each segment represents a category sized by its value. The `MeterGroupLegend` component displays labels and values for the same dataset.
 
+## Import
+
+```ts
+import { MeterGroup, MeterGroupLegend } from '@atom-forge/ui';
+```
+
 ## MeterGroup
 
 ### Props
@@ -66,8 +72,8 @@ The root div has `role="meter"` with `aria-valuemin`, `aria-valuemax`, and `aria
 ## Example
 
 ```sveltehtml
-<script>
-  import { MeterGroup, MeterGroupLegend } from '$lib';
+<script lang="ts">
+  import { MeterGroup, MeterGroupLegend } from '@atom-forge/ui';
 
   const items = [
     { id: 'docs', label: 'Documents', value: 25, color: '#3b82f6' },
@@ -88,3 +94,15 @@ The root div has `role="meter"` with `aria-valuemin`, `aria-valuemax`, and `aria
 <MeterGroup {items} compact />
 <MeterGroupLegend {items} compact />
 ```
+
+## When to use
+
+Use to show contributions to a total, with a companion legend for labels and values.
+
+## Alternatives
+
+Use [ProgressBar](../forms/progress-bar.md) or [ProgressRing](progress-ring.md) for one completion metric; use [Charts](charts.md) for axes and multiple series.
+
+## Setup and limitations
+
+Pass the same items to bar and legend; no shared context or binding synchronizes them. Supply nonnegative values and a max at least equal to their sum. Segment flex weights use values plus any remainder; a smaller max does not clip segments to max and can make meter ARIA totals inconsistent. Set a height for vertical bars. Size/orientation styling is captured at initialization. Click callbacks run on div/li elements without keyboard activation; custom interactive content must supply keyboard behavior. Only MeterGroup forwards arbitrary attributes such as aria-label; the legend does not.

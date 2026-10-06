@@ -108,9 +108,9 @@
 		const scroller = scrollerEl;
 		if (!scroller) return;
 
-		function handleScroll() {
+		const handleScroll = () => {
 			scheduleScrollSync(scroller.scrollLeft, scroller.scrollTop);
-		}
+		};
 
 		scroller.addEventListener('scroll', handleScroll, {passive: true});
 		syncScrollPosition(scroller.scrollLeft, scroller.scrollTop);

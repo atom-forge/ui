@@ -4,7 +4,7 @@ A generic, type-safe data table with sticky headers, column visibility control, 
 
 ## Import
 
-```sveltehtml
+```ts
 import { Table, type ColumnDef } from '@atom-forge/ui';
 ```
 
@@ -71,7 +71,7 @@ type TableOverflow = 'ellipsis' | 'wrap' | 'clip';
 ## Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
   import { Table, type ColumnDef } from '@atom-forge/ui';
 
   type User = { id: number; name: string; role: string; active: boolean };
@@ -81,7 +81,7 @@ type TableOverflow = 'ellipsis' | 'wrap' | 'clip';
     { id: 2, name: 'Bob',   role: 'User',  active: false },
   ];
 
-  let columns: ColumnDef<User>[] = [
+  let columns = $state<ColumnDef<User>[]>([
     { key: 'id',     label: 'ID',    shrink: true },
     { key: 'name',   label: 'Name',  grow: true },
     { key: 'role',   label: 'Role',
@@ -90,7 +90,7 @@ type TableOverflow = 'ellipsis' | 'wrap' | 'clip';
     { key: 'active', label: 'Active',
       snippet: activeCellSnippet,
     },
-  ];
+  ]);
 </script>
 
 {#snippet activeCellSnippet(row)}
@@ -132,7 +132,7 @@ Use `headerClass` to style every header cell. Use `style.header` on a column to 
 <Table
   {data}
   bind:columns
-  headerClass="bg-surface-primary normal-case text-muted-contrast"
+  headerClass="bg-surface normal-case text-muted-contrast"
 />
 ```
 
@@ -157,13 +157,13 @@ Header classes are merged in this order: default header classes, `headerClass`, 
 Use `width`, `minWidth`, and `maxWidth` to control narrow and wide columns. The sizing is applied through a `<colgroup>` and repeated on cells, so it also works when `hideHeader` is enabled.
 
 ```sveltehtml
-<script>
-  let columns: ColumnDef<User>[] = [
+<script lang="ts">
+  let columns = $state<ColumnDef<User>[]>([
     { key: 'id', label: 'ID', width: '6rem', shrink: true },
     { key: 'name', label: 'Name', minWidth: '16rem', grow: true },
     { key: 'email', label: 'Email', width: '24ch' },
     { key: 'notes', label: 'Notes', minWidth: '22rem' },
-  ];
+  ]);
 </script>
 
 <Table {data} bind:columns />
@@ -282,3 +282,15 @@ Right-click the header to show the column visibility popup.
 ## Column visibility
 
 Set `visible: false` in a column definition to hide it initially. Set `fixed: true` to prevent the user from toggling it via the settings popup.
+
+## When to use
+
+Use for flat structured records with per-column formatting/snippets, visibility, and scrollable headers.
+
+## Alternatives
+
+Use [Tree](../layout/tree.md) for hierarchy or [Timeline](timeline.md) for event narratives; compose [Pagination](../layout/pagination.md) separately for paging.
+
+## Setup and limitations
+
+Root supplies popup context, which Table retrieves even when columnsEditable is false, but only uses for the settings menu. A popup provider/container is required for columnsEditable, not for a plain display-only Table. The initial columns array is captured in internal state and missing visible flags are assigned on its column objects (not a defensive copy). **Current limitation:** there is no synchronization effect for later columns-prop replacements and visibility changes are not assigned back to the bindable prop; do not rely on bind:columns to observe popup changes. Remount for a replaced column configuration. Data renders in supplied order with index-keyed rows; there is no sorting, filtering, pagination, virtualization, selection, empty-state UI, or editing engine. Formatter/snippet and grow/shrink are mutually exclusive. Fixed means protected visibility/extra noScroll weight, not a sticky column or guaranteed minimum pixel width.

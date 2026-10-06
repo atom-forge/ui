@@ -4,7 +4,7 @@ A navigation trail showing the current page's location within a hierarchy. Separ
 
 ## Import
 
-```sveltehtml
+```ts
 import { Breadcrumb } from '@atom-forge/ui';
 ```
 
@@ -59,3 +59,15 @@ With truncation and collapsing:
 - Long labels are truncated with `truncate max-w-32` (links) or `max-w-48` (current page).
 - When `maxSegments` is set and exceeded, middle items collapse into a `…` button that opens a context menu.
 
+
+## When to use
+
+Use for navigation through a page’s ancestor hierarchy.
+
+## Alternatives
+
+Use [Tabs](tabs.md) for peer views or [Stepper](stepper.md) for process progress.
+
+## Setup and limitations
+
+Root provides popup context for collapsed navigation; the component reads that context even when collapsing is off. The last item is always text. Exceeding `maxSegments` yields exactly first / ellipsis / last, not a configurable number of retained ancestors. Collapsed href actions assign `window.location.href`; normal links use anchors. An onclick-only segment uses `href="#"`, so prevent default in its handler when appropriate. No route discovery or router state is managed.

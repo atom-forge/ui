@@ -93,10 +93,10 @@ import { CHART_PALETTE, seriesColor } from '@atom-forge/ui';
 />
 
 <!-- Stacked -->
-<CjsBarChart labels={['Design', 'Eng']} stacked datasets={[...]} />
+<CjsBarChart labels={['Design', 'Eng']} stacked datasets={[{ label: 'Hours', data: [20, 40] }]} />
 
 <!-- Horizontal -->
-<CjsBarChart labels={['CSS', 'TS', 'Svelte']} horizontal datasets={[...]} />
+<CjsBarChart labels={['CSS', 'TS', 'Svelte']} horizontal datasets={[{ label: 'Score', data: [30, 50, 70] }]} />
 ```
 
 ---
@@ -236,9 +236,9 @@ Bind the `chart` prop to get the raw Chart.js instance:
   let chartInstance = $state<Chart | undefined>();
 </script>
 
-<LineChart labels={[...]} datasets={[...]} bind:chart={chartInstance} />
+<LineChart labels={['Jan', 'Feb']} datasets={[{ label: 'Revenue', data: [12, 19] }]} bind:chart={chartInstance} />
 
-<button onclick={() => chartInstance?.resetZoom()}>Reset</button>
+<button type="button" onclick={() => chartInstance?.reset()}>Reset animation</button>
 ```
 
 ---
@@ -247,13 +247,29 @@ Bind the `chart` prop to get the raw Chart.js instance:
 
 `ChartBase` accepts a full `ChartConfiguration` object directly — useful when no high-level wrapper fits your needs:
 
-```sveltehtml
+```ts
 import { ChartBase } from '@atom-forge/ui';
 import type { ChartConfiguration } from 'chart.js';
 
-const config: ChartConfiguration = { type: 'line', data: { ... }, options: { ... } };
+const config: ChartConfiguration = {
+  type: 'line',
+  data: { labels: ['Jan', 'Feb'], datasets: [{ label: 'Revenue', data: [12, 19] }] },
+  options: { responsive: true },
+};
 ```
 
 ```sveltehtml
 <ChartBase {config} />
 ```
+
+## When to use
+
+Use LineChart for trends, CjsBarChart for category comparisons, Pie/Doughnut for parts of a whole, Scatter/Bubble for numeric coordinates, and Radar for comparable multi-axis profiles.
+
+## Alternatives
+
+Use [BarChart](bar-chart.md) for simple DOM bars, [Heatmap](heatmap.md) for a matrix, or [Table](table.md) when exact values are primary.
+
+## Setup and limitations
+
+No Root manager context is needed. Wrappers derive themed options from CSS and observe document-root class/data-theme changes. The canvas instance is created in a client-side effect and destroyed on cleanup; `bind:chart` is undefined before initialization and after cleanup. Config updates replace data/options and call update; ChartBase does not recreate the instance when config.type changes, so remount for a chart-type change. Supply matching label/data lengths. The options prop is the Chart.js customization path; plugins are not installed automatically. Canvas output has no built-in textual data equivalent or generic attribute forwarding; provide accessible labels/data outside it. Several wrappers append hex alpha suffixes to dataset colors (including Line/Radar fills and Pie/Doughnut segments), so use hex color overrides rather than arbitrary CSS color syntax.

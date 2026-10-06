@@ -4,7 +4,7 @@
 
 ## Import
 
-```sveltehtml
+```ts
 import { Slider, Range } from '@atom-forge/ui';
 ```
 
@@ -41,9 +41,9 @@ Same as Slider, plus:
 ## Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
   let vol   = $state(60);
-  let range = $state([20, 80]);
+  let range = $state<[number, number]>([20, 80]);
 </script>
 
 <!-- Slider -->
@@ -60,3 +60,15 @@ Same as Slider, plus:
 <Slider bind:value={vol} showValue={v => v + ' %'}/>
 <Range bind:value={range} showValue={v => v + ' kg'}/>
 ```
+
+## When to use
+
+Use Slider for a bounded scalar and Range for a two-value interval controlled by dragging.
+
+## Alternatives
+
+Use [Input](input.md) when exact numeric text entry is required. Use [ProgressBar](progress-bar.md) for read-only progress.
+
+## Setup and behavior
+
+Bind a number or an explicitly typed `[number, number]` tuple. Initial values are clamped during component initialization (with a console error), not continuously normalized on external assignment. Supply `max > min`, positive `step`, and feasible distance constraints. Range sorts values during drag updates and may push the other thumb to enforce distance; distance is not validated on initial/external values. Size is captured at initialization. Tick marks are suppressed when the step count reaches 100. Neither wrapper exposes a change/commit callback; use binding for live updates and do not infer a save-on-release contract.

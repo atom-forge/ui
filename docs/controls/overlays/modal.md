@@ -4,17 +4,17 @@ An imperative modal system. Open any Svelte component as a stacked modal dialog 
 
 ## Import
 
-```sveltehtml
+```ts
 import { getModalManager } from '@atom-forge/ui';
 ```
 
-`AtomForge` automatically provides the modal manager and renders the shared Modal/Drawer overlay container. No manual setup is needed.
+`Root` automatically provides the modal manager and renders the shared Modal/Drawer overlay container. No manual setup is needed.
 
 ---
 
 ## ModalManager API
 
-Obtain the manager anywhere inside the `<AtomForge>` tree:
+Obtain the manager anywhere inside the `<Root>` tree:
 
 ```ts
 const modal = getModalManager();
@@ -30,13 +30,13 @@ Opens a component as a modal. Returns `Promise<any>` that resolves with the valu
 | `props` | `object` | Props passed to the component. |
 | `options` | `ModalOptions \| string` | Optional behavior. A string is treated as a deduplication `key` for backwards compatibility. |
 
-### `modal.openSnippet(snippet, props?)`
+### `modal.openSnippet(snippet, props?, options?)`
 
 Opens a Svelte snippet as a modal.
 
 ### `modal.close(result?)`
 
-Closes the topmost modal and resolves its promise with `result`.
+Closes the most recently opened modal and resolves its promise with `result`.
 
 ### `modal.resolve(result?)`
 
@@ -56,7 +56,7 @@ Alias for `close`.
 ## Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
   import ConfirmDialog from './ConfirmDialog.svelte';
   const modal = getModalManager();
 
@@ -74,8 +74,8 @@ Alias for `close`.
 ### Inside the modal component
 
 ```sveltehtml
-<script>
-  let { message } = $props();
+<script lang="ts">
+  let { message }: { message: string } = $props();
   const modal = getModalManager();
 </script>
 
@@ -91,7 +91,7 @@ Alias for `close`.
 ### Open a snippet
 
 ```sveltehtml
-<script>
+<script lang="ts">
   const modal = getModalManager();
 </script>
 
@@ -109,7 +109,7 @@ Alias for `close`.
 
 ## Stacking
 
-Modals stack — each `open()` call adds a layer. `close()` always removes the topmost modal. Use this to build multi-step flows.
+Modals stack — each `open()` call adds a layer. `close()` removes the most recently opened modal, even if a drawer is above it. Use this to build multi-step flows.
 
 Modal and Drawer share one internal overlay stack and one renderer. A drawer opened after a modal, or a modal opened after a drawer, is rendered above the earlier overlay automatically. Popup and Toast stay outside this stack and remain on their fixed always-topmost tier.
 
@@ -132,3 +132,15 @@ The visible backdrop uses the overridable `.overlay-backdrop` class from the lib
 ```
 
 CSS cascades per property. If a future override needs to remove a backdrop-related declaration such as blur, the override must provide a competing declaration for that property. The default modal backdrop does not use `backdrop-filter`.
+
+## When to use
+
+Use for a blocking confirmation or task presented as arbitrary component/snippet content.
+
+## Alternatives
+
+Use [Drawer](drawer.md) for an edge panel, [Popup](popup.md) for anchored transient content, and [Zen](zen.md) for externally bound focus mode.
+
+## Setup and limitations
+
+Wrap the app in Root, which initializes managers and the shared renderer. Call getModalManager during descendant component initialization, not from an arbitrary utility without context. Await open for a result and allow undefined for dismissal/navigation/deduplication. Duplicate keys resolve the new call immediately with undefined; they do not return the existing promise. Close targets the most recently opened modal of that kind, even if a drawer is above it; user dismissal targets only the overall topmost closable overlay. The renderer provides no dialog naming, focus trap, automatic focus restoration, or global body overflow lock: implement required dialog semantics/focus behavior in content.

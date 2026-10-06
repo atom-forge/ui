@@ -6,7 +6,7 @@ The chart is fully responsive via `viewBox` and adapts grid label and legend col
 
 ## Import
 
-```sveltehtml
+```ts
 import { Heatmap, type HeatmapData, type HeatmapCell } from '@atom-forge/ui';
 ```
 
@@ -31,13 +31,16 @@ The `values` array must have `yLabels.length` rows, each with `xLabels.length` e
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `data` | `HeatmapData` | — | Required. Axis labels and cell values. |
-| `colors` | `string[]` | `['#f0f0f0', '#22c55e']` | Hex color scale (minimum 2 stops). Interpolated linearly from min → max. |
-| `showLegend` | `boolean` | `true` | Show the color bar legend below the grid. |
+| `colors` | `string[]` | `['#f0f0f0', '#22c55e']` | Hex color scale; 2 or more stops enable interpolation. Interpolated linearly from min → max. |
+| `showLegend` | `boolean` | `false` | Show the color bar legend below the grid. |
 | `legendTitle` | `string` | `''` | Label shown above the legend bar. |
+| `cellSize` | `number` | `16` | Cell size in SVG units. |
+| `labelColor` | `string` | — | Override axis label text color. |
+| `labelBg` | `string` | — | Optional axis label background color. |
 | `cellPadding` | `number` | `2` | Gap between cells (SVG units). |
 | `cellBorderRadius` | `number` | `2` | Corner radius of each cell (SVG units). |
 | `showRowLabels` | `boolean` | `true` | Show the Y-axis row labels on the left. |
-| `showColLabels` | `boolean \| 'vertical'` | `true` | `false` = hide, `true` = horizontal (default), `'vertical'` = rotated 90°. |
+| `showColLabels` | `boolean \| 'vertical'` | `false` | `false` = hide, `true` = horizontal, `'vertical'` = rotated 90°. |
 | `class` | `string` | — | Extra classes on the root `<svg>` element. |
 | `cellClass` | `string` | — | Extra classes applied to every cell `<rect>`. |
 | `oncellClick` | `(detail: HeatmapCell) => void` | — | Fires when a cell is clicked or activated via keyboard. |
@@ -76,7 +79,7 @@ type HeatmapCell = {
 ## Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
   const data = {
     xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     yLabels: ['Morning', 'Midday', 'Afternoon', 'Evening'],
@@ -98,10 +101,22 @@ type HeatmapCell = {
 <!-- Custom tooltip + click handler -->
 <Heatmap {data} oncellClick={(d) => console.log(d)}>
   {#snippet tooltip(cell)}
-    <div class="bg-raised border border-base-b rounded-lg px-3 py-2 text-sm shadow-lg">
+    <div class="bg-surface border border-frame rounded-lg px-3 py-2 text-sm shadow-lg">
       <div class="font-semibold">{cell.yLabel}, {cell.xLabel}</div>
       <div class="text-accent">{cell.value}</div>
     </div>
   {/snippet}
 </Heatmap>
 ```
+
+## When to use
+
+Use for row-major numeric matrices where color reveals activity or intensity patterns.
+
+## Alternatives
+
+Use [Charts](charts.md) for series/axes plots or [Table](table.md) for precise textual comparison.
+
+## Setup and limitations
+
+Supply finite values aligned with both label arrays; missing cells render as zero while min/max are calculated from supplied values. Equal min/max maps cells to the middle of the scale. Color interpolation parses 3- or 6-digit hex, not CSS variables or named colors. Legend and column labels are off by default. Hover callbacks occur on mouse entry and do not emit a leave value. Tooltip is local positioned content, so Root is not required; it is mouse-driven rather than focus-driven. Every cell is tabbable, with Enter/Space activation, but there is no grid arrow-navigation or virtualization; large matrices create many tab stops.

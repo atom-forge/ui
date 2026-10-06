@@ -4,8 +4,8 @@ A segmented input for fixed-length codes — OTPs, PIN codes, licence keys, acti
 
 ## Import
 
-```sveltehtml
-import { CodeInput } from '$lib';
+```ts
+import { CodeInput } from '@atom-forge/ui';
 ```
 
 ---
@@ -24,7 +24,7 @@ import { CodeInput } from '$lib';
 | `disabled`     | `boolean`                                                                      | `false` | Disables the entire input.                                                                                                                                                               |
 | `compact`      | `boolean`                                                                      | —       | Compact size (`w-8 h-10`). Mutually exclusive with `small`.                                                                                                                              |
 | `small`        | `boolean`                                                                      | —       | Small size (`w-6 h-8`). Mutually exclusive with `compact`.                                                                                                                               |
-| `onComplete`   | `(value: string) => void`                                                      | —       | Called once every **editable** box is filled. Receives only the editable portion.                                                                                                        |
+| `onComplete`   | `(value: string) => void`                                                      | —       | Called when an internal edit or paste leaves every **editable** box filled. Receives only the editable portion.                                                                                                        |
 
 ---
 
@@ -52,7 +52,7 @@ Pasting text fills editable boxes from the current position onwards. Only charac
 
 ```sveltehtml
 
-<script>
+<script lang="ts">
 	let otp = $state('');
 </script>
 
@@ -61,7 +61,7 @@ Pasting text fills editable boxes from the current position onwards. Only charac
 	layout={6}
 	characterSet="numeric"
 	placeholder="·"
-	onComplete={(v) => toast.show(`Code: ${v}`, { type: 'success' })}
+	onComplete={(v) => console.log('Completed code:', v)}
 />
 ```
 
@@ -100,7 +100,7 @@ Pasting text fills editable boxes from the current position onwards. Only charac
 
 ```sveltehtml
 
-<script>
+<script lang="ts">
 	const isHex = (char: string) => /^[0-9a-fA-F]$/.test(char);
 </script>
 
@@ -141,3 +141,15 @@ Pasting text fills editable boxes from the current position onwards. Only charac
 - `uppercase` normalises both typed input and pasted text, including the `prefix`.
 - `onComplete` fires on every fill-up — including via paste — and receives only the editable portion (without the prefix).
 - `value` never contains prefix characters. To get the full code, concatenate manually: `` `${prefix}${value}` ``.
+
+## When to use
+
+Use for a fixed-length character code with optional read-only prefix and grouping.
+
+## Alternatives
+
+Use [Input](input.md) for variable-length text or numeric text. CodeInput is not a masked password control.
+
+## Setup and behavior
+
+Bind only the editable string. Layout, prefix boxes, and size are captured at initialization; remount to change them. `onComplete` runs after internal edits or paste leave every editable box populated, including replacement of a character in an already full code; external assignment does not invoke it. Treat it as a UI callback, not proof that a code is valid or a one-time submission event. **Current limitations:** the hidden input has `tabindex="-1"` and no `oninput` handler; do not assume standard tab access or mobile autofill/input updates the binding. Extra attributes are applied to the outer div, not the hidden input. Built-in alpha/alphanumeric validation is ASCII-only.

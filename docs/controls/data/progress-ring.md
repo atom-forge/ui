@@ -2,6 +2,12 @@
 
 A circular SVG progress indicator. Supports a single ring or multiple concentric rings. The progress arc animates smoothly when `value` changes via CSS `stroke-dashoffset` transition.
 
+## Import
+
+```ts
+import { ProgressRing } from '@atom-forge/ui';
+```
+
 ## Props
 
 ### Single ring
@@ -43,7 +49,7 @@ type RingDef = {
 
 ## Accessibility
 
-Root element: `role="progressbar"` with `aria-valuemin=0`, `aria-valuemax={max}`, `aria-valuenow={value}` (single-ring mode only). Pass `aria-label` to describe the metric.
+Root element: `role="progressbar"` with `aria-valuemin=0`, `aria-valuemax={max}`, `aria-valuenow={clampedValue}` (single-ring mode only). Arbitrary attributes are not forwarded. Describe metrics with accessible text outside the component.
 
 ## SVG internals
 
@@ -56,8 +62,8 @@ For ring at index `i`:
 ## Examples
 
 ```sveltehtml
-<script>
-  import { ProgressRing } from '$lib';
+<script lang="ts">
+  import { ProgressRing } from '@atom-forge/ui';
   let value = $state(65);
 </script>
 
@@ -83,3 +89,15 @@ For ring at index `i`:
   ]}
 />
 ```
+
+## When to use
+
+Use for a compact circular completion metric, or concentric related metrics.
+
+## Alternatives
+
+Use [ProgressBar](../forms/progress-bar.md) for linear progress or [MeterGroup](meter-group.md) for contributions to one total.
+
+## Setup and limitations
+
+Values are visually clamped but not written back to caller state; max <= 0 produces an empty arc. Rings mode overrides scalar value/max and suppresses the default center label. Ensure size/strokeWidth/gap keep every radius positive. There is no indeterminate mode or completion callback. Multi-ring ARIA does not expose individual values. The component does not forward arbitrary attributes, so passing aria-label directly does not label its root; provide accessible text outside the visualization.

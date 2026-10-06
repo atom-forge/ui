@@ -4,7 +4,7 @@ A centered placeholder shown when a list or section has no content. Combines an 
 
 ## Import
 
-```sveltehtml
+```ts
 import { EmptyState } from '@atom-forge/ui';
 ```
 
@@ -44,3 +44,15 @@ import { EmptyState } from '@atom-forge/ui';
   <Button accent icon={defineIcon(IconFilePlus)} label="New Document"/>
 </EmptyState>
 ```
+
+## When to use
+
+Use after loading completes when a collection is empty or a filter finds no results.
+
+## Alternatives
+
+Use a loading placeholder while work is pending; use [Card](card.md) for a populated surface.
+
+## Setup and behavior
+
+The application decides when the state is empty. `icon` and `title` are required; direct Lucide icons work without `defineIcon()`. Children supply optional actions, but the component does not fetch, retry, or navigate on its own.

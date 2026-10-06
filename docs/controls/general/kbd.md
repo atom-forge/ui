@@ -4,7 +4,7 @@ Renders keyboard shortcut keys styled as physical keycaps. Supports single keys 
 
 ## Import
 
-```sveltehtml
+```ts
 import { Kbd } from '@atom-forge/ui';
 ```
 
@@ -43,3 +43,15 @@ import { Kbd } from '@atom-forge/ui';
 | `⌃` | Control |
 | `⌫` | Backspace/Delete |
 | `↩` | Return/Enter |
+
+## When to use
+
+Use to display a shortcut in help text, menus, or tooltips.
+
+## Alternatives
+
+Use [Button](button.md) for an action the user can invoke; Kbd is only a visual description.
+
+## Setup and behavior
+
+No key listeners are registered. `meta` is displayed as Command on detected Apple platforms and Ctrl otherwise; `cmd` always displays Command. Platform detection occurs at initialization and the server has no navigator, so use explicit keys if identical server/client labels matter.

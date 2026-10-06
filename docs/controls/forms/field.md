@@ -4,7 +4,7 @@ A wrapper that pairs a form control with a label, hint, and error message. Use `
 
 ## Import
 
-```sveltehtml
+```ts
 import { Field, FieldGroup, FieldSpan } from '@atom-forge/ui';
 ```
 
@@ -76,7 +76,7 @@ No props. Wraps any content in a `col-span-2` div so it stretches across both co
   </Field>
 
   <FieldSpan>
-    <hr class="border-base-b"/>
+    <hr class="border-frame"/>
   </FieldSpan>
 
   <Field label="Agree" layout="horizontal">
@@ -114,3 +114,15 @@ No props. Wraps any content in a `col-span-2` div so it stretches across both co
 - `error` takes precedence over `hint` — if both are set, only the error is shown.
 - In `layout="horizontal"`, `Field` renders two grid children (label cell + control cell) that slot into a `FieldGroup`'s two-column grid.
 - `FieldSpan` is only meaningful inside a `FieldGroup`.
+
+## When to use
+
+Use to compose a label, supporting text, and error presentation around a form control.
+
+## Alternatives
+
+Use a control’s own label when no separate hint/error layout is needed. FieldGroup is for aligned horizontal fields, not a form-state provider.
+
+## Setup and behavior
+
+Set `for` to the child’s actual input ID when the child supports one. Field does not generate IDs, bind values, set the child’s `invalid` / `required` attributes, or connect error text with `aria-describedby`. Required/optional markers are presentation only. An `errorSnippet` takes precedence over hints even when it renders no text. A custom label snippet must supply its own accessible label association.

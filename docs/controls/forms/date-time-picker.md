@@ -4,7 +4,7 @@ A combined date and time form control. It uses `DateTimePopover` internally and 
 
 ## Import
 
-```sveltehtml
+```ts
 import { DateTimePicker, DateTimePickerBody, DateTimePopover } from '@atom-forge/ui';
 ```
 
@@ -50,9 +50,21 @@ import { DateTimePicker, DateTimePickerBody, DateTimePopover } from '@atom-forge
 ### Action popover
 
 ```sveltehtml
-<DateTimePopover value={startsAt} confirmLabel="Mentés" onconfirm={saveStartsAt}>
+<DateTimePopover value={startsAt} confirmLabel="Save" onconfirm={saveStartsAt}>
   {#snippet trigger(open, isOpen)}
     <Button secondary outline label="Choose date and time" onclick={open} aria-expanded={isOpen} />
   {/snippet}
 </DateTimePopover>
 ```
+
+## When to use
+
+Use for a nullable local date/time, not a date-only value or timezone-aware scheduling model.
+
+## Alternatives
+
+Use [DatePicker](date-picker.md) for a calendar date or [TimePicker](time-picker.md) for an independent time string. DateTimePickerBody supports inline composition.
+
+## Setup and behavior
+
+Render DateTimePicker and DateTimePopover below `Root`. Bind `Date | null`; desktop edits commit only after OK, while coarse-pointer `datetime-local` writes immediately. The desktop calendar treats min/max as day bounds and does not constrain the time spinner to exact timestamps. The native input receives timestamp min/max but does not apply `round`. Validate exact limits and timezone conversion in the application. No timezone selection or range mode is provided. Default formatting omits seconds even when `seconds` is enabled; supply `format` to display them.

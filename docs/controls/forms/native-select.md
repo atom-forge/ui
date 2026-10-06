@@ -4,7 +4,7 @@ A styled wrapper around the native `<select>` element. Supports the same size va
 
 ## Import
 
-```sveltehtml
+```ts
 import { NativeSelect } from '@atom-forge/ui';
 ```
 
@@ -37,7 +37,7 @@ import { NativeSelect } from '@atom-forge/ui';
 ## Usage
 
 ```sveltehtml
-<script>
+<script lang="ts">
   const options = [
     { value: 'a', label: 'Option A' },
     { value: 'b', label: 'Option B' },
@@ -52,3 +52,15 @@ import { NativeSelect } from '@atom-forge/ui';
 <NativeSelect {options} bind:value={selected} borderless/>
 <NativeSelect {options} bind:value={selected} disabled/>
 ```
+
+## When to use
+
+Use for a simple single-choice list with the browser’s native menu and no popup provider.
+
+## Alternatives
+
+Use [Select](select.md) for search, async options, or custom option rendering; use [Radio](radio.md) for choices visible at once.
+
+## Setup and behavior
+
+Bind `value` to application state. The overlaying native select handles interaction while a separate label shows the selected option. Display lookup uses loose equality (`==`), unlike Select’s strict equality; avoid ambiguous mixed ID types. Placeholder is disabled, so users cannot return to it through the menu. There is no search, custom option snippet, multi-selection, generic attribute forwarding, or public change callback.

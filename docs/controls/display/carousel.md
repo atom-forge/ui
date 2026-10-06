@@ -2,6 +2,12 @@
 
 A horizontally scrollable slide container with scroll-snap, optional arrow navigation, and a companion `CarouselIndicator` for dot-based navigation. Both components sync through a shared `bind:currentIndex`.
 
+## Import
+
+```ts
+import { Carousel, CarouselIndicator } from '@atom-forge/ui';
+```
+
 ## Components
 
 - **`Carousel`** — scrollable slide container
@@ -39,7 +45,7 @@ A horizontally scrollable slide container with scroll-snap, optional arrow navig
 
 ```sveltehtml
 <script lang="ts">
-    import { Carousel, CarouselIndicator } from '$lib/controls/display/carousel';
+    import { Carousel, CarouselIndicator } from '@atom-forge/ui';
 
     const slides = [
         { id: 1, title: 'First' },
@@ -89,3 +95,15 @@ When the carousel reaches the last slide, showcase mode advances back to the fir
 - **Index → scroll**: A `$effect` calls `scrollTo` whenever `currentIndex` changes externally (e.g. indicator click or `goTo()`). Manual scrolling is guarded by a `userScrolling` flag to prevent interference.
 - **Showcase**: When `showcase` is set, a timeout advances `currentIndex` after the configured delay. `[min, max]` picks a new random delay for each slide.
 - **Snap**: `snap-x snap-mandatory` with `snap-center` on each slide ensures pixel-perfect alignment after every scroll gesture.
+
+## When to use
+
+Use for full-width slides navigated by scrolling, arrows, or an indicator.
+
+## Alternatives
+
+Use [Tabs](../layout/tabs.md) for explicitly labeled content panels rather than sequential slides.
+
+## Setup and behavior
+
+Bind the same `$state` index to Carousel and CarouselIndicator; there is no shared context provider. Keep `total` equal to `items.length`. External index assignment is not clamped; `goTo()` clamps only its own input. Avoid navigation methods on an empty item list. Showcase wraps regardless of `loop` and has no built-in pause-on-hover or pause control; add a user-controlled way to disable it when needed.
