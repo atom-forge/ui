@@ -2,7 +2,7 @@
 
 UI is a Svelte 5 component library built with Tailwind CSS 4. It provides composable, themeable UI components — from basic inputs and buttons to overlays, charts, and data tables.
 
-AI coding agents: start with the [AI Consumer Entry Point](./ai-entrypoint.md) for a task-driven reading workflow. To choose components rather than configure the library, use the [capability map](./component-overview.md#choose-by-task).
+AI coding agents: start with the [AI Consumer Entry Point](../../README-AI.md) for a task-driven reading workflow. To choose components rather than configure the library, use the [capability map](./component-overview.md#choose-by-task).
 
 ---
 

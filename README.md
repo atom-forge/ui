@@ -4,7 +4,7 @@ Welcome to the documentation for the AtomForge UI component library.
 
 ## Guides
 
-- **[AI Consumer Entry Point](docs/guides/ai-entrypoint.md)**: Start here when an AI coding agent uses this library in an application. Task-driven discovery, reading routes, and usage contracts.
+- **[AI Consumer Entry Point](README-AI.md)**: Start here when an AI coding agent uses this library in an application. Task-driven discovery, reading routes, and usage contracts.
 - **[Getting Started](docs/guides/getting-started.md)**: A guide to installation, CSS configuration, and basic library usage.
 - **[Component Overview](docs/guides/component-overview.md)**: A task-driven capability map and linked component category index.
 - **[Forms](docs/guides/forms.md)**: Choose and compose inputs, labels, and validation feedback.

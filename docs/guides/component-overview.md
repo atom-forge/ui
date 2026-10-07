@@ -2,7 +2,7 @@
 
 Choose tools by the task they solve, then follow the linked documentation for setup, behavior, API, and limitations. The category index below includes documented public modules; inclusion does not imply a stability guarantee. Import documented public symbols from `@atom-forge/ui`, not from the source-folder paths.
 
-For a recommended reading workflow, start with the [AI Consumer Entry Point](./ai-entrypoint.md).
+For a recommended reading workflow, start with the [AI Consumer Entry Point](../../README-AI.md).
 
 ## Choose by task
 
