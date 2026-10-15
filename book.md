@@ -1,5 +1,7 @@
 ---
-name: AtomForge UI guide
+title: UI
+subtitle: "@atom-forge/ui"
+author: AtomForge
 language: en
 id: atomforge-ui-guide
 intro: A practical learning path for building applications with @atom-forge/ui.
