@@ -11,6 +11,7 @@ children:
   - "[[book/05-recipes.md]]"
   - "[[book/06-pitfalls.md]]"
   - "[[book/07-reference.md]]"
+  - "[AI Notes](book/08-ai-notes.md)"
 ---
 
 # AtomForge UI guide
