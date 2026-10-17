@@ -20,7 +20,8 @@
 		"prepublishOnly": "npm run prepack",
 		"release": "npm publish --access public",
 		"pub-check": "bun run scripts/pub-check.ts",
-		"pub": "bun run scripts/pub.ts"
+		"pub": "bun run scripts/pub.ts",
+		"check:showcase": "bun run package && node scripts/showcase/migration-check.mjs && node scripts/showcase/audit.mjs"
 	},
 	"repository": {
 		"url": "git://github.com/atom-forge/ui.git"
@@ -58,12 +59,12 @@
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-node": "^5.5.4",
+		"@sveltejs/adapter-static": "^4.0.0",
 		"@sveltejs/kit": "^2.49.1",
 		"@sveltejs/package": "^2.5.7",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@tailwindcss/forms": "^0.5.10",
-		"@tailwindcss/typography": "^0.5.19",
+		"@tailwindcss/typography": "^0.5.20",
 		"@tailwindcss/vite": "^4.1.17",
 		"@types/turndown": "^5.0.6",
 		"publint": "^0.3.15",

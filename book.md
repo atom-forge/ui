@@ -19,7 +19,7 @@ children:
 # AtomForge UI guide
 
 > [!tip] Live examples
-> Browse the components running live at [atom-forge.eu/ui](https://atom-forge.eu/ui/).
+> Browse the components running live at [ui.atom-forge.eu](https://ui.atom-forge.eu/).
 
 This book explains **how to think about** `@atom-forge/ui`: what the library is, how its pieces fit together, and where the usual mistakes are. It is a reading path, not a reference.
 
