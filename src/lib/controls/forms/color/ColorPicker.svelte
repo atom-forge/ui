@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {useFieldControl} from '../field/field-context';
 	import type { AnyProp, ClassProp, XOR } from "../../../helpers/types";
 	import { untrack } from 'svelte';
 	import { twMerge } from "tailwind-merge";
@@ -18,6 +19,8 @@
 		value?: string
 		disabled?: boolean
 	} = $props();
+
+	const field = useFieldControl();
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 
@@ -50,5 +53,5 @@
 <div class={wrapperClass} {...props}>
 	<span class={swatchClass} style:background-color={value}></span>
 	<span class={hexClass}>{value}</span>
-	<input type="color" class={inputClass} bind:value {disabled} />
+	<input type="color" class={inputClass} bind:value {disabled} id={field?.id} />
 </div>

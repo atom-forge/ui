@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {useFieldControl} from '../field/field-context';
 	import {type AnyProp, type ClassProp, defineIcon, Icon, type IconDefinition, type XOR} from "../../../index";
 	import {twMerge} from "tailwind-merge";
 	import {Eye, EyeOff} from 'lucide-svelte';
@@ -37,6 +38,8 @@
 		prefix?: Snippet | string;
 		suffix?: Snippet | string;
 	} = $props();
+
+	const field = useFieldControl(untrack(() => props.id));
 
 	let isPasswordVisible = $state(false);
 
@@ -133,6 +136,7 @@
 			value={value}
 			oninput={handleInput}
 			{...props}
+			id={field?.id ?? props.id}
 		/>
 		{#if type === 'password'}
 			<button

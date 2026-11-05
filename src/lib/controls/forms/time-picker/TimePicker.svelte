@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {useFieldControl} from '../field/field-context';
 	import { Icon } from '../../general/icon';
 	import TimePopover from './TimePopover.svelte';
 	import type { XOR } from '../../../helpers/types';
@@ -25,6 +26,8 @@
 		round?: false | 0 | 5 | 10 | 15 | 20 | 30 | number[];
 		class?: string;
 	} = $props();
+
+	const field = useFieldControl();
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 
@@ -98,7 +101,7 @@
 
 <TimePopover {value} {round} {seconds} {disabled} onconfirm={(next) => { value = next; }}>
 	{#snippet trigger(open, isOpen)}
-		<div class={containerClass(isOpen)} role="button" tabindex={disabled ? undefined : 0} onclick={(e) => { if (!shouldUseNativePicker()) open(e); }} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }} aria-expanded={isOpen}>
+		<div class={containerClass(isOpen)} role="button" id={field?.id} aria-labelledby={field?.labelId ? `${field.labelId} ${field.id}` : undefined} tabindex={disabled ? undefined : 0} onclick={(e) => { if (!shouldUseNativePicker()) open(e); }} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }} aria-expanded={isOpen}>
 			<!-- Native time input — always rendered; CSS enables pointer events on touch devices only -->
 			<input
 				type="time"

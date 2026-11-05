@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {useFieldControl} from '../field/field-context';
 	import {twMerge} from 'tailwind-merge';
 	import type {ClassProp, XOR} from '../../../helpers/types';
 	import type {Snippet} from 'svelte';
@@ -50,6 +51,8 @@
 		adornment?:   Snippet;
 		counter?:     Snippet<[{ count: number; max: number | undefined; words: number; letters: number }]>;
 	} = $props();
+
+	const field = useFieldControl();
 
 	// ── Internal state ────────────────────────────────────────────────────────
 	let textareaEl = $state<HTMLTextAreaElement | undefined>(undefined);
@@ -245,6 +248,7 @@
 			{placeholder}
 			{disabled}
 			maxlength={maxLength}
+			id={field?.id}
 			onkeydown={handleKeydown}
 		></textarea>
 

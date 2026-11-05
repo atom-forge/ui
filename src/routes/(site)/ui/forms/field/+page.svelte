@@ -11,7 +11,7 @@
 	const fieldProps: PropDef[] = [
 		{ group: 'Content', name: 'label', type: 'string', description: 'Label text above (or beside) the control.' },
 		{ group: 'Content', name: 'info', type: 'string', description: 'Small right-aligned text in the label row.' },
-				{ group: 'Content', name: 'for', type: 'string', description: 'Native label target. Match the id of a labelable control; Field does not generate or inject control ids.' },
+				{ group: 'Content', name: 'for', type: 'string', description: 'Explicit label target. Omit it to let Field bind the label to its first control automatically.' },
 				{ group: 'Content', name: 'children', type: 'Snippet', description: 'Required control content.' },
 				{ group: 'Styling', name: 'class', type: 'string', description: 'Vertical wrapper classes, or horizontal label-cell classes.' },
 				{ group: 'Content', name: 'hint', type: 'string', description: 'Helper text shown below the control.' },
@@ -57,7 +57,7 @@
 				<ProseText>
 					Wrap any control with <DocInlineCode>Field</DocInlineCode> and provide a <DocInlineCode>label</DocInlineCode>.
 					Use <DocInlineCode>hint</DocInlineCode> for helper text, <DocInlineCode>error</DocInlineCode> for validation messages,
-					<DocInlineCode>required</DocInlineCode> or <DocInlineCode>optional</DocInlineCode> to annotate the label; these do not validate or mark the child control required. Use <DocInlineCode>for</DocInlineCode> with a matching control id where supported.
+					<DocInlineCode>required</DocInlineCode> or <DocInlineCode>optional</DocInlineCode> to annotate the label; these do not validate or mark the child control required. The label is bound to the first control inside the Field automatically (screen readers announce it as the control's name); set <DocInlineCode>for</DocInlineCode> only to target a specific id yourself.
 				</ProseText>
 				<DocShowExample component={Example1} code={example1Raw}/>
 	</ProseParagraph>

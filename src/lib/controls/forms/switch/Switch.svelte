@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {useFieldControl} from '../field/field-context';
 	import type {ClassProp, XOR} from "../../../index";
 	import {untrack} from 'svelte';
 	import {Icon, type IconDefinition} from "../../general/icon";
@@ -23,6 +24,8 @@
 		icons?: { on: IconDefinition; off: IconDefinition }
 		disabled?: boolean
 	} = $props();
+
+	const field = useFieldControl();
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 	const usingChecked = untrack(() => checked !== undefined);
@@ -68,7 +71,7 @@
 </script>
 
 <label class={wrapperClass}>
-	<input type="checkbox" class="sr-only peer" checked={isChecked} onchange={handleChange} {disabled}/>
+	<input type="checkbox" class="sr-only peer" id={field?.id} checked={isChecked} onchange={handleChange} {disabled}/>
 	<div class="relative {trackClass}">
 		<div class={thumbClass}
 		     style="transform: {isChecked ? `translateX(${thumbTranslateX})` : 'translateX(0)'}; margin: 0.125rem;">

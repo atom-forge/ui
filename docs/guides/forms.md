@@ -60,7 +60,7 @@ Complete page component, rendered beneath the application's Root. This example v
 </form>
 ```
 
-`Field.for` and the input ID establish the label association. The error snippet supplies an ID because Field does not generate `aria-describedby` connections. Always supplying `errorSnippet` suppresses Field hints even when the snippet is empty; this recipe intentionally has no hint. `novalidate` lets the demonstrated application rule run instead of native required-field blocking.
+Field binds its label to the first nested control automatically; this recipe sets `Field.for` explicitly because the input ID is also used elsewhere. The error snippet supplies an ID because Field does not generate `aria-describedby` connections. Always supplying `errorSnippet` suppresses Field hints even when the snippet is empty; this recipe intentionally has no hint. `novalidate` lets the demonstrated application rule run instead of native required-field blocking.
 
 ## Application responsibilities
 

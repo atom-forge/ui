@@ -13,7 +13,7 @@
 	const props: PropDef[] = [
 		{ name: 'options', type: '{ value: any; label: string }[]', description: 'List of options to render.' },
 		{ name: 'value', type: 'any', description: 'Bindable value of the selected option.' },
-		{ name: 'placeholder', type: 'string', default: "'Select an option'", description: 'Shown when no option is selected. Rendered as a disabled first option.' },
+		{ name: 'placeholder', type: 'string', default: "'Select an option'", description: 'Shown when no option is selected. The empty-state option is hidden from the option list.' },
 		{ name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the select.' },
 		{ name: 'borderless', type: 'boolean', default: 'false', description: 'Removes the border and makes the background transparent.' },
 		{ group: 'Size', name: 'compact', type: 'boolean', default: '—', description: 'Compact size — <code>h-8</code>. Mutually exclusive with <code>small</code>.' },

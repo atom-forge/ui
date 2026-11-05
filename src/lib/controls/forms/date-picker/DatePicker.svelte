@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {useFieldControl} from '../field/field-context';
 	import { Icon } from '../../general/icon';
 	import DatePopover from './DatePopover.svelte';
 	import type { XOR } from '../../../helpers/types';
@@ -33,6 +34,8 @@
 		disabledDays?: number[];
 		class?: string;
 	} = $props();
+
+	const field = useFieldControl();
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 
@@ -88,7 +91,7 @@
 	onconfirm={(next) => { value = next; }}
 >
 	{#snippet trigger(open, isOpen)}
-		<div class={containerClass(isOpen)} role="button" tabindex={disabled ? undefined : 0} onclick={(e) => { if (!shouldUseNativePicker()) open(e); }} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }} aria-expanded={isOpen}>
+		<div class={containerClass(isOpen)} role="button" id={field?.id} aria-labelledby={field?.labelId ? `${field.labelId} ${field.id}` : undefined} tabindex={disabled ? undefined : 0} onclick={(e) => { if (!shouldUseNativePicker()) open(e); }} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }} aria-expanded={isOpen}>
 			<!-- Native date input — always rendered; CSS enables pointer events on touch devices only -->
 			<input
 				type="date"

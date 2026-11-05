@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {useFieldControl} from '../field/field-context';
 	import type {Snippet} from 'svelte';
 	import {untrack, onMount} from 'svelte';
 	import {twMerge} from 'tailwind-merge';
@@ -46,6 +47,8 @@
 		option?: Snippet<[SelectOption, boolean]>;
 		chip?: Snippet<[SelectOption, () => void]>;
 	} = $props();
+
+	const field = untrack(() => button) ? undefined : useFieldControl();
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 	const popupManager = getPopupManager();
@@ -213,6 +216,8 @@
 {:else}
 	<button
 		bind:this={triggerEl}
+		id={field?.id}
+		aria-labelledby={field?.labelId ? `${field.labelId} ${field.id}` : undefined}
 		onclick={openDropdown}
 		onkeydown={onTriggerKeydown}
 		class={triggerCls}

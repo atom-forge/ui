@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {useFieldControl} from '../field/field-context';
 	import type {XOR} from "../../../index";
 	import {untrack} from 'svelte';
 	import {ChevronDown} from 'lucide-svelte';
@@ -23,6 +24,8 @@
 		disabled?: boolean;
 		borderless?: boolean;
 	} = $props();
+
+	const field = useFieldControl();
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 
@@ -66,10 +69,9 @@
 	</div>
 
 	<select class="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
-	        bind:value {disabled}>
-		{#if placeholder}
-			<option value={undefined} disabled selected>{placeholder}</option>
-		{/if}
+	        bind:value {disabled} id={field?.id}>
+		<!-- Empty-state option: keeps the select empty while no value is set; hidden from the option list. -->
+		<option value={undefined} disabled selected hidden>{placeholder ?? ''}</option>
 		{#each options as option}
 			<option value={option.value}>{option.label}</option>
 		{/each}

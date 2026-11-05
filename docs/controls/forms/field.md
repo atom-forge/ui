@@ -20,7 +20,7 @@ import { Field, FieldGroup, FieldSpan } from '@atom-forge/ui';
 | `error`        | Content  | `string`                     | —            | Error message shown below the control. Takes precedence over `hint`.                                |
 | `required`     | Content  | `boolean`                    | `false`      | Appends a red `*` to the label.                                                                     |
 | `optional`     | Content  | `boolean`                    | `false`      | Appends an `(optional)` badge to the label.                                                         |
-| `for`          | Content  | `string`                     | —            | Passed to the `<label for="...">` attribute for a11y.                                               |
+| `for`          | Content  | `string`                     | —            | Explicit `<label for>` target. Omit it to let Field bind the label to its first control automatically. |
 | `layout`       | Layout   | `'vertical' \| 'horizontal'` | `'vertical'` | Vertical stacks label above control. Horizontal renders two grid cells for use inside `FieldGroup`. |
 | `labelSnippet` | Snippets | `Snippet`                    | —            | Overrides `label`. Use for rich label content (icons, badges, etc.).                                |
 | `hintSnippet`  | Snippets | `Snippet`                    | —            | Overrides `hint`.                                                                                   |
@@ -125,4 +125,6 @@ Use a control’s own label when no separate hint/error layout is needed. FieldG
 
 ## Setup and behavior
 
-Set `for` to the child’s actual input ID when the child supports one. Field does not generate IDs, bind values, set the child’s `invalid` / `required` attributes, or connect error text with `aria-describedby`. Required/optional markers are presentation only. An `errorSnippet` takes precedence over hints even when it renders no text. A custom label snippet must supply its own accessible label association.
+Field binds its `<label>` to the first form control rendered inside it: it generates an ID, the control (`Input`, `Textarea`, `NativeSelect`, `Select`, `MultiSelect`, `DatePicker`, `DateTimePicker`, `TimePicker`, `ColorPicker`, `TagEditor`, `Switch`) puts it on its focusable element, and button-like triggers also reference the label with `aria-labelledby`. Screen readers announce the label as the control's name, and tests can query the control with `getByLabelText`. An `id` set on `Input` is kept and the label follows it. Further controls in the same Field are not bound. Set `for` to opt out and target an ID yourself. Custom controls can join the mechanism with `field.useFieldControl()` (exported from `@atom-forge/ui`), called during component initialisation.
+
+Field does not bind values, set the child’s `invalid` / `required` attributes, or connect error text with `aria-describedby`. Required/optional markers are presentation only. An `errorSnippet` takes precedence over hints even when it renders no text. A custom label snippet must supply its own accessible label association.

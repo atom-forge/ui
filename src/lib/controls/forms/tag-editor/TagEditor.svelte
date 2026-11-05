@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {useFieldControl} from '../field/field-context';
 	import type {Snippet} from 'svelte';
 	import {untrack} from 'svelte';
 	import {twMerge} from 'tailwind-merge';
@@ -47,6 +48,8 @@
 		chip?:        Snippet<[string, () => void]>;
 		option?:      Snippet<[string, boolean]>;
 	} = $props();
+
+	const field = useFieldControl();
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 	const chipVariant = untrack(() => primary ? 'primary' : secondary ? 'secondary' : danger ? 'danger' : accent ? 'accent' : 'primary');
@@ -229,6 +232,7 @@
 
 	<input
 		bind:this={inputEl}
+		id={field?.id}
 		value={sharedState.query}
 		oninput={onInput}
 		onkeydown={onKeydown}

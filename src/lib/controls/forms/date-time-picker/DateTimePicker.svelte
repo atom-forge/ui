@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {useFieldControl} from '../field/field-context';
 	import {Icon} from '../../general/icon';
 	import DateTimePopover from './DateTimePopover.svelte';
 	import type {XOR} from '../../../helpers/types';
@@ -33,6 +34,8 @@
 		round?: RoundProp;
 		class?: string;
 	} = $props();
+
+	const field = useFieldControl();
 
 	const size = untrack(() => small ? 'small' : compact ? 'compact' : 'normal');
 
@@ -87,7 +90,7 @@
 	onconfirm={(next) => { value = next; }}
 >
 	{#snippet trigger(open, openState)}
-		<div class={containerClass(openState)} role="button" tabindex={disabled ? undefined : 0} onclick={(e) => { if (!shouldUseNativePicker()) open(e); }} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }} aria-expanded={openState}>
+		<div class={containerClass(openState)} role="button" id={field?.id} aria-labelledby={field?.labelId ? `${field.labelId} ${field.id}` : undefined} tabindex={disabled ? undefined : 0} onclick={(e) => { if (!shouldUseNativePicker()) open(e); }} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }} aria-expanded={openState}>
 			<input
 				type="datetime-local"
 				step={seconds ? 1 : 60}

@@ -16,7 +16,7 @@ import { NativeSelect } from '@atom-forge/ui';
 |------|------|---------|-------------|
 | `options` | `{ value: any; label: string }[]` | — | List of options to render. |
 | `value` | `any` | — | Bindable selected value. |
-| `placeholder` | `string` | `'Select an option'` | Placeholder option shown when nothing is selected (disabled). |
+| `placeholder` | `string` | `'Select an option'` | Text shown when nothing is selected. The empty-state option is hidden from the native option list. |
 | `disabled` | `boolean` | — | Disables the select. |
 | `borderless` | `boolean` | — | Removes border and makes background transparent. |
 | `compact` | `boolean` | — | Compact size (h-8, text-xs). Mutually exclusive with `small`. |

@@ -2,6 +2,7 @@
 	import {twMerge} from 'tailwind-merge';
 	import type {ClassProp, ChildrenProp} from '../../../helpers/types';
 	import type {Snippet} from 'svelte';
+	import {setFieldContext} from './field-context';
 
 	let {
 		label,
@@ -34,6 +35,32 @@
 	} = $props();
 
 	const isHorizontal = $derived(layout === 'horizontal');
+
+	// ── Label ↔ control binding ───────────────────────────────────────────────
+	// Without an explicit `for`, the first form control rendered inside the Field
+	// claims a generated id, so the <label> is announced as the control's name.
+	// The label always points at that id (also during SSR, before any claim happens).
+	const uid = $props.id();
+	const labelId = `${uid}-label`;
+	let claimed = $state(false);
+	let controlId = $state(`${uid}-control`);
+	const labelFor = $derived(forId ?? controlId);
+
+	setFieldContext({
+		claim(ownId) {
+			if (forId !== undefined || claimed) return undefined;
+			claimed = true;
+			if (ownId) controlId = ownId;
+			return {
+				get id() { return controlId; },
+				get labelId() { return label && !labelSnippet ? labelId : undefined; },
+			};
+		},
+		release() {
+			claimed = false;
+			controlId = `${uid}-control`;
+		},
+	});
 </script>
 
 <!--
@@ -48,7 +75,7 @@
 		{#if labelSnippet}
 			{@render labelSnippet()}
 		{:else if label}
-			<label for={forId} class="text-sm text-muted-contrast leading-snug">
+			<label id={labelId} for={labelFor} class="text-sm text-muted-contrast leading-snug">
 				{label}
 				{#if required}<span class="text-error ml-0.5">*</span>{/if}
 				{#if optional}<span class="text-muted-contrast text-xs ml-1">(optional)</span>{/if}
@@ -82,7 +109,7 @@
 				{#if labelSnippet}
 					{@render labelSnippet()}
 				{:else if label}
-					<label for={forId} class="text-xs font-light text-muted-contrast leading-snug">
+					<label id={labelId} for={labelFor} class="text-xs font-light text-muted-contrast leading-snug">
 						{label}
 						{#if required}<span class="text-error ml-0.5">*</span>{/if}
 						{#if optional}<span class="text-muted-contrast text-xs ml-1">(optional)</span>{/if}
