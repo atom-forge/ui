@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.0.38] - 2026-11-05
+
 ### Added
 
 - Live component showcase application in `src/routes/(site)` (every control under `/ui/<category>/<control>/`, the former `ui-pro` controls in the `content`, `editors`, `scheduling` and `overlays` categories, and the CRM, Inbox and Intranet showcase applications), moved here from the atom-forge.eu website. It resolves `@atom-forge/ui` to the local source through `kit.alias`, so the examples always run against the current code. The site shell lives in `src/site`; none of it is part of the published package.
