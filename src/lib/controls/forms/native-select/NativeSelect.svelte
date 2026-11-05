@@ -69,7 +69,8 @@
 	</div>
 
 	<select class="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
-	        bind:value {disabled} id={field?.id}>
+	        bind:value {disabled} id={field?.id}
+	        aria-describedby={field?.describedBy} aria-invalid={field?.invalid || undefined}>
 		<!-- Empty-state option: keeps the select empty while no value is set; hidden from the option list. -->
 		<option value={undefined} disabled selected hidden>{placeholder ?? ''}</option>
 		{#each options as option}

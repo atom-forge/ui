@@ -187,6 +187,7 @@
 	<button
 		bind:this={triggerEl}
 		id={field?.id}
+		aria-describedby={field?.describedBy}
 		aria-labelledby={field?.labelId ? `${field.labelId} ${field.id}` : undefined}
 		onclick={openDropdown}
 		onkeydown={onTriggerKeydown}

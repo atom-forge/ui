@@ -53,5 +53,5 @@
 <div class={wrapperClass} {...props}>
 	<span class={swatchClass} style:background-color={value}></span>
 	<span class={hexClass}>{value}</span>
-	<input type="color" class={inputClass} bind:value {disabled} id={field?.id} />
+	<input type="color" class={inputClass} bind:value {disabled} id={field?.id} aria-describedby={field?.describedBy} aria-invalid={field?.invalid || undefined} />
 </div>

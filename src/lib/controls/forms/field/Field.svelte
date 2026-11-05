@@ -42,6 +42,9 @@
 	// The label always points at that id (also during SSR, before any claim happens).
 	const uid = $props.id();
 	const labelId = `${uid}-label`;
+	const messageId = `${uid}-message`;
+	const hasError = $derived(!!(error || errorSnippet));
+	const hasMessage = $derived(hasError || !!(hint || hintSnippet));
 	let claimed = $state(false);
 	let controlId = $state(`${uid}-control`);
 	const labelFor = $derived(forId ?? controlId);
@@ -54,6 +57,8 @@
 			return {
 				get id() { return controlId; },
 				get labelId() { return label && !labelSnippet ? labelId : undefined; },
+				get describedBy() { return hasMessage ? messageId : undefined; },
+				get invalid() { return hasError; },
 			};
 		},
 		release() {
@@ -92,11 +97,11 @@
 	<div class="flex flex-col gap-1 min-w-0">
 		{@render children()}
 		{#if error || errorSnippet}
-			<p class="text-xs text-error">
+			<p id={messageId} class="text-xs text-error">
 				{#if errorSnippet}{@render errorSnippet()}{:else}{error}{/if}
 			</p>
 		{:else if hint || hintSnippet}
-			<p class="text-xs text-muted-contrast">
+			<p id={messageId} class="text-xs text-muted-contrast">
 				{#if hintSnippet}{@render hintSnippet()}{:else}{hint}{/if}
 			</p>
 		{/if}
@@ -127,11 +132,11 @@
 		{@render children()}
 
 		{#if error || errorSnippet}
-			<p class="text-xs text-error">
+			<p id={messageId} class="text-xs text-error">
 				{#if errorSnippet}{@render errorSnippet()}{:else}{error}{/if}
 			</p>
 		{:else if hint || hintSnippet}
-			<p class="text-xs text-muted-contrast">
+			<p id={messageId} class="text-xs text-muted-contrast">
 				{#if hintSnippet}{@render hintSnippet()}{:else}{hint}{/if}
 			</p>
 		{/if}

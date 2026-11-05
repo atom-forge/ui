@@ -137,6 +137,8 @@
 			oninput={handleInput}
 			{...props}
 			id={field?.id ?? props.id}
+			aria-describedby={[props['aria-describedby'], field?.describedBy].filter(Boolean).join(' ') || undefined}
+			aria-invalid={props['aria-invalid'] ?? (invalid || field?.invalid || undefined)}
 		/>
 		{#if type === 'password'}
 			<button

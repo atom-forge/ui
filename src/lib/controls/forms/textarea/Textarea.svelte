@@ -249,6 +249,8 @@
 			{disabled}
 			maxlength={maxLength}
 			id={field?.id}
+			aria-describedby={field?.describedBy}
+			aria-invalid={invalid || field?.invalid || undefined}
 			onkeydown={handleKeydown}
 		></textarea>
 

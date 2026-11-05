@@ -233,6 +233,8 @@
 	<input
 		bind:this={inputEl}
 		id={field?.id}
+		aria-describedby={field?.describedBy}
+		aria-invalid={field?.invalid || undefined}
 		value={sharedState.query}
 		oninput={onInput}
 		onkeydown={onKeydown}

@@ -101,7 +101,7 @@
 
 <TimePopover {value} {round} {seconds} {disabled} onconfirm={(next) => { value = next; }}>
 	{#snippet trigger(open, isOpen)}
-		<div class={containerClass(isOpen)} role="button" id={field?.id} aria-labelledby={field?.labelId ? `${field.labelId} ${field.id}` : undefined} tabindex={disabled ? undefined : 0} onclick={(e) => { if (!shouldUseNativePicker()) open(e); }} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }} aria-expanded={isOpen}>
+		<div class={containerClass(isOpen)} role="button" id={field?.id} aria-describedby={field?.describedBy} aria-labelledby={field?.labelId ? `${field.labelId} ${field.id}` : undefined} tabindex={disabled ? undefined : 0} onclick={(e) => { if (!shouldUseNativePicker()) open(e); }} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); } }} aria-expanded={isOpen}>
 			<!-- Native time input — always rendered; CSS enables pointer events on touch devices only -->
 			<input
 				type="time"

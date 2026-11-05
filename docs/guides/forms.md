@@ -26,7 +26,6 @@ Complete page component, rendered beneath the application's Root. This example v
 <script lang="ts">
   import { Button, Field, Input } from '@atom-forge/ui';
 
-  const id = $props.id();
   let name = $state('');
   let submitted = $state(false);
   let savedName = $state<string | undefined>();
@@ -41,31 +40,20 @@ Complete page component, rendered beneath the application's Root. This example v
 </script>
 
 <form onsubmit={submit} novalidate class="flex flex-col gap-4 max-w-md">
-  <Field label="Display name" for={id} required error={error}>
-    <Input
-      id={id}
-      name="displayName"
-      bind:value={name}
-      required
-      invalid={!!error}
-      aria-invalid={!!error}
-      aria-describedby={error ? `${id}-error` : undefined}
-    />
-    {#snippet errorSnippet()}
-      {#if error}<span id={`${id}-error`}>{error}</span>{/if}
-    {/snippet}
+  <Field label="Display name" required error={error}>
+    <Input name="displayName" bind:value={name} required invalid={!!error}/>
   </Field>
   <Button type="submit" label="Save locally"/>
   <p role="status">{savedName === undefined ? '' : `Local snapshot: ${savedName}`}</p>
 </form>
 ```
 
-Field binds its label to the first nested control automatically; this recipe sets `Field.for` explicitly because the input ID is also used elsewhere. The error snippet supplies an ID because Field does not generate `aria-describedby` connections. Always supplying `errorSnippet` suppresses Field hints even when the snippet is empty; this recipe intentionally has no hint. `novalidate` lets the demonstrated application rule run instead of native required-field blocking.
+Field wires the accessibility attributes itself: the label names the Input, the error text is connected with `aria-describedby`, and the Input gets `aria-invalid` while an error is shown. `invalid` only adds the error styling. `novalidate` lets the demonstrated application rule run instead of native required-field blocking.
 
 ## Application responsibilities
 
 - Implement full validation, server-side validation, serialization, persistence, permissions, and submission error handling. Field's required marker and Input's `invalid` styling do not implement those rules.
 - For async submission, maintain pending/error state, prevent duplicate requests, and use [Button](../controls/general/button.md) `loading`/`disabled`; only announce success after persistence succeeds.
 - Convert numeric strings explicitly. Keep Select ID types consistent (`string` and `number` are not interchangeable); Select has no public `onchange` prop.
-- Own reset/dirty state, accessible help/error associations, focus on invalid fields, and native form integration for controls that do not forward form attributes.
+- Own reset/dirty state, focus on invalid fields, and native form integration for controls that do not forward form attributes.
 - For async options, implement throttling, failure handling, and stale-response protection in the source; these are not a form engine feature.

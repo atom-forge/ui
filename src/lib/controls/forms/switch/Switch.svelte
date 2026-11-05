@@ -71,7 +71,7 @@
 </script>
 
 <label class={wrapperClass}>
-	<input type="checkbox" class="sr-only peer" id={field?.id} checked={isChecked} onchange={handleChange} {disabled}/>
+	<input type="checkbox" class="sr-only peer" id={field?.id} aria-describedby={field?.describedBy} checked={isChecked} onchange={handleChange} {disabled}/>
 	<div class="relative {trackClass}">
 		<div class={thumbClass}
 		     style="transform: {isChecked ? `translateX(${thumbTranslateX})` : 'translateX(0)'}; margin: 0.125rem;">

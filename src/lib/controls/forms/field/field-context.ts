@@ -8,6 +8,10 @@ export type FieldControl = {
 	readonly id: string;
 	/** Id of the rendered `<label>` element, or `undefined` when the Field renders no label. */
 	readonly labelId: string | undefined;
+	/** Id of the rendered error or hint text, or `undefined` when the Field shows neither. Use as `aria-describedby`. */
+	readonly describedBy: string | undefined;
+	/** `true` while the Field shows an error. Use as `aria-invalid`. */
+	readonly invalid: boolean;
 };
 
 type FieldContext = {
@@ -16,7 +20,7 @@ type FieldContext = {
 };
 
 /**
- * Called by `Field`. Exposes the label ↔ control binding to the first form control
+ * Called by `Field`. Exposes the label / description ↔ control binding to the first form control
  * rendered inside it. Pass `undefined` to shadow an outer Field's context.
  */
 export function setFieldContext(context: FieldContext | undefined) {

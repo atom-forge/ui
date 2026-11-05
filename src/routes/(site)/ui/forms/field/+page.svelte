@@ -14,8 +14,8 @@
 				{ group: 'Content', name: 'for', type: 'string', description: 'Explicit label target. Omit it to let Field bind the label to its first control automatically.' },
 				{ group: 'Content', name: 'children', type: 'Snippet', description: 'Required control content.' },
 				{ group: 'Styling', name: 'class', type: 'string', description: 'Vertical wrapper classes, or horizontal label-cell classes.' },
-				{ group: 'Content', name: 'hint', type: 'string', description: 'Helper text shown below the control.' },
-		{ group: 'Content', name: 'error', type: 'string', description: 'Error message shown below the control. Takes precedence over <code>hint</code>.' },
+				{ group: 'Content', name: 'hint', type: 'string', description: 'Helper text shown below the control, connected to it with <code>aria-describedby</code>.' },
+		{ group: 'Content', name: 'error', type: 'string', description: 'Error message shown below the control. Takes precedence over <code>hint</code>. Connected to the control with <code>aria-describedby</code> and sets <code>aria-invalid</code>.' },
 		{ group: 'Content', name: 'required', type: 'boolean', default: 'false', description: 'Appends a red <code>*</code> to the label.' },
 		{ group: 'Content', name: 'optional', type: 'boolean', default: 'false', description: 'Appends an <code>(optional)</code> badge to the label.' },
 		{ group: 'Layout', name: 'layout', type: "'vertical' | 'horizontal'", default: "'vertical'", description: 'Vertical stacks label above the control. Horizontal is designed for use inside <code>FieldGroup</code>.' },
@@ -57,7 +57,7 @@
 				<ProseText>
 					Wrap any control with <DocInlineCode>Field</DocInlineCode> and provide a <DocInlineCode>label</DocInlineCode>.
 					Use <DocInlineCode>hint</DocInlineCode> for helper text, <DocInlineCode>error</DocInlineCode> for validation messages,
-					<DocInlineCode>required</DocInlineCode> or <DocInlineCode>optional</DocInlineCode> to annotate the label; these do not validate or mark the child control required. The label is bound to the first control inside the Field automatically (screen readers announce it as the control's name); set <DocInlineCode>for</DocInlineCode> only to target a specific id yourself.
+					<DocInlineCode>required</DocInlineCode> or <DocInlineCode>optional</DocInlineCode> to annotate the label; these do not validate or mark the child control required. The label, hint and error are bound to the first control inside the Field automatically (label as the control's name, hint/error via <DocInlineCode>aria-describedby</DocInlineCode>, error also as <DocInlineCode>aria-invalid</DocInlineCode>); set <DocInlineCode>for</DocInlineCode> only to wire a specific id yourself.
 				</ProseText>
 				<DocShowExample component={Example1} code={example1Raw}/>
 	</ProseParagraph>
