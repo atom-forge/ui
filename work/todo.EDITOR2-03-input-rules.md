@@ -23,7 +23,7 @@ Detect trigger patterns while typing and auto-convert the current block type. De
 - [ ] Trigger characters are stripped from content after conversion
 - [ ] No type errors (`bun run check`)
 - [ ] Documentation updated (plan status updated to reflect EDITOR2-03 complete)
-- [ ] Relevant documents in `work/docs/guides/` and `work/contribution/rules/` updated as needed
+- [ ] Relevant documents in `work/docs/guides/` and `AGENTS/local/` updated as needed
 
 ## Technical Notes
 - Depends on EDITOR2-02 block components

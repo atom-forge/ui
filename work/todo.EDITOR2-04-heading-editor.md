@@ -21,7 +21,7 @@ A separate `HeadingEditor.svelte` component showing all headings as an interacti
 - [ ] Outline reflects live document state
 - [ ] No type errors (`bun run check`)
 - [ ] Documentation updated (plan status updated to reflect EDITOR2-04 complete)
-- [ ] Relevant documents in `work/docs/guides/` and `work/contribution/rules/` updated as needed
+- [ ] Relevant documents in `work/docs/guides/` and `AGENTS/local/` updated as needed
 
 ## Technical Notes
 - Depends on EDITOR2-03

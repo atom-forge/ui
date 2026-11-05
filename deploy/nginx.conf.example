@@ -1,0 +1,13 @@
+# Merge into the site's TLS configuration; this HTTP example does not provision certificates.
+server {
+    listen 80;
+    server_name ui.atom-forge.eu;
+
+    root /var/www/eu.atom-forge.ui/current;
+    index index.html;
+
+    location / {
+        # Directory routes resolve to their own index.html. Missing routes are 404.
+        try_files $uri $uri/ =404;
+    }
+}

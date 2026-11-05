@@ -23,7 +23,7 @@ const trackClass = twMerge('base classes', size === 'normal' && 'h-6');
 ---
 
 ## Color system
-Detailed specifications in [docs/guides/color-system.md](../guides/color-system.md).
+Detailed specifications in [docs/guides/color-system.md](../../../docs/guides/color-system.md).
 
 Only colors defined in the color system (semantic tokens) or values derived from them (e.g., using opacity modifiers like `text-accent/80`) are allowed. Hardcoded Tailwind colors (e.g., `text-blue-500`) or hex codes are strictly forbidden. Always use semantic tokens like `text-accent` or `bg-surface-primary`.
 

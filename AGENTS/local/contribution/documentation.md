@@ -49,7 +49,7 @@ Break down the component's features into logical sections using Level 2 headers 
 ## Writing Rules
 
 ### Language
-- **All documentation must be in English.** Never use Hungarian or any other language for descriptions, labels, or UI text.
+- **Write the reference in English.** The Hungarian translation is maintained separately, following `AGENTS/documentation.md`. Labels and UI text in examples are always English.
 
 ### Code Blocks
 - Use ` ```sveltehtml ` for all Svelte example code.
@@ -71,7 +71,7 @@ Break down the component's features into logical sections using Level 2 headers 
 - **Self-Documenting Examples**: Write example code that is easy to copy-paste and works with minimal modifications.
 - **Mutual Exclusivity**: If props are mutually exclusive (e.g., `small` vs. `compact`), explicitly state this in the description or the props table.
 - **Accessibility & Logic**: If a component has specific keyboard behaviors or internal logic (like "First truthy prop wins"), document it clearly.
-- **Linking**: Link to related components or guides using relative paths (e.g., `[Color System](../guides/color-system.md)`).
+- **Linking**: Link to related components or guides using relative paths from the documentation file (e.g., `[Color System](../../guides/color-system.md)` from a control page).
 
 ---
 

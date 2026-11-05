@@ -25,7 +25,7 @@ Allow users to manually convert a block to a compatible type via a UI affordance
 - [ ] Disallowed conversions are not offered in the UI
 - [ ] No type errors (`bun run check`)
 - [ ] Documentation updated (plan status updated to reflect EDITOR2-05 complete)
-- [ ] Relevant documents in `work/docs/guides/` and `work/contribution/rules/` updated as needed
+- [ ] Relevant documents in `work/docs/guides/` and `AGENTS/local/` updated as needed
 
 ## Technical Notes
 - Depends on EDITOR2-03

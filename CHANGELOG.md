@@ -15,9 +15,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Agent instructions follow the shared AtomForge structure: `AGENTS.md` describes the project, its commands and its reference-first documentation model, and points to the shared rules in `AGENTS/` (`devrules.md`, `changelog.md`, `documentation.md`) and to the library's own rules in `AGENTS/local/` (`ui-lib-dev.md`, `svelte-standards.md`, moved from `work/contribution/rules/`).
+- The contribution guides moved from `docs/contribution/` to `AGENTS/local/contribution/`, so they are no longer shipped in the npm package; `README.md` points developers to `AGENTS.md` and links the book and the live showcase.
+- `bun run pub` now refuses to release with uncommitted changes and, after pushing the tag, waits until the new version is on npm and deploys the showcase (`bun run deploy`), so every release updates https://ui.atom-forge.eu.
+- Project rules require the showcase site (https://ui.atom-forge.eu) to follow every component change in the same task (`bun run check:showcase`), and make deploying it (`bun run deploy`) part of every release.
+- Documentation rules no longer forbid Hungarian: the reference is written in English and may get a Hungarian translation; labels and UI text stay English. The project rules now describe the showcase site and `/dev/*` pages in `src/routes` instead of calling the repository a pure library.
 - The development demo pages moved from `/ui/*` to `/dev/*` so that `/ui/*` belongs to the showcase.
 - The SvelteKit app now builds a static site (`@sveltejs/adapter-static` replaces `@sveltejs/adapter-node`).
 - `book.md` links to the showcase at ui.atom-forge.eu.
+- Showcase data and overlay pages re-audited against 0.0.37 (no API changes since 0.0.34): version-pinned limitation notes are now version-neutral, the outdated comparisons with the reference guides (Heatmap defaults, `AtomForge` provider name) were removed, and `scripts/showcase/audit.mjs` no longer warns about a stale inventory.
+
+### Removed
+
+- The SOP and journal workflow (`work/contribution/overview.md`, `work/contribution/sop/`, `work/journal/`) and the `CLAUDE.md` / `GEMINI.md` redirect files.
+
+### Fixed
+
+- `Field` now binds its label to the control inside it (accessibility): it generates an ID that the first nested form control (`Input`, `Textarea`, `NativeSelect`, `Select`, `MultiSelect`, `DatePicker`, `DateTimePicker`, `TimePicker`, `ColorPicker`, `TagEditor`, `Switch`) applies to its focusable element, with `aria-labelledby` on button-like triggers. Screen readers announce the field name and tests can use `getByLabelText`. An explicit `for` still takes precedence. Custom controls can opt in with `field.useFieldControl()`.
+- `NativeSelect` no longer lists its placeholder (`'Select an option'` by default) as a selectable entry in the native dropdown; the empty-state option is now rendered `hidden`.
 
 ---
 

@@ -11,14 +11,6 @@
 		"strict": true,
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
-		"noImplicitAny": false,
-		"paths": {
-			"$lib": [
-				"../_/lib"
-			],
-			"$lib/*": [
-				"../_/lib/*"
-			]
-		}
+		"noImplicitAny": false
 	}
 }

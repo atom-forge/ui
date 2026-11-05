@@ -31,7 +31,7 @@ Standards, structure, and rules for creating and maintaining component documenta
 
 ## Quick Rules
 
-- **Pure Library**: This project contains only the library source and documentation.
+- **Library first**: The published package contains only the library and its documentation; the showcase site (deployed to https://ui.atom-forge.eu) and the development pages in `src/routes` are not part of the package.
 - **Documentation**: When modifying a control, **ALWAYS** update its markdown file.
 - **All documentation is in English**.
 - **Bun**: Use `bun` for development.

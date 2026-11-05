@@ -1,4 +1,4 @@
-import {RenderSnippet} from '../../../index';
+import RenderSnippet from '../../../helpers/RenderSnippet.svelte';
 import type {Component, Snippet} from 'svelte';
 import {getContext, setContext} from 'svelte';
 import {getOverlayStackManager, type OverlayOptions, type OverlayStackManager, type OverlayState} from '../shared/overlay-manager.svelte';

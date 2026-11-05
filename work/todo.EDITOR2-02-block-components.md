@@ -23,7 +23,7 @@ Implement all 8 individual Svelte block components. Each handles both preview an
 - [ ] `DividerBlock.svelte` — renders `<hr>`; no contenteditable; Backspace/Delete removes it
 - [ ] No type errors (`bun run check`)
 - [ ] Documentation updated (plan status updated to reflect EDITOR2-02 complete)
-- [ ] Relevant documents in `work/docs/guides/` and `work/contribution/rules/` updated as needed
+- [ ] Relevant documents in `work/docs/guides/` and `AGENTS/local/` updated as needed
 
 ## Technical Notes
 - Depends on EDITOR2-01 types and BlockEditor scaffold

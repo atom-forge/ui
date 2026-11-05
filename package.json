@@ -21,7 +21,8 @@
 		"release": "npm publish --access public",
 		"pub-check": "bun run scripts/pub-check.ts",
 		"pub": "bun run scripts/pub.ts",
-		"check:showcase": "bun run package && node scripts/showcase/migration-check.mjs && node scripts/showcase/audit.mjs"
+		"check:showcase": "bun run package && node scripts/showcase/migration-check.mjs && node scripts/showcase/audit.mjs",
+		"deploy": "python3 deploy/local.py"
 	},
 	"repository": {
 		"url": "git://github.com/atom-forge/ui.git"

@@ -2,6 +2,11 @@
 
 Welcome to the documentation for the AtomForge UI component library.
 
+## Documentation
+
+- **[The UI book](https://books.atom-forge.eu)**: The learning path — mental models, choosing controls, recipes, and pitfalls — embedding the reference below.
+- **[Live showcase](https://ui.atom-forge.eu/)**: Every control running live.
+
 ## Guides
 
 - **[AI Consumer Entry Point](README-AI.md)**: Start here when an AI coding agent uses this library in an application. Task-driven discovery, reading routes, and usage contracts.
@@ -19,12 +24,7 @@ The markdown documentation is shipped in the package under `docs/`, but it is no
 
 ## Development & Contribution
 
-- **[Contribution Guide](docs/contribution/index.md)**: The entry point for library developers, covering engineering standards and project structure.
-- **[Documentation Guide](docs/contribution/documentation.md)**: Standards, structure, and rules for creating and maintaining component documentation.
-- **[Workflow & Standards](docs/contribution/workflow.md)**: Development lifecycle, project layout, and the component reuse rule.
-- **[Coding Standards](docs/contribution/coding-standards.md)**: Technical coding guidelines focusing on relative imports, runes, and Svelte 5 patterns.
-- **[Styling & Color System](docs/contribution/styling.md)**: Visual consistency, `twMerge` usage, and semantic token standards.
-- **[Library Tools & Utilities](docs/contribution/helpers.md)**: Documentation for shared internal types, utilities, and helper components.
+Rules for developing the library itself — for people and coding agents alike — start in [`AGENTS.md`](AGENTS.md), which links to the shared AtomForge rules and to the library's own standards in `AGENTS/local/`.
 
 ---
 

@@ -1,4 +1,5 @@
-export {default as BlockEditor, defaultPreviewComponents} from './BlockEditor.svelte';
+export {default as BlockEditor} from './BlockEditor.svelte';
+export {defaultPreviewComponents} from './default-preview-components.js';
 export {default as BlockItem} from './BlockItem.svelte';
 export {default as BlockView} from './BlockView.svelte';
 export {getBlockAPI} from './context.js';

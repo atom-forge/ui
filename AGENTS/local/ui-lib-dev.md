@@ -9,21 +9,23 @@ applies_to: Any task that creates or modifies components in the atom-forge/ui li
 
 ## Project Rules
 
-- **Pure Library**: This project contains only the library source and documentation. No app routes are published in the package.
-- **Dev-only Routes**: `src/routes/` may be used for development-only sandboxes and test pages. These files are **never exported** from `src/lib/index.ts` and are not included in the published package. They exist solely to exercise library components during development.
-- **Component Reuse**: **ALWAYS** reuse existing components within the library. If a control exists (e.g., `Checkbox`), use it instead of native elements or creating a new one. Refer to [docs/guides/component-overview.md](../../../docs/guides/component-overview.md) for the full list.
+- **Library first**: The published package contains only the library (`src/lib`) and its documentation.
+- **Routes are not part of the package**: `src/routes/(site)` is the live showcase site (deployed with `bun run deploy`, checked with `bun run check:showcase`), and `/dev/*` holds development sandboxes. Nothing in `src/routes` is exported from `src/lib/index.ts` or included in the package.
+- **Component Reuse**: **ALWAYS** reuse existing components within the library. If a control exists (e.g., `Checkbox`), use it instead of native elements or creating a new one. Refer to [docs/guides/component-overview.md](../../docs/guides/component-overview.md) for the full list.
 - **Grouping**: Components must be placed in the correct category folder: `data`, `display`, `forms`, `general`, `layout`, or `overlays`.
 - **Atomic Components**: Each component gets its own folder with an `index.ts` for clean exports.
 - **Documentation**: When modifying a control, **ALWAYS** update its `docs/controls/[category]/[component].md` file.
-- **All documentation is in English** — never use Hungarian or any other language.
+- **English source documentation**: write the reference in English; the Hungarian translation follows `AGENTS/documentation.md`. Labels and UI text in components are always English.
 - **Bun**: Use `bun` for development (not `npm` or `pnpm`).
+- **Showcase**: The showcase site (`src/routes/(site)`, published at https://ui.atom-forge.eu) must always represent the current state of the library. When adding a component, or changing a component's API or behavior, update its showcase page under `src/routes/(site)/ui/<category>/<component>/` — examples and API inventory — in the same task, and run `bun run check:showcase`. When the audit warns that the inventories were reviewed against an older version, review them for the current version.
 
 ## Releases
 
 - **Git-based publishing only**: Never run `npm publish` or `bun run release` directly.
 - **Release command**: Use `bun run pub <patch|minor|major|version>` after the implementation changes have been committed.
-- `bun run pub` bumps `package.json`, updates `CHANGELOG.md`, creates the release commit and version tag, then pushes both the branch and tag.
+- `bun run pub` refuses to run with uncommitted changes, bumps `package.json`, updates `CHANGELOG.md`, creates the release commit and version tag, pushes both the branch and tag, waits until the new version is on npm, then deploys the showcase with `bun run deploy`.
 - Pushing a `v*` tag triggers `.github/workflows/publish.yml`, which builds and publishes the package through GitHub Actions.
+- **The showcase is part of every release**: https://ui.atom-forge.eu must show the released state, so a release is not complete until the site is deployed. `bun run pub` does this automatically; if it stops before the deploy (the version did not reach npm within 15 minutes, or the deploy failed), fix the cause and run `bun run deploy` from the released commit.
 
 ---
 
@@ -224,7 +226,7 @@ Only semantic color tokens are allowed. Never use hardcoded Tailwind palette uti
 
 Opacity modifiers on tokens are allowed: `text-accent/80`.
 
-Full color reference: [`docs/guides/color-system.md`](../../../docs/guides/color-system.md)
+Full color reference: [`docs/guides/color-system.md`](../../docs/guides/color-system.md)
 
 ### Size Naming
 
