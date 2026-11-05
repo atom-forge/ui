@@ -35,7 +35,7 @@
 			An SVG-based heatmap for visualizing 2D data with a color scale. Typical uses include activity calendars, correlation matrices, and time-of-day patterns.
 			The component is fully responsive via <DocInlineCode>viewBox</DocInlineCode> and adapts its label and legend colors to the active theme.
 		</ProseText>
-		<ProseText>Use a rectangular values[y][x] matrix matching the label counts and finite numeric values. The installed source defaults showLegend and showColLabels to false, despite true defaults in the packaged guide. Tooltip and oncellHover respond to mouse entry; keyboard focus does not open the tooltip.</ProseText>
+		<ProseText>Use a rectangular values[y][x] matrix matching the label counts and finite numeric values. showLegend and showColLabels default to false. Tooltip and oncellHover respond to mouse entry; keyboard focus does not open the tooltip.</ProseText>
 
 		<DocApiBlock title="API">
 			<DocApiTable {props} />

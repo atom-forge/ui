@@ -20,7 +20,7 @@
 	<ProseDivider />
 	<ProseParagraph>
 		<ProseTitle level={3}>Inline settings for a headerless table</ProseTitle>
-		<ProseText>Share the same reactive column objects with Table. Initialize visible explicitly in this example. Fixed columns are omitted from the settings panel; fixed does not force a column with visible=false to become visible. TableSettings has no class or children prop in 0.0.34; use an outer wrapper for layout.</ProseText>
+		<ProseText>Share the same reactive column objects with Table. Initialize visible explicitly in this example. Fixed columns are omitted from the settings panel; fixed does not force a column with visible=false to become visible. TableSettings has no class or children prop; use an outer wrapper for layout.</ProseText>
 		<DocShowExample component={Example1} code={example1} />
 	</ProseParagraph>
 	<ProseDivider />

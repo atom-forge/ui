@@ -12,7 +12,7 @@
 
 	const props: PropDef[] = [
         { name: 'children', type: 'Snippet', description: 'Required focus-mode content.' },
-        { name: 'class', type: 'string', description: 'Accepted but unused in 0.0.34. Zen renders nothing while inactive; use zenClass and backdropClass to style the active overlay.' },
+        { name: 'class', type: 'string', description: 'Accepted but unused. Zen renders nothing while inactive; use zenClass and backdropClass to style the active overlay.' },
 		{ name: 'active',          type: 'boolean', default: 'false', description: 'Bindable. Controls visibility. Set to <code>false</code> to close.' },
 		{ name: 'closeOnEsc',      type: 'boolean', default: 'true',  description: 'Close when the <code>Escape</code> key is pressed.' },
 		{ name: 'closeOnBackdrop', type: 'boolean', default: 'true',  description: 'Close when clicking the backdrop.' },

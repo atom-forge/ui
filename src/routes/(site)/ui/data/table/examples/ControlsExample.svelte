@@ -3,7 +3,7 @@
 
     type Ticket = { id: number; summary: string; owner: string };
     const data: Ticket[] = [
-        { id: 1, summary: 'Audit public exports, sources and types against installed 0.0.34', owner: 'Alice' },
+        { id: 1, summary: 'Audit public exports, sources and types against the installed package', owner: 'Alice' },
         { id: 2, summary: 'Update live examples and displayed source', owner: 'Bob' },
     ];
     let columns = $state<ColumnDef<Ticket>[]>([

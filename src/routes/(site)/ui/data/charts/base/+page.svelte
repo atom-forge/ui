@@ -20,7 +20,7 @@
             <DocInlineCode>ChartBase</DocInlineCode> is the public low-level Chart.js canvas control.
             Use the specialized chart controls for automatic theme observation, or supply a complete
             configuration here. This example reads the theme on mount and exports the bound chart as PNG.
-            It does not automatically re-read colors when the theme changes. In 0.0.34 the emitted ChartBase declaration shadows the Chart.js instance type with the Svelte component type; the example guards the runtime instance method instead of hiding this behind an any cast.
+            It does not automatically re-read colors when the theme changes. The emitted ChartBase declaration shadows the Chart.js instance type with the Svelte component type; the example guards the runtime instance method instead of hiding this behind an any cast.
         </ProseText>
         <ProseText>
             The specialized wrappers append alpha hex suffixes to their series colors: use six-digit

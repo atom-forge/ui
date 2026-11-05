@@ -24,7 +24,7 @@
 		{ group: 'Positioning args', name: 'pos', type: 'MouseClientEvent', description: 'Positions the popup at the mouse cursor (<code>{ clientX, clientY }</code>). Mutually exclusive with <code>anchor</code>.' },
 		{ group: 'Positioning args', name: 'anchor', type: 'Element | { currentTarget: EventTarget | null }', description: 'Positions the popup relative to a DOM element. Passing a <code>MouseEvent</code> uses its <code>currentTarget</code>. Mutually exclusive with <code>pos</code>.' },
 		{ group: 'Positioning args', name: 'align', type: "'auto' | 'left' | 'right' | 'both' | 'side'", default: "'auto'", description: 'Horizontal alignment relative to the anchor. <code>both</code> sets a minimum width equal to the anchor. <code>side</code> opens to the right or left (for submenus). <code>auto</code> picks a side based on the screen quadrant.' },
-		{ group: 'Positioning args', name: 'offset', type: 'number', default: '4', description: 'Anchor gap in pixels. In 0.0.34, zero falls back to 4; cursor positioning always uses 4.' },
+		{ group: 'Positioning args', name: 'offset', type: 'number', default: '4', description: 'Anchor gap in pixels. Zero falls back to 4; cursor positioning always uses 4.' },
 		{ group: 'Fourth argument', name: 'ref', type: 'any', description: 'Fourth-argument deduplication key. If the same ref is already active, returns its existing promise without reopening it. This differs from modal/drawer duplicate keys, which resolve immediately with undefined.' },
 	];
 </script>

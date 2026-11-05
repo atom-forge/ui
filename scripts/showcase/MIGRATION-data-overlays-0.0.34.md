@@ -71,3 +71,7 @@ git --no-pager diff --check -- src/routes/ui/data src/routes/ui/overlays
 The audit compiles all owned Svelte files for client and server, resolves public imports and raw-source references, checks component prop-name inventories against dist $props, tests shared-stack result/deduplication/dismissal contracts, renders the custom-toast props contract, and SSR-renders every page under a manager provider. Displayed examples use raw Svelte imports and are therefore included in compilation/type checking; literal code strings have a separate syntax check when present.
 
 Validation does not execute browser effects, drag interactions, canvas drawing, focus management, portals or positioning. No visual validation is claimed.
+
+## Re-audit against 0.0.37
+
+`git diff v0.0.34` shows no API or behavior change in `src/lib/controls/data` or `src/lib/controls/overlays` (only an internal import path in `modal-manager.svelte.ts`), so every discrepancy listed above still holds. The packaged reference guides were corrected in the meantime (Heatmap `showLegend` / `showColLabels` defaults, `Root` instead of `AtomForge`), so the showcase no longer contrasts the source with them, and version-pinned "in 0.0.34" wording on the pages was made version-neutral. `AUDITED_VERSION` in `audit.mjs` is now `0.0.37`.

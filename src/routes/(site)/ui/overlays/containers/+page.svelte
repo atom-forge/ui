@@ -5,7 +5,7 @@
 	const props: PropDef[] = [
 		{ group: 'ModalContainer / DrawerContainer', name: 'props', type: 'none', description: 'Either component renders the entire shared modal/drawer stack. Mount only one, and neither when using Root.' },
 		{ group: 'PopupContainer', name: 'children', type: 'Snippet', description: 'Without children, renders the nearest manager. With children, creates a child manager context and renders its popup. This is the supported nested-popup boundary.' },
-		{ group: 'ToastContainer', name: 'props', type: 'none', description: 'Renders the nearest manager’s toasts, including custom components with only the props passed to showCustom. No id or options are injected into custom content in 0.0.34.' },
+		{ group: 'ToastContainer', name: 'props', type: 'none', description: 'Renders the nearest manager’s toasts, including custom components with only the props passed to showCustom. No id or options are injected into custom content.' },
 		{ group: 'Root', name: 'children', type: 'Snippet', description: 'Required application content rendered beneath the provider context.' },
 		{ group: 'Root', name: 'manageBodyStyle', type: 'boolean', default: 'true', description: 'Applies canvas background/text colors to the body. Disabling this does not disable theme class or localStorage updates.' },
 	];
@@ -20,7 +20,7 @@
 	<ProseDivider />
 	<ProseParagraph>
 		<ProseTitle level={3}>Recommended application layout</ProseTitle>
-		<ProseText>Version 0.0.34 exports Root, not AtomForge (the provider name still used in some packaged guides). Place Root once in the application layout. It creates all four managers, a theme manager and the portal target, and mounts the renderers. Do not add extra containers under it. Context getters belong in descendant component initialization.</ProseText>
+		<ProseText>The provider is Root. Place Root once in the application layout. It creates all four managers, a theme manager and the portal target, and mounts the renderers. Do not add extra containers under it. Context getters belong in descendant component initialization.</ProseText>
 		<DocShowExample code={rootCode} />
 	</ProseParagraph>
 	<ProseDivider />

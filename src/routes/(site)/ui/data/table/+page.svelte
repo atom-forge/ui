@@ -29,7 +29,7 @@
 		{ group: 'Table', name: 'data', type: 'T[]', description: 'Array of data objects to display.' },
 		{ group: 'Table', name: 'columns', type: 'ColumnDef<T>[]', description: 'Column definitions. Bindable — the component may mutate visibility.' },
 		{ group: 'Table', name: 'rowStyle', type: 'string | StylingFn<T>', description: 'Class string or function applied to each <code>&lt;tr&gt;</code>. A function receives <code>(row, tableData, index)</code>.' },
-		{ group: 'Table', name: 'columnsEditable', type: 'boolean', default: 'false', description: 'Opens the built-in header context popup. In 0.0.34 its callback toggles visibility a second time after TableSettings has already mutated it; prefer an external TableSettings snippet for working visibility changes.' },
+		{ group: 'Table', name: 'columnsEditable', type: 'boolean', default: 'false', description: 'Opens the built-in header context popup. Its callback toggles visibility a second time after TableSettings has already mutated it; prefer an external TableSettings snippet for working visibility changes.' },
 
 		// ColumnDef
 		{ group: 'ColumnDef<T>', name: 'key', type: 'keyof T', description: 'Data key to read from the row object.' },
@@ -58,7 +58,7 @@
 	<ProseParagraph>
 		<ProseTitle>Table</ProseTitle>
 		<ProseText>Configurable data table with fixed headers, optional column visibility toggling, flexible cell rendering, and row-level bar chart backgrounds.</ProseText>
-				<ProseText>Column visibility caveat: the built-in columnsEditable popup double-toggles visible in 0.0.34. Use the external settings example below or <a href="/ui/data/table-settings">Table Settings</a> instead. Keep column objects reactive and shared; Table captures its initial columns array and does not synchronize replacement definitions after mount. hideHeader also removes the built-in popup trigger. grow and shrink are mutually exclusive true flags; formatter and snippet are mutually exclusive renderers.</ProseText>
+				<ProseText>Column visibility caveat: the built-in columnsEditable popup double-toggles visible. Use the external settings example below or <a href="/ui/data/table-settings">Table Settings</a> instead. Keep column objects reactive and shared; Table captures its initial columns array and does not synchronize replacement definitions after mount. hideHeader also removes the built-in popup trigger. grow and shrink are mutually exclusive true flags; formatter and snippet are mutually exclusive renderers.</ProseText>
 
 		<DocApiBlock title="API">
 			<DocApiTable {props} />

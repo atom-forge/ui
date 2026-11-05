@@ -32,7 +32,7 @@
 	<ProseParagraph>
 		<ProseTitle>Progress Ring</ProseTitle>
 		<ProseText>A circular SVG progress indicator that animates as the value changes. Supports a single ring or multiple concentric rings via the <DocInlineCode>rings</DocInlineCode> prop.</ProseText>
-		<ProseText>Use a positive max and enough size for every ring’s radius to remain positive. Non-positive maxima render an empty arc. A multi-ring control has no default center label; provide children for a summary. The root has role=progressbar and single-ring numeric ARIA values, but 0.0.34 does not forward arbitrary attributes such as aria-label. Include an adjacent textual description rather than assuming extra props reach the DOM.</ProseText>
+		<ProseText>Use a positive max and enough size for every ring’s radius to remain positive. Non-positive maxima render an empty arc. A multi-ring control has no default center label; provide children for a summary. The root has role=progressbar and single-ring numeric ARIA values, but it does not forward arbitrary attributes such as aria-label. Include an adjacent textual description rather than assuming extra props reach the DOM.</ProseText>
 
 		<DocApiBlock title="API">
 			<DocApiTable {props} />

@@ -25,7 +25,7 @@
 
 		{ group: 'ToastManager', name: 'show(message, options?)', type: 'string', description: 'Displays a toast and returns its <code>id</code>. Auto-dismisses after <code>duration</code> ms (default 3000). Set <code>duration: 0</code> for persistent.' },
 		{ group: 'ToastManager', name: 'dismiss(id)', type: 'void', description: 'Immediately dismisses the toast with the given <code>id</code>.' },
-		{ group: 'ToastManager', name: 'showCustom(component, props, options?)', type: 'string', description: 'Renders a custom component with exactly the supplied props. Returns its id, but does not inject id or options into the component in 0.0.34. Pass a dismissal callback that captures the returned id.' },
+		{ group: 'ToastManager', name: 'showCustom(component, props, options?)', type: 'string', description: 'Renders a custom component with exactly the supplied props. Returns its id, but does not inject id or options into the component. Pass a dismissal callback that captures the returned id.' },
 
 		{ group: 'ToastOptions', name: 'type', type: "'info' | 'success' | 'warning' | 'error'", default: "'info'", description: 'Controls the accent stripe color and default icon.' },
 		{ group: 'ToastOptions', name: 'duration', type: 'number', default: '3000', description: 'Auto-dismiss delay in milliseconds. <code>0</code> = never auto-dismiss.' },
@@ -92,7 +92,7 @@
 
 	<ProseParagraph>
 		<ProseTitle level={3}>Custom Component</ProseTitle>
-				<ProseText>Use <DocInlineCode>showCustom()</DocInlineCode> to render any Svelte component as a toast. In 0.0.34, only your supplied props reach the component. Capture the returned id and pass an explicit onclose callback to dismiss it. Custom content must render its own close/action controls; options still control the manager’s auto-dismiss timer.</ProseText>
+				<ProseText>Use <DocInlineCode>showCustom()</DocInlineCode> to render any Svelte component as a toast. Only your supplied props reach the component. Capture the returned id and pass an explicit onclose callback to dismiss it. Custom content must render its own close/action controls; options still control the manager’s auto-dismiss timer.</ProseText>
 				<DocShowExample component={Example7} code={[
 					{ name: 'Example7.svelte', code: example7 },
 					{ name: 'CustomToast.svelte', code: customToastCode },

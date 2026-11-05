@@ -24,7 +24,7 @@
 <div class="space-y-3">
     <div class="h-64"><ChartBase {config} bind:chart /></div>
     <Button compact label="Download PNG" onclick={() => {
-        // 0.0.34's ChartBase declaration shadows the Chart.js instance type.
+        // The ChartBase declaration shadows the Chart.js instance type.
         if (!chart || !('toBase64Image' in chart) || typeof chart.toBase64Image !== 'function') return;
         const link = document.createElement('a');
         link.href = chart.toBase64Image();

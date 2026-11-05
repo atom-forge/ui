@@ -45,7 +45,7 @@
 		<ProseTitle>MeterGroup</ProseTitle>
 		<ProseText>A segmented horizontal bar that visualises proportions within a total. Each segment represents a category, sized by its value. Pair it with <DocInlineCode>MeterGroupLegend</DocInlineCode> to show labels and values.</ProseText>
 
-		<ProseText>Use non-negative segment values and a positive total. In 0.0.34, max below the sum does not clamp segment proportions; it only removes the remainder. Size is captured at initialization (small wins over compact); legend orientation is also captured. Choose these before mounting. MeterGroup forwards extra HTML attributes, while MeterGroupLegend does not. Built-in click handlers are pointer-only; provide real buttons in custom legend content for keyboard selection.</ProseText>
+		<ProseText>Use non-negative segment values and a positive total. Max below the sum does not clamp segment proportions; it only removes the remainder. Size is captured at initialization (small wins over compact); legend orientation is also captured. Choose these before mounting. MeterGroup forwards extra HTML attributes, while MeterGroupLegend does not. Built-in click handlers are pointer-only; provide real buttons in custom legend content for keyboard selection.</ProseText>
 				<DocApiBlock title="API">
 			<DocApiTable {props} />
 		</DocApiBlock>

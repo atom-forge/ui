@@ -9,7 +9,7 @@
 	import example3 from './examples/Example3.svelte?raw';
 
 	const props: PropDef[] = [
-        { group: 'ChartSegment', name: 'label', type: 'string', description: 'Accepted in the data shape but not read by the 0.0.34 tooltip. Supply series names; otherwise it displays Value 1, Value 2, etc.' },
+        { group: 'ChartSegment', name: 'label', type: 'string', description: 'Accepted in the data shape but not read by the tooltip. Supply series names; otherwise it displays Value 1, Value 2, etc.' },
         { group: 'BarChart', name: 'class', type: 'string', description: 'Classes on the outer flex container. Additional HTML attributes are forwarded.' },
 		{ group: 'BarChart', name: 'data', type: 'ChartData[]', description: 'Array of data points. Each item has a <code>label</code> and either a simple <code>value</code> or a <code>values</code> array for multi-series.' },
 		{ group: 'BarChart', name: 'series', type: 'Series[]', description: 'Series definitions. Each entry provides a <code>name</code> (shown in the tooltip) and a <code>color</code> (CSS color string).' },

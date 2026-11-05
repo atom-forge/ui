@@ -13,7 +13,7 @@
 
     const props: PropDef[] = [
         { group: 'CommandPalette props', name: 'option', type: 'Snippet<[CommandItem, boolean]>', description: 'Custom result renderer receiving the command and whether it is highlighted.' },
-		{ group: 'CommandPalette props', name: 'items',       type: 'CommandItem[] | ((query: string) => Promise<CommandItem[]>)',                             default: '[]',               description: 'Static commands filtered locally, or an async query function. No search prop and no built-in debounce in 0.0.34.' },
+		{ group: 'CommandPalette props', name: 'items',       type: 'CommandItem[] | ((query: string) => Promise<CommandItem[]>)',                             default: '[]',               description: 'Static commands filtered locally, or an async query function. No search prop and no built-in debounce.' },
 		{ group: 'CommandPalette props', name: 'placeholder', type: 'string',                                    default: "'Search commands...'", description: 'Placeholder text for the search input.' },
 		{ group: 'CommandPalette props', name: 'close',       type: '() => void',                                default: '() => {}',         description: 'Optional callback to close the palette. Pass explicitly when opened via modalManager.open(); it is not injected.' },
 

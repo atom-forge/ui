@@ -45,7 +45,7 @@
         { group: "SortableList", name: "draggingClass", type: "string", default: "'opacity-35'", description: "Classes on the non-shadow item wrapper matching the active drag ID." },
         { group: "SortableList", name: "dropIndicatorClass", type: "string", description: "Classes on the shadow item wrapper." },
         { group: "SortableList", name: "flipDurationMs", type: "number", default: "160", description: "Shared duration for the engine and Svelte flip animation, in milliseconds." },
-        { group: "SortableList", name: "preservePreviewSize", type: "boolean", default: "true", description: "Accepted but unused in the 0.0.34 implementation." },
+        { group: "SortableList", name: "preservePreviewSize", type: "boolean", default: "true", description: "Accepted but unused by the current implementation." },
         { group: "SortableList", name: "onchange", type: "(items: T[], detail) => void", description: "Final-order callback. Detail contains items, previousItems, item, itemId, fromIndex, toIndex, trigger and source. Missing source/target indices are -1. The detail type is not re-exported from the public package entry point." },
         { group: "SortableGroup", name: "children", type: "Snippet", description: "Lists sharing the group’s drag zone type." },
 
@@ -83,7 +83,7 @@
             name: "previewOffset",
             type: "(args: { container: HTMLElement }) => { x: number; y: number }",
             description:
-                "Accepted for compatibility but not used by SortableList in 0.0.34. Native preview offset helpers belong to the separate dnd action API.",
+                "Accepted for compatibility but not used by SortableList. Native preview offset helpers belong to the separate dnd action API.",
         },
         {
             group: "SortableList",
@@ -124,7 +124,7 @@
             name: "rules",
             type: "GroupRules",
             description:
-                "Legacy target-list rules ({ [listId]: { accepts: string[] | boolean } }). Not enforced by SortableList in 0.0.34.",
+                "Legacy target-list rules ({ [listId]: { accepts: string[] | boolean } }). Not enforced by SortableList.",
         },
         {
             group: "SortableGroup",
@@ -132,7 +132,7 @@
             type: "string",
             default: "'type'",
             description:
-                "Legacy item type field. Not evaluated by SortableList in 0.0.34.",
+                "Legacy item type field. Not evaluated by SortableList.",
         },
         {
             group: "SortableGroup",
@@ -159,7 +159,7 @@
             runs only when the finalized ID order differs from its previous snapshot. Pointer dragging finalizes on drop; keyboard arrow moves finalize immediately, so keyboard persistence may run more than once during a grab.
         </ProseText>
         <ProseText>
-            Version 0.0.34 limitation: <DocInlineCode>SortableGroup</DocInlineCode> shares a zone type,
+            Current limitation: <DocInlineCode>SortableGroup</DocInlineCode> shares a zone type,
             but its <DocInlineCode>rules</DocInlineCode> and <DocInlineCode>typeField</DocInlineCode>
             are not consumed by the current <DocInlineCode>SortableList</DocInlineCode> implementation.
             Do not rely on them to reject cross-list moves.
@@ -193,7 +193,7 @@
 		            > instances, enabling items to be moved between columns. The <DocInlineCode
 		                >items</DocInlineCode
                     > binding on each list stores its final order. This board accepts both tasks and bugs
-                    in every column; group rules are not enforced in 0.0.34.
+                    in every column; group rules are not enforced.
 		        </ProseText>
 		        <DocShowExample component={KanbanExample} code={kanbanExample} />
 	</ProseParagraph>
@@ -288,7 +288,7 @@
     <ProseDivider />
     <ProseParagraph>
         <ProseTitle level={3}>Standalone indicators</ProseTitle>
-        <ProseText>DropSlot is a visual insertion slot driven by atIndex and insertIndex. DropIndicator registers a native drop target with <DocInlineCode>{'{ type: "list-indicator", listId }'}</DocInlineCode>; it delegates events to your callbacks. Neither is used internally by SortableList in 0.0.34, and neither moves data by itself.</ProseText>
+        <ProseText>DropSlot is a visual insertion slot driven by atIndex and insertIndex. DropIndicator registers a native drop target with <DocInlineCode>{'{ type: "list-indicator", listId }'}</DocInlineCode>; it delegates events to your callbacks. Neither is used internally by SortableList, and neither moves data by itself.</ProseText>
         <DocShowExample component={IndicatorsExample} code={indicatorsExample} />
     </ProseParagraph>
 </ProsePage>
