@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.0.39] - 2026-11-05
+
 ### Fixed
 
 - `Field` now connects its hint or error text to the bound control with `aria-describedby`, and sets `aria-invalid="true"` on it while an error is shown (not on button-like triggers such as `Select`, `MultiSelect` and the date/time pickers, where `aria-invalid` is not valid). An `aria-describedby` passed to `Input` is kept and extended. `field.useFieldControl()` exposes the new `describedBy` and `invalid` values for custom controls.
