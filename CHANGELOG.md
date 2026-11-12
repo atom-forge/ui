@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-12
+
 ### Added
 - Hungarian translation of the documentation in `docs/hu/`, mirroring `docs/en/` file by file; shipped in the package.
 - `book/upgrading.md`, the migration chapter of the book, and a reading guide on the front page.
