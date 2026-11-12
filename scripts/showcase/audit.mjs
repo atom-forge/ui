@@ -9,7 +9,7 @@ import { createServer } from 'vite';
 // Run from any directory, after `bun run package`: node scripts/showcase/audit.mjs
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const dist = path.join(root, 'dist');
-const owned = ['src/routes/(site)/ui/data', 'src/routes/(site)/ui/overlays'];
+const owned = ['content', 'data', 'display', 'forms', 'general', 'layout', 'overlays', 'scheduling'].map(category => `src/routes/(site)/ui/${category}`);
 const pkg = JSON.parse(await readFile(path.join(dist, '../package.json'), 'utf8'));
 const AUDITED_VERSION = '0.0.39';
 if (pkg.version !== AUDITED_VERSION) console.warn(`WARNING: the API inventory was last audited against ${AUDITED_VERSION}; the packaged library is ${pkg.version}. Re-audit the API.`);
@@ -83,7 +83,53 @@ const coverage = {
     'overlays/toast': ['overlays/toast/Toast'],
     'overlays/tooltip': ['overlays/tooltip/Tooltip'],
     'overlays/zen': ['overlays/zen/Zen'],
+    'content/doc': ['content/doc/DocApiBlock', 'content/doc/DocApiTable', 'content/doc/DocInlineCode', 'content/doc/DocShowCode', 'content/doc/DocShowExample'],
+    'content/prose': ['content/prose/ProsePage', 'content/prose/ProseParagraph', 'content/prose/ProseDivider', 'content/prose/ProseBlockQuote', 'content/prose/ProseCallout', 'content/prose/ProseLinkCard', 'content/prose/ProseMarkdown', 'content/prose/ProseText', 'content/prose/ProseTitle', 'content/prose/ProseYoutubeEmbed'],
+    'display/avatar': ['display/avatar/Avatar'],
+    'display/avatar-group': ['display/avatar-group/AvatarGroup'],
+    'display/card': ['display/card/Card'],
+    'display/carousel': ['display/carousel/Carousel', 'display/carousel/CarouselIndicator'],
+    'display/empty-state': ['display/empty-state/EmptyState'],
+    'display/flip-card': ['display/flip-card/FlipCard'],
+    'display/skeleton': ['display/skeleton/Skeleton'],
+    'forms/checkbox': ['forms/checkbox/Checkbox', 'forms/checkbox/CheckboxGroupManager', 'forms/checkbox/CheckboxView'],
+    'forms/code-input': ['forms/code-input/CodeInput'],
+    'forms/color': ['forms/color/ColorPicker'],
+    'forms/date-picker': ['forms/date-picker/DatePicker'],
+    'forms/date-time-picker': ['forms/date-time-picker/DateTimePicker'],
+    'forms/field': ['forms/field/Field', 'forms/field/FieldGroup', 'forms/field/FieldSpan'],
+    'forms/input': ['forms/input/Input'],
+    'forms/multi-select': ['forms/multi-select/MultiSelect'],
+    'forms/native-select': ['forms/native-select/NativeSelect'],
+    'forms/picker-bodies': ['forms/date-picker/DatePickerBody', 'forms/time-picker/TimePickerBody', 'forms/date-time-picker/DateTimePickerBody'],
+    'forms/picker-popovers': ['forms/date-picker/DatePopover', 'forms/time-picker/TimePopover', 'forms/date-time-picker/DateTimePopover'],
+    'forms/progress-bar': ['forms/progress-bar/ProgressBar'],
+    'forms/radio': ['forms/radio/RadioGroup', 'forms/radio/RadioButtonView'],
+    'forms/select': ['forms/select/Select'],
+    'forms/slider': ['forms/slider/Slider', 'forms/slider/Range'],
+    'forms/switch': ['forms/switch/Switch'],
+    'forms/tag-editor': ['forms/tag-editor/TagEditor'],
+    'forms/textarea': ['forms/textarea/Textarea'],
+    'forms/time-picker': ['forms/time-picker/TimePicker'],
+    'general/badge': ['general/badge/Badge'],
+    'general/button': ['general/button/Button'],
+    'general/chip': ['general/chip/Chip'],
+    'general/icon': ['general/icon/Icon'],
+    'general/kbd': ['general/kbd/Kbd'],
+    'general/spinner': ['../helpers/Spinner'],
+    'layout/accordion': ['layout/accordion/Accordion', 'layout/accordion/AccordionItem', 'layout/accordion/Collapsible'],
+    'layout/breadcrumb': ['layout/breadcrumb/Breadcrumb'],
+    'layout/button-bar': ['layout/button-bar/ButtonBar', 'layout/button-bar/ButtonBarItem'],
+    'layout/pagination': ['layout/pagination/Pagination'],
+    'layout/pagination-slider': ['layout/pagination-slider/PaginationSlider'],
+    'layout/splitter': ['layout/splitter/Splitter'],
+    'layout/stepper': ['layout/stepper/Stepper'],
+    'layout/tabs': ['layout/tabs/Tabs', 'layout/tabs/TabList', 'layout/tabs/Tab', 'layout/tabs/TabPanels', 'layout/tabs/TabPanel'],
+    'layout/tree': ['layout/tree/TreeView', 'layout/tree/TreeItem'],
+    'scheduling/calendar': ['scheduling/calendar/Calendar'],
+    'scheduling/organizer': ['scheduling/organizer/Organizer'],
 };
+const undocumented = [];
 for (const page of pages) {
     const route = page.replace('src/routes/(site)/ui/', '').replace('/+page.svelte', '');
     assert(Object.hasOwn(coverage, route), `Add new page to API coverage: ${route}`);
@@ -100,7 +146,7 @@ for (const page of pages) {
                     for (const element of node.name.elements) {
                         if (element.dotDotDotToken) continue;
                         const prop = (element.propertyName ?? element.name).getText(ast);
-                        assert(new RegExp(`\\b${prop}\\b`).test(documented), `${route}: undocumented public prop ${control}.${prop}`);
+                        if (!new RegExp(`\\b${prop}\\b`).test(documented)) undocumented.push(`${route}: ${control}.${prop}`);
                     }
                 }
                 ts.forEachChild(node, visit);
@@ -109,6 +155,7 @@ for (const page of pages) {
         }
     }
 }
+assert.equal(undocumented.length, 0, `Undocumented public props:\n${undocumented.join('\n')}`);
 console.log(`Compiled ${all.length} owned Svelte files for client and server; checked public imports, ${rawImports} raw sources, ${literalSnippets} inline snippets and ${pages.length} page API inventories.`);
 
 // Middleware mode: no listening HTTP server and no browser/visual claim.

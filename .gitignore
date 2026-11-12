@@ -25,3 +25,6 @@ vite.config.ts.timestamp-*
 
 # npm pack output
 *.tgz
+
+# Local temp and tool caches
+/var

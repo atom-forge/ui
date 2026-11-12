@@ -12,7 +12,20 @@
 	import Example5 from './examples/Example5.svelte';
 	import example5Raw from './examples/Example5.svelte?raw';
 
+	const layoutProps: PropDef[] = [
+		{ group: 'ProsePage' },
+		{ name: 'children', type: 'Snippet', description: 'Page content, stacked with wide vertical gaps.' },
+		{ name: 'class', type: 'string', description: 'Extra CSS classes on the wrapper div.' },
+		{ group: 'ProseParagraph' },
+		{ name: 'children', type: 'Snippet', description: 'Section content, stacked with medium vertical gaps.' },
+		{ name: 'class', type: 'string', description: 'Extra CSS classes on the wrapper div.' },
+		{ group: 'ProseText' },
+		{ name: 'children', type: 'Snippet', description: 'Paragraph content; inline elements such as DocInlineCode are allowed.' },
+		{ name: 'class', type: 'string', description: 'Extra CSS classes on the paragraph. Other attributes are forwarded to it.' },
+	];
+
 	const titleProps: PropDef[] = [
+		{ group: 'Props', name: 'children', type: 'Snippet', description: 'Heading text.' },
 		{ group: 'Props', name: 'level',    type: '1 | 2 | 3',  default: '1',       description: 'Heading level. 1 → h1 (3xl bold), 2 → h2 (xl semibold), 3 → h3 (base semibold).' },
 		{ group: 'Props', name: 'subtitle', type: 'string',                          description: 'Optional muted subtitle rendered below the heading.' },
 		{ group: 'Props', name: 'class',    type: 'string',                          description: 'Extra CSS classes forwarded to the wrapper div.' },
@@ -45,6 +58,7 @@
 
 	const markdownProps: PropDef[] = [
 		{ group: 'Props', name: 'content', type: 'string', description: 'Markdown source string. Parsed via <code>marked</code> and rendered with Tailwind Typography prose styles.' },
+		{ group: 'Props', name: 'children', type: 'Snippet', description: 'Already-rendered content to style with the same prose classes instead of parsing <code>content</code>. Takes precedence over <code>content</code>.' },
 	];
 </script>
 
@@ -57,6 +71,18 @@
 		</ProseText>
 
 		<div class="mt-8 space-y-12">
+
+			<div>
+				<ProseTitle level={2}>ProsePage, ProseParagraph, ProseText</ProseTitle>
+				<ProseText>
+					Layout wrappers: <DocInlineCode>ProsePage</DocInlineCode> stacks the sections of a page,
+					<DocInlineCode>ProseParagraph</DocInlineCode> stacks the parts of a section, and
+					<DocInlineCode>ProseText</DocInlineCode> renders a muted body paragraph.
+				</ProseText>
+				<DocApiBlock title="API">
+					<DocApiTable props={layoutProps} />
+				</DocApiBlock>
+			</div>
 
 			<div>
 				<ProseTitle level={2}>ProseTitle</ProseTitle>

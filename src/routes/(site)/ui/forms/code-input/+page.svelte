@@ -24,6 +24,7 @@
 		{ group: 'Props', name: 'compact',      type: 'boolean',                                                         default: '—',      description: 'Compact size (<code>w-8 h-10</code>). Mutually exclusive with <code>small</code>.' },
 		{ group: 'Props', name: 'small',        type: 'boolean',                                                         default: '—',      description: 'Small size (<code>w-6 h-8</code>). Mutually exclusive with <code>compact</code>.' },
 		{ group: 'Props', name: 'onComplete',   type: '(value: string) => void',                                         default: '—',      description: 'Called when every editable box is filled. Receives only the editable portion.' },
+		{ group: 'Props', name: 'class',        type: 'string',                                                          default: '—',      description: 'Extra classes on the outer wrapper. Other attributes are forwarded to it.' },
 	];
 </script>
 

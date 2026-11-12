@@ -28,6 +28,7 @@
 		{ name: 'icon', type: 'IconDefinition', description: 'Icon displayed inside the input on the left.' },
 		{ name: 'prefix', type: 'string | Snippet', description: 'Content shown before the input field, separated by a border.' },
 		{ name: 'suffix', type: 'string | Snippet', description: 'Content shown after the input field, separated by a border.' },
+		{ name: 'oninput', type: '(event: Event) => void', description: 'Called on every input, after <code>integer</code>/<code>float</code> filtering has updated the value.' },
 				{ name: 'class', type: 'string', description: 'Extra classes on the outer wrapper. Additional HTML attributes such as id and name are forwarded to the native input.' },
 				{ name: 'focus()', type: '() => void', description: 'Exported method, available via bind:this, to focus the native input.' },
 	];

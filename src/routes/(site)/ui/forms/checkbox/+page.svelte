@@ -39,6 +39,8 @@
 		{ name: 'compact', type: 'boolean', description: 'Applies a medium compact size (16px box).' },
 		{ name: 'small', type: 'boolean', description: 'Applies the smallest size (14px box).' },
 		{ name: 'onclick', type: '(event: MouseEvent) => void', description: 'Click handler — you must manage state changes yourself.' },
+		{ group: 'CheckboxGroupManager' },
+		{ name: 'children', type: 'Snippet', description: 'Content that shares one checkbox group context; the checkboxes inside use <code>group</code> to join a group.' },
 	];
 </script>
 
