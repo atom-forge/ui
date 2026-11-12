@@ -20,9 +20,10 @@ Tervezett munka, fontossági sorrendben. A részletek és az ötletek a `notes/`
 5. [x] **Fejlesztői szabályok összefésülése:** az `AGENTS/ui-lib-dev.md` szó szerint ismétli a svelte-helpers részt a `svelte-standards.md`-ből, és ellentmond neki (`src/lib/helpers/` vagy `@atom-forge/svelte-helpers`?); az `AGENTS/contribution/` részben fedi mindkettőt.
 6. [x] **Showcase-leltárak:** a `check:showcase` API-leltárai a 0.0.34-hez vannak átnézve; az aktuális verzióhoz frissíteni. — Átnézve a 0.0.39-hez (`AUDITED_VERSION`): a propok változatlanok, a `closeTopmostIfClosable()` visszatérési típusa javítva.
 7. [x] ~~**Block Editor 2**~~ — elvetve: a Brickee váltja ki, a kód kivezetve (lásd 13.).
-8. [x] **Takarítás**
+8. [ ] **Takarítás**
    - [x] A régi `atom-forge-ui-0.0.30.tgz` a repó gyökerében.
    - [x] A `@atlaskit/pragmatic-drag-and-drop-hitbox` függőség sehol nincs használva (a kivezetés előtt sem volt).
+   - [ ] A `var/tmp/` alatti ideiglenes fájlok (`test.ui-check.log`, `.hm`, `node-gyp`) a gitben vannak; törölni, és a `var/`-t felvenni a `.gitignore`-ba.
 9. [x] **Release `@atom-forge/ship`-pel** (a saját `scripts/pub.ts` helyett)
    - [x] Release utáni lépés a Shipben: `ship.after` parancslista (`SHIP_VERSION`, `SHIP_TAG`), tesztekkel és dokumentációval.
    - [x] Ship-release az `after` funkcióval: 0.3.0 kint van npm-en.
