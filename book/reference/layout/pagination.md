@@ -3,4 +3,4 @@ type: content
 title: "Pagination"
 ---
 
-![[../../../docs/controls/layout/pagination]]
+![[../../../docs/en/controls/layout/pagination]]

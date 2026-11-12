@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {ChildrenProp} from "../../../index";
+	import type {ChildrenProp} from '@atom-forge/svelte-helpers';
 	import {Icon, type IconDefinition} from "../../general/icon";
 	import type {TabsVariant} from './Tabs.svelte';
 	import {getContext} from 'svelte';

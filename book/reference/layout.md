@@ -15,4 +15,4 @@ children:
 
 # Layout
 
-Control reference for the Layout category. Each page is embedded from `docs/controls/layout/`.
+Control reference for the Layout category. Each page is embedded from `docs/en/controls/layout/`.

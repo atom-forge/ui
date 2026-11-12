@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {ClassProp} from "../../../index";
+	import type {ClassProp} from '@atom-forge/svelte-helpers';
 	import type {SliderSize} from './theme';
 	import {getPercentage, getValueFromClientX} from './utils';
 	import {untrack} from 'svelte';

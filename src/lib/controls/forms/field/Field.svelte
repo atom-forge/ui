@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {twMerge} from 'tailwind-merge';
-	import type {ClassProp, ChildrenProp} from '../../../helpers/types';
+	import type {ClassProp, ChildrenProp} from '@atom-forge/svelte-helpers';
 	import type {Snippet} from 'svelte';
 	import {setFieldContext} from './field-context';
 

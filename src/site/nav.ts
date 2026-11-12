@@ -167,20 +167,7 @@ export const SIDEBAR_STRUCTURE: MenuItem[] = [
 		children: [
 			{label: 'Doc Components',   icon: Binary,    href: "/ui/content/doc"},
 			{label: 'Prose Components', icon: Type,      href: "/ui/content/prose"},
-						{label: 'Table Preview', icon: Table2, href: '/ui/content/table-preview'},
-						{label: 'Block View', icon: LayoutTemplate, href: '/ui/content/block-view'},
 						{label: 'Advanced Command Palette', icon: Search, href: '/ui/overlays/command-palette'},
-		],
-	},
-	{
-		label: "Editors",
-		icon: FilePen,
-		children: [
-			{label: 'Block Editor',     icon: PanelLeft, href: "/ui/editors/block-editor"},
-			{label: 'Table Editor',     icon: Table2,    href: "/ui/editors/table-editor"},
-			{label: 'Markdown Editor',  icon: FileText,  href: "/ui/editors/markdown-editor"},
-			{label: 'Diagram Editor',   icon: Shapes,    href: "/ui/editors/diagram-editor"},
-			{label: 'Img Editor',       icon: ImageIcon, href: "/ui/editors/img-editor"},
 		],
 	},
 	{
@@ -189,8 +176,6 @@ export const SIDEBAR_STRUCTURE: MenuItem[] = [
 		children: [
 			{label: 'Calendar',         icon: CalendarRange,  href: "/ui/scheduling/calendar"},
 			{label: 'Organizer',        icon: LayoutTemplate, href: "/ui/scheduling/organizer"},
-			{label: 'Gantt Chart',      icon: CalendarRange,  href: "/ui/scheduling/gantt"},
-			{label: 'Resource Manager', icon: Users,          href: "/ui/scheduling/resource-manager"},
 		],
 	},
 
@@ -210,19 +195,10 @@ export const ALL_GEMS: NavItem[] = [
 	...NAV_GROUPS.flatMap(g => g.items),
 
 		{value: '/ui/data/charts/base', label: 'Charts Base & Configuration', group: 'Data · Charts', icon: Settings2},
-		{value: '/ui/content/table-preview', label: 'Table Preview', group: 'Advanced · Content', icon: Table2},
-		{value: '/ui/content/block-view', label: 'Block View', group: 'Advanced · Content', icon: LayoutTemplate},
 		{value: '/ui/overlays/command-palette', label: 'Advanced Command Palette', group: 'Advanced · Content', icon: Search},
 		// Add Advanced components to searchable items too
 	{value: '/ui/content/doc',    label: 'Doc Components',   group: 'Advanced · Content',    icon: Binary},
 	{value: '/ui/content/prose',  label: 'Prose Components', group: 'Advanced · Content',    icon: Type},
-	{value: '/ui/editors/block-editor',   icon: PanelLeft,       label: 'Block Editor',     group: 'Advanced · Editors'},
-	{value: '/ui/editors/table-editor',   icon: Table2,          label: 'Table Editor',     group: 'Advanced · Editors'},
-	{value: '/ui/editors/markdown-editor',icon: FileText,        label: 'Markdown Editor',  group: 'Advanced · Editors'},
-	{value: '/ui/editors/diagram-editor', icon: Shapes,          label: 'Diagram Editor',   group: 'Advanced · Editors'},
-	{value: '/ui/editors/img-editor',     icon: ImageIcon,       label: 'Img Editor',       group: 'Advanced · Editors'},
 	{value: '/ui/scheduling/calendar',       icon: CalendarRange,   label: 'Calendar',         group: 'Advanced · Scheduling'},
 	{value: '/ui/scheduling/organizer',      icon: LayoutTemplate,  label: 'Organizer',        group: 'Advanced · Scheduling'},
-	{value: '/ui/scheduling/gantt',          icon: CalendarRange,   label: 'Gantt Chart',      group: 'Advanced · Scheduling'},
-	{value: '/ui/scheduling/resource-manager',icon: Users,          label: 'Resource Manager',group: 'Advanced · Scheduling'},
 ];

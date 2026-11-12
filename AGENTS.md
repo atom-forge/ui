@@ -1,25 +1,24 @@
 # Agent Instructions
 
-## Project
-
 UI (`@atom-forge/ui`) is a Svelte 5 component library for building admin interfaces and dashboards, styled with Tailwind CSS. The repository also hosts the live component showcase published at https://ui.atom-forge.eu.
 
 How to use the library — choosing components, usage contracts, and reading routes into the documentation — is described in [`README-AI.md`](README-AI.md). Read it before changing a component's behavior or its documentation.
 
-- Source: `src/lib/` — `controls/<category>/<component>/` (one folder per component with an `index.ts`), `core/` (`Root`, theme manager, `theme.css`), `helpers/`, `dev/` (staging area for new components, never exported), `index.ts` and `ui.ts` (root exports and the `UI` namespace). `dist/` is built with `svelte-package`.
-- `src/routes/(site)` is the showcase site, deployed to https://ui.atom-forge.eu, and `/dev/*` holds development pages; neither is part of the npm package. `work/` holds plans, todos, and specs; it is not documentation.
-- Use `bun`, not `npm` or `pnpm`. There is no test suite yet.
-- Typecheck: `bun run check` · Package: `bun run package` (`bun run prepack` also runs `publint`) · Showcase check: `bun run check:showcase` · Showcase deploy: `bun run deploy`
-- Release: commit everything first, then `bun run pub <patch|minor|major>` — it pushes the tag, waits for npm, and deploys the showcase. A release is complete only when https://ui.atom-forge.eu shows it; if `pub` stops before the deploy, fix the cause and run `bun run deploy`. Verify npm: `bun run pub-check`. Never run `npm publish` or `bun run release` directly.
-- Documentation model: **reference-first**. The reference in `docs/` (`docs/controls/<category>/<component>.md` and `docs/guides/`) is the source of truth; the book (`book.md` in the repository root, chapters in `book/`) embeds it, and its reference chapter is generated with `bun run scripts/book-reference.ts`. The page template for components is `AGENTS/local/contribution/documentation.md`.
+Documentation model: **reference-first** (see `AGENTS/devrules.md` for the documentation layout).
 
 ## Rules
 
 Read the rule file that applies before you start, not only at the end:
 
-- **Changing code, tests, or configuration** → read `AGENTS/devrules.md` first.
-- **Creating or modifying components** → also read `AGENTS/local/ui-lib-dev.md` and `AGENTS/local/svelte-standards.md`, and update the component's showcase page in the same task; `AGENTS/local/contribution/` holds the detailed workflow, coding, styling, helper, and documentation standards (start at its `index.md`).
+- **Changing code, tests, or configuration** → read `AGENTS/devrules.md` first: this package's development rules, source layout, and commands.
 - **Changing the book, `docs/`, `README.md`, or `README-AI.md`** — including any change to the public API or its behavior, which always needs documentation → read `AGENTS/documentation.md` first.
 - **Every task** ends with a `CHANGELOG.md` entry → follow `AGENTS/changelog.md`.
 
-The three files directly in `AGENTS/` are shared by every AtomForge package and are identical in all of their repositories. Do not put package-specific rules in them — those belong in this file or, when they need more room, in `AGENTS/local/`. Change a shared file only when the change is meant for every package, and then apply the same change in all AtomForge package repositories.
+`AGENTS/changelog.md` and `AGENTS/documentation.md` are shared by every AtomForge package and are identical in all of their repositories: change them only when the change is meant for every package, and then in all AtomForge package repositories at once. Everything else in `AGENTS/` — `devrules.md` and the files it refers to — belongs to this package alone.
+
+## Todos and notes
+
+- `TODO.md` lists planned work, most important first, as a numbered checkbox list (`1. [ ]`), one or two lines per item. Subtasks are unnumbered checkbox items (`- [ ]`) indented under their task; renumber the tasks when one is added or removed. Longer context lives in `notes/`, and the item links to it.
+- `notes/` holds ideas, plans, specs, and research in any form and language.
+- Neither is an instruction: work on an item only when asked. Do not remove finished items: check them off (`[x]`) as you go, each subtask as soon as it is done and the task when its last subtask is, and update or delete the notes they made obsolete. When you notice work outside the current task, add it to `TODO.md` and mention it in your report.
+- Neither is shipped in the npm package.

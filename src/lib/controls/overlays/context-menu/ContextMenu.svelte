@@ -1,5 +1,8 @@
 <script lang="ts">
-	import {Button, Card, defineIcon, getPopupManager, Icon, PopupContainer} from "../../../index"
+	import {Button} from "../../general/button";
+	import {Card} from "../../display/card";
+	import {defineIcon, Icon} from "../../general/icon";
+	import {getPopupManager, PopupContainer} from "../popup";
 	import {twMerge} from "tailwind-merge";
 	import {ChevronRight} from 'lucide-svelte';
 	import ContextMenu from './ContextMenu.svelte';

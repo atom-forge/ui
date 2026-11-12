@@ -3,4 +3,4 @@ type: content
 title: "Checkbox"
 ---
 
-![[../../../docs/controls/forms/checkbox]]
+![[../../../docs/en/controls/forms/checkbox]]

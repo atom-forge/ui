@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {AnyProp, ChildrenProp, ClassProp} from "../../../index";
+	import type {AnyProp, ChildrenProp, ClassProp} from '@atom-forge/svelte-helpers';
 	import {twMerge} from 'tailwind-merge';
 
 	type Elevate = 0 | 1 | 2 | 3 | 4 | 5 | 6 | "0" | "1" | "2" | "3" | "4" | "5" | "6";

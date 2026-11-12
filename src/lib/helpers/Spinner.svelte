@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {AnyProp, ClassProp} from "./types";
+	import type {AnyProp, ClassProp} from '@atom-forge/svelte-helpers';
 
 	let {
 		class: classes = '',

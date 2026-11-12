@@ -3,4 +3,4 @@ type: content
 title: "Tag Editor"
 ---
 
-![[../../../docs/controls/forms/tag-editor]]
+![[../../../docs/en/controls/forms/tag-editor]]

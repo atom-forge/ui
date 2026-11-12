@@ -1,7 +1,7 @@
 <script lang="ts">
 	import {useFieldControl} from '../field/field-context';
 	import {twMerge} from 'tailwind-merge';
-	import type {ClassProp, XOR} from '../../../helpers/types';
+	import type {ClassProp, XOR} from '@atom-forge/svelte-helpers';
 	import type {Snippet} from 'svelte';
 
 	// ── Public API (bind:this) ────────────────────────────────────────────────

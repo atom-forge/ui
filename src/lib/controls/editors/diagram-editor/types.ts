@@ -1,7 +1,0 @@
-export type DiagramData = {
-	xml:          string;
-	svg:          string;
-	scheme:       'light' | 'dark';
-	caption?:     string;
-	description?: string;
-};

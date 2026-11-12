@@ -1,5 +1,5 @@
 <script lang="ts" generics="T extends Record<string, any>">
-	import type {ClassProp} from '../../helpers/types';
+	import type {ClassProp} from '@atom-forge/svelte-helpers';
 	import {twMerge} from 'tailwind-merge';
 	import type {GridTableColumnDef, GridTableDividers, GridTableSort, GridTableStylingFn} from './types';
 	import {getPopupManager} from '../../controls/overlays/popup';

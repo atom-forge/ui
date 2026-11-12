@@ -1,8 +1,9 @@
 <script lang="ts">
-	import type {ChildrenProp, ClassProp} from "../../../index";
+	import type {ChildrenProp, ClassProp} from '@atom-forge/svelte-helpers';
 	import {fade} from 'svelte/transition';
 	import {twMerge} from 'tailwind-merge';
 	import type {Snippet} from "svelte";
+	import {portal} from '../../../helpers/portal';
 
 	let {
 		label,
@@ -52,28 +53,6 @@
 
 	function handleMouseMove(event: MouseEvent) {
 		if (!fixed) mousePos = {x: event.clientX, y: event.clientY};
-	}
-
-	/**
-	 * A portal action that moves the node to the document.body
-	 */
-	function portal(node: HTMLElement, target: string = 'body') {
-		let targetEl: HTMLElement | null;
-
-		targetEl = document.querySelector(target);
-		if (!targetEl) {
-			targetEl = document.body;
-		}
-
-		targetEl.appendChild(node);
-
-		return {
-			destroy() {
-				if (targetEl && targetEl.contains(node)) {
-					targetEl.removeChild(node);
-				}
-			}
-		};
 	}
 
 	$effect(() => {
@@ -159,7 +138,7 @@
 
 {#if show && (label || content)}
 	<div
-		use:portal={"#atom-forge-portal-target"}
+		use:portal
 		class={twMerge(
 			"fixed z-10000 px-2 py-1 text-xs rounded-surface shadow-lg",
 			inverted

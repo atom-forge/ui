@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {AnyProp, ChildrenProp} from "../../../index";
+	import type {AnyProp, ChildrenProp} from '@atom-forge/svelte-helpers';
 	import {getContext} from 'svelte';
 
 	let {

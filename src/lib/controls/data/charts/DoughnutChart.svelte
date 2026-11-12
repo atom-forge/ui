@@ -3,7 +3,7 @@
 	import { getChartTheme, seriesColor } from './theme.js';
 	import type { ChartConfiguration, ChartOptions } from 'chart.js';
 	import type { Chart as ChartJS } from 'chart.js';
-	import type { ClassProp } from '../../../helpers/types';
+	import type { ClassProp } from '@atom-forge/svelte-helpers';
 
 	let {
 		labels,

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {ClassProp, XOR} from "../../../helpers/types";
+	import type {ClassProp, XOR} from '@atom-forge/svelte-helpers';
 	import {twMerge} from "tailwind-merge";
 	import Avatar from "../avatar/Avatar.svelte";
 

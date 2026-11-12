@@ -41,8 +41,8 @@ class DrawerManagerFacade {
 		this.manager.resolve('drawer', result);
 	}
 
-	closeTopmostIfClosable(result?: any) {
-		this.manager.closeTopmostIfClosable(result);
+	closeTopmostIfClosable(result?: any): boolean {
+		return this.manager.closeTopmostIfClosable(result);
 	}
 
 	isTopmost(drawer: DrawerState | undefined) {

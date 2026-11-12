@@ -3,4 +3,4 @@ type: content
 title: "Progress Ring"
 ---
 
-![[../../../docs/controls/data/progress-ring]]
+![[../../../docs/en/controls/data/progress-ring]]

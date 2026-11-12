@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {useFieldControl} from '../field/field-context';
-	import type {ClassProp, XOR} from "../../../index";
+	import type {ClassProp, XOR} from '@atom-forge/svelte-helpers';
 	import {untrack} from 'svelte';
 	import {Icon, type IconDefinition} from "../../general/icon";
 	import {twMerge} from "tailwind-merge";

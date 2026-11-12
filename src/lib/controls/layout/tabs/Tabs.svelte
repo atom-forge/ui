@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {ChildrenProp} from "../../../index";
+	import type {ChildrenProp} from '@atom-forge/svelte-helpers';
 	import {setContext, untrack} from 'svelte';
 
 	export type TabsVariant = 'line' | 'button';

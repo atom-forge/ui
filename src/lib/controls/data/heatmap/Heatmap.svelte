@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { twMerge } from 'tailwind-merge';
-	import type { ClassProp } from '../../../helpers/types';
+	import type { ClassProp } from '@atom-forge/svelte-helpers';
 
 	export type HeatmapData = {
 		xLabels: string[];

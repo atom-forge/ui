@@ -31,7 +31,7 @@ Changes always flow in one direction:
 
 ## Reference-first flow
 
-1. `docs/en/` — the reference and the guides, written first. Each item has its own page; the root `AGENTS.md` describes the layout and the page template. A change to an item's behavior or API updates its page in the same task.
+1. `docs/en/` — the reference and the guides, written first. Each item has its own page; the package's `AGENTS/devrules.md` describes the layout and the page template. A change to an item's behavior or API updates its page in the same task.
 2. `docs/hu/` — the Hungarian translation of `docs/en/`, mirrored file by file.
 3. The book — mental models, choosing between items, recipes, and pitfalls. It embeds the relevant sections of `docs/en/` with `![[...]]` instead of duplicating them, and states that the reference wins where the two disagree. Because embedded files must lie inside the book, the book's root is the repository root: the front page is `book.md` there, the chapters are in `book/`. A generated reference chapter is regenerated with the package's script, never edited by hand.
 4. `README-AI.md` — a navigation guide rather than a full reference: the essential rules and usage contracts, task-based reading routes into `docs/en/`, and how to find the documentation in the installed package.

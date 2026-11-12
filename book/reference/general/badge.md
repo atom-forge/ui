@@ -3,4 +3,4 @@ type: content
 title: "Badge"
 ---
 
-![[../../../docs/controls/general/badge]]
+![[../../../docs/en/controls/general/badge]]

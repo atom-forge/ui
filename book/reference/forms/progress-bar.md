@@ -3,4 +3,4 @@ type: content
 title: "ProgressBar"
 ---
 
-![[../../../docs/controls/forms/progress-bar]]
+![[../../../docs/en/controls/forms/progress-bar]]

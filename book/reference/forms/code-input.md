@@ -3,4 +3,4 @@ type: content
 title: "Code Input"
 ---
 
-![[../../../docs/controls/forms/code-input]]
+![[../../../docs/en/controls/forms/code-input]]

@@ -29,7 +29,7 @@
 	}
 </script>
 
-<svelte:window onkeydown={e => {
+<svelte:document onkeydowncapture={e => {
 	if (e.key === 'ArrowDown') { e.preventDefault(); popupEl?.moveDown(); }
 	else if (e.key === 'ArrowUp') { e.preventDefault(); popupEl?.moveUp(); }
 	else if (e.key === 'Enter') {
@@ -41,7 +41,7 @@
 			sharedState.query = '';
 		}
 	}
-	else if (e.key === 'Escape') { popupManager.close(); }
+	else if (e.key === 'Escape') { e.preventDefault(); popupManager.close(); }
 }}/>
 
 <SelectPopup

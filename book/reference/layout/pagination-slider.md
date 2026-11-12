@@ -3,4 +3,4 @@ type: content
 title: "Pagination Slider"
 ---
 
-![[../../../docs/controls/layout/pagination-slider]]
+![[../../../docs/en/controls/layout/pagination-slider]]

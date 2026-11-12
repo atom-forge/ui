@@ -27,7 +27,7 @@
 <ProsePage>
 	<ProseParagraph>
 		<ProseTitle>Tooltip</ProseTitle>
-		<ProseText>Wraps any element and shows a floating label on hover after a short delay. The tooltip follows the cursor and is portalled to <DocInlineCode>#atom-forge-portal-target</DocInlineCode> to avoid clipping.</ProseText>
+		<ProseText>Wraps any element and shows a floating label on hover after a short delay. The tooltip follows the cursor and is moved with the exported <DocInlineCode>portal</DocInlineCode> action into the floating layer of Root, so it is not clipped and stays above modals and drawers.</ProseText>
 
 		<ProseText>Root supplies the portal target; if it is absent, Tooltip falls back to document.body. This implementation responds to mouse hover only, not keyboard focus, and does not add role=tooltip or aria-describedby automatically. Keep essential instructions visible and give icon-only triggers their own accessible names.</ProseText>
 				<DocApiBlock title="API">

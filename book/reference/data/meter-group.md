@@ -3,4 +3,4 @@ type: content
 title: "MeterGroup & MeterGroupLegend"
 ---
 
-![[../../../docs/controls/data/meter-group]]
+![[../../../docs/en/controls/data/meter-group]]

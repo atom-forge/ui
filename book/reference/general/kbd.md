@@ -3,4 +3,4 @@ type: content
 title: "Kbd"
 ---
 
-![[../../../docs/controls/general/kbd]]
+![[../../../docs/en/controls/general/kbd]]

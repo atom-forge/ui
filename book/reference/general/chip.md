@@ -3,4 +3,4 @@ type: content
 title: "Chip"
 ---
 
-![[../../../docs/controls/general/chip]]
+![[../../../docs/en/controls/general/chip]]

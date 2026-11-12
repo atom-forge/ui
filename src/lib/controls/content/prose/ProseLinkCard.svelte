@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ExternalLink, Link } from 'lucide-svelte';
-	import {as} from '../../../helpers/as';
+	import {as} from '@atom-forge/svelte-helpers';
 
 	let { url, title, description, favicon }: {
 		url: string;

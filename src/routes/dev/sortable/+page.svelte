@@ -3,13 +3,6 @@
 	import {SortableGroup, SortableList} from '../../../lib/controls/data/sortable';
 	import TagEditor from '../../../lib/controls/forms/tag-editor/TagEditor.svelte';
 	import MultiSelect from '../../../lib/controls/forms/multi-select/MultiSelect.svelte';
-	import {
-		BlockEditor,
-		BlockEditHeading,
-		BlockEditMarkdown,
-		BlockEditTextarea,
-		type Block,
-	} from '../../../lib/controls/editors/block-editor';
 	import type {SelectOption} from '../../../lib/controls/forms/select/Select.svelte';
 
 	type Task = {
@@ -72,29 +65,10 @@
 		{value: 'research', label: 'Research'},
 	];
 
-	let editorBlocks = $state<Block[]>([
-		{id: 'block-title', type: 'heading', data: {text: 'Sortable consumer audit', level: 2}},
-		{id: 'block-copy', type: 'text', data: {text: 'This block editor reorders through SortableList with a drag handle inside each block toolbar.'}},
-		{id: 'block-notes', type: 'markdown', data: {text: '- Drag the toolbar handle\n- Check that editor focus survives\n- Reorder without leaking placeholders'}},
-	]);
-
-	const blockComponents = {
-		heading: BlockEditHeading,
-		text: BlockEditTextarea,
-		markdown: BlockEditMarkdown,
-	};
-
-	const blockLabels = {
-		heading: 'Heading',
-		text: 'Text',
-		markdown: 'Markdown',
-	};
-
 	const taskOrder = $derived(tasks.map(item => item.title).join(' / '));
 	const chipOrder = $derived(chips.map(item => item.label).join(', '));
 	const tagOrder = $derived(tagValue.join(', '));
 	const multiOrder = $derived(multiValue.join(', '));
-	const blockOrder = $derived(editorBlocks.map(block => block.type).join(' / '));
 	let lastChange = $state('No onchange yet');
 
 	function laneOrder(items: LaneItem[]) {
@@ -296,18 +270,6 @@
 				</div>
 			</div>
 
-			<div class="flex flex-col gap-3 rounded-control border border-frame bg-surface-primary p-4">
-				<div>
-					<h3 class="text-xs font-semibold uppercase tracking-widest text-muted-contrast">BlockEditor</h3>
-					<p class="mt-1 text-xs text-muted-contrast">{blockOrder}</p>
-				</div>
-				<BlockEditor
-					bind:blocks={editorBlocks}
-					components={blockComponents}
-					typeLabels={blockLabels}
-					joinable="text"
-				/>
-			</div>
 		</section>
 	</div>
 </div>

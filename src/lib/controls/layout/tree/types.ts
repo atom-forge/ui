@@ -1,4 +1,4 @@
-import type {IconDefinition} from "../../../index";
+import type {IconDefinition} from "../../general/icon";
 
 export type TreeNode = {
 	id: string;

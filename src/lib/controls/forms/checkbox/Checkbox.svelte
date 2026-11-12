@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { AnyProp, ClassProp, XOR } from "../../../helpers/types";
+	import type { AnyProp, ClassProp, XOR } from '@atom-forge/svelte-helpers';
 	import { onMount, untrack } from 'svelte';
 	import { getCheckboxGroupManager, type NamedCheckboxGroupManager } from "./checkbox-group-manager.svelte";
 	import CheckboxView from './CheckboxView.svelte';

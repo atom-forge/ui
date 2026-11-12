@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Tooltip from "../../overlays/tooltip/Tooltip.svelte";
-	import type {ClassProp, XOR} from "../../../helpers/types";
+	import type {ClassProp, XOR} from '@atom-forge/svelte-helpers';
 	import {twMerge} from "tailwind-merge";
 
 	let {

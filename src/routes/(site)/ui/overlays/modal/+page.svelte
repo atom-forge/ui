@@ -13,7 +13,7 @@
     const props: PropDef[] = [
         { group: 'ModalOptions', name: 'closable', type: 'boolean', default: 'true', description: 'Allows backdrop/Escape dismissal. Pass an options object as the third argument; a string key is also accepted for compatibility. No close callback is injected into content props.' },
         { group: 'ModalOptions', name: 'key', type: 'string', description: 'Deduplication key scoped to the overlay kind. A duplicate open resolves immediately with undefined.' },
-        { group: 'ModalManager', name: 'closeTopmostIfClosable(value?)', type: 'void', description: 'Dismisses only the topmost closable overlay in the shared modal/drawer stack; it may be the other kind.' },
+        { group: 'ModalManager', name: 'closeTopmostIfClosable(value?)', type: 'boolean', description: 'Dismisses only the topmost closable overlay in the shared modal/drawer stack; it may be the other kind. Returns whether it closed one.' },
         { group: 'ModalManager', name: 'isTopmost(state)', type: 'boolean', description: 'Tests whether a state is topmost in the shared modal/drawer stack.' },
         { group: 'ModalManager', name: 'modals', type: 'ModalState[]', description: 'Current states of this kind in the shared overlay stack.' },
 		{ group: 'Setup', name: 'createModalManager()', type: 'OverlayStackManager', description: 'Creates and registers a <code>ModalManager</code> via Svelte context. Call once in your root layout.' },
@@ -35,7 +35,7 @@
 			Modals stack; closing one reveals the one below it.
 		</ProseText>
 
-		<ProseText>Use <DocInlineCode>Root</DocInlineCode> once in the application layout: it sets up all managers, the portal target and the shared modal/drawer renderer. Do not add ModalContainer or DrawerContainer under Root, or render both containers together: each renders the same shared stack. Programmatic close/resolve closes the last overlay of that kind even when closable is false; backdrop/Escape only dismiss the overall topmost closable overlay.</ProseText>
+		<ProseText>Use <DocInlineCode>Root</DocInlineCode> once in the application layout: it sets up all managers, the portal target and the shared modal/drawer renderer. Do not add ModalContainer or DrawerContainer under Root, or render both containers together: each renders the same shared stack. Programmatic close/resolve closes the last overlay of that kind even when closable is false; backdrop/Escape only dismiss the overall topmost closable overlay, and an Escape already handled inside it (<DocInlineCode>preventDefault()</DocInlineCode>) is ignored.</ProseText>
         <DocApiBlock title="API">
 			<DocApiTable {props} />
 		</DocApiBlock>

@@ -3,4 +3,4 @@ type: content
 title: "Avatar Group"
 ---
 
-![[../../../docs/controls/display/avatar-group]]
+![[../../../docs/en/controls/display/avatar-group]]

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import {type ClassProp, getThemeManager, type XOR} from "../../../index";
+	import {type ClassProp, type XOR} from '@atom-forge/svelte-helpers';
+	import {getThemeManager} from "../../../core/theme-manager.svelte";
 	import {twMerge} from "tailwind-merge";
 	import {type Snippet, untrack} from 'svelte';
 

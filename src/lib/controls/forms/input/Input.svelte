@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {useFieldControl} from '../field/field-context';
-	import {type AnyProp, type ClassProp, defineIcon, Icon, type IconDefinition, type XOR} from "../../../index";
+	import {type AnyProp, type ClassProp, type XOR} from '@atom-forge/svelte-helpers';
+	import {defineIcon, Icon, type IconDefinition} from "../../general/icon";
 	import {twMerge} from "tailwind-merge";
 	import {Eye, EyeOff} from 'lucide-svelte';
 	import type {Snippet} from 'svelte';

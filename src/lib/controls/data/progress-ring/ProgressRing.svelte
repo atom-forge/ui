@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ChildrenPropOptional, ClassProp } from '../../../helpers/types';
+	import type { ChildrenPropOptional, ClassProp } from '@atom-forge/svelte-helpers';
 	import { twMerge } from 'tailwind-merge';
 
 	export type RingDef = {

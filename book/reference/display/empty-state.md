@@ -3,4 +3,4 @@ type: content
 title: "Empty State"
 ---
 
-![[../../../docs/controls/display/empty-state]]
+![[../../../docs/en/controls/display/empty-state]]

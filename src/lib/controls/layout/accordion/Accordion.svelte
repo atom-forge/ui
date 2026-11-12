@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {createAccordionManager} from './accordion-manager.svelte';
-	import type {AnyProp, ChildrenProp, ClassProp, XOR} from "../../../helpers/types";
+	import type {AnyProp, ChildrenProp, ClassProp, XOR} from '@atom-forge/svelte-helpers';
 	import {untrack} from 'svelte';
 	import {twMerge} from "tailwind-merge";
 

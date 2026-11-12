@@ -3,4 +3,4 @@ type: content
 title: "Calendar"
 ---
 
-![[../../../docs/controls/scheduling/calendar]]
+![[../../../docs/en/controls/scheduling/calendar]]

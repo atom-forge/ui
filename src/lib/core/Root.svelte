@@ -4,7 +4,7 @@
 	import {createPopupManager, PopupContainer} from "../controls/overlays/popup";
 	import {createToastManager, ToastContainer} from "../controls/overlays/toast";
 	import {createDrawerManager} from "../controls/overlays/drawer";
-	import type {ChildrenProp} from "../helpers/types";
+	import type {ChildrenProp} from '@atom-forge/svelte-helpers';
 	import {createThemeManager} from "./theme-manager.svelte";
 	import {onMount} from "svelte";
 	import SharedOverlayContainer from "../controls/overlays/shared/SharedOverlayContainer.svelte";

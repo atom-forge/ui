@@ -2,7 +2,7 @@
 	import { twMerge } from 'tailwind-merge';
 	import { untrack } from 'svelte';
 	import { Check } from 'lucide-svelte';
-	import type { ClassProp } from '../../../helpers/types';
+	import type { ClassProp } from '@atom-forge/svelte-helpers';
 
 	export type Step = { id: string; label: string; description?: string };
 

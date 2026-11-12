@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {AnyProp, ClassProp, XOR} from "../../../index";
+	import type {AnyProp, ClassProp, XOR} from '@atom-forge/svelte-helpers';
 	import {untrack} from "svelte";
 	import {twMerge} from "tailwind-merge";
 	import {InlineSvgIcon, IconDefiner, SvgIcon, type IconDefinition} from "./icon-definition";

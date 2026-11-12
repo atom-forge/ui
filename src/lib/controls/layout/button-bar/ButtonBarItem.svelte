@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {AnyProp, ChildrenProp, ClassProp} from "../../../helpers/types";
+	import type {AnyProp, ChildrenProp, ClassProp} from '@atom-forge/svelte-helpers';
 	import {twMerge} from "tailwind-merge";
 
 	let {

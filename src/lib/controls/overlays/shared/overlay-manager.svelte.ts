@@ -61,10 +61,12 @@ export class OverlayStackManager {
 		this.close(kind, result);
 	}
 
-	closeTopmostIfClosable(result?: any) {
+	/** Closes the topmost overlay if it is closable; returns whether it closed one. */
+	closeTopmostIfClosable(result?: any): boolean {
 		const last = this.topmost();
-		if (!last || !last.options.closable) return;
+		if (!last || !last.options.closable) return false;
 		this.resolveItem(last, result);
+		return true;
 	}
 
 	closeAll(result?: any) {

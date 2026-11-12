@@ -3,4 +3,4 @@ type: content
 title: "Doc components"
 ---
 
-![[../../../docs/controls/content/doc]]
+![[../../../docs/en/controls/content/doc]]

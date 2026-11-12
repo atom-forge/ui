@@ -14,4 +14,4 @@ children:
 
 # Data & Charts
 
-Control reference for the Data & Charts category. Each page is embedded from `docs/controls/data/`.
+Control reference for the Data & Charts category. Each page is embedded from `docs/en/controls/data/`.

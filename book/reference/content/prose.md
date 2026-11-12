@@ -3,4 +3,4 @@ type: content
 title: "Prose components"
 ---
 
-![[../../../docs/controls/content/prose]]
+![[../../../docs/en/controls/content/prose]]

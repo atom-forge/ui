@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {twMerge} from 'tailwind-merge';
-	import type {ClassProp, XOR} from '../../../helpers/types';
+	import type {ClassProp, XOR} from '@atom-forge/svelte-helpers';
 	import {Icon, type IconDefinition} from '../../general/icon';
 
 	let {

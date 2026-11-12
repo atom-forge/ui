@@ -3,4 +3,4 @@ type: content
 title: "ColorPicker"
 ---
 
-![[../../../docs/controls/forms/color]]
+![[../../../docs/en/controls/forms/color]]

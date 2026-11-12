@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {ClassProp} from "../../../helpers/types";
+	import type {ClassProp} from '@atom-forge/svelte-helpers';
 	import {twMerge} from "tailwind-merge";
 	import {getPopupManager} from "../../overlays/popup/popup-manager.svelte";
 	import {ContextMenu, type ContextMenuItemConfig} from "../../overlays/context-menu";

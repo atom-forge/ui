@@ -57,7 +57,7 @@
 	}
 </script>
 
-<svelte:window onkeydown={(e) => { if (e.key === 'Escape') cancel(); }}/>
+<svelte:document onkeydowncapture={(e) => { if (e.key === 'Escape') { e.preventDefault(); cancel(); } }}/>
 
 <Card class="w-fit shadow-lg">
 	<div role="dialog" aria-modal="false" tabindex="-1" bind:this={panel}>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {ClassProp, XOR} from "../../../index";
+	import type {ClassProp, XOR} from '@atom-forge/svelte-helpers';
 	import {untrack} from "svelte";
 	import SliderView from './SliderView.svelte';
 	import type {SliderSize} from './theme';

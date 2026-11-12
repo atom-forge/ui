@@ -1,5 +1,5 @@
 <script lang="ts" generics="T extends Record<string, any>">
-	import type {ClassProp} from "../../../index";
+	import type {ClassProp} from '@atom-forge/svelte-helpers';
 	import {getPopupManager} from '../../overlays/popup';
 	import TableSettings from './TableSettings.svelte';
 	import type {ColumnDef, StylingFn, TableOverflow} from './types';

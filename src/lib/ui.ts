@@ -52,26 +52,18 @@ import {Popup, PopupContainer} from './controls/overlays/popup/index.js';
 import {Toast, ToastContainer} from './controls/overlays/toast/index.js';
 import {Tooltip} from './controls/overlays/tooltip/index.js';
 import {Zen} from './controls/overlays/zen/index.js';
-import {BlockEditor, BlockItem, BlockView, BlockEditTextarea, BlockEditMarkdown, BlockEditHeading, BlockEditQuote, BlockEditDiagram, BlockEditCallout, BlockEditDivider, BlockEditYoutube, BlockEditCode, BlockEditTable, BlockEditLinkCard, BlockViewHeading, BlockViewTextarea, BlockViewMarkdown, BlockViewQuote, BlockViewDivider, BlockViewYoutube, BlockViewTable, BlockViewDiagram, BlockViewCallout, BlockViewCode, BlockViewLinkCard} from './controls/editors/block-editor/index.js';
-import {DiagramEditor} from './controls/editors/diagram-editor/index.js';
-import {ImgEditor} from './controls/editors/img-editor/index.js';
-import {MarkdownEditor} from './controls/editors/markdown-editor/index.js';
-import {TableEditor, TablePreview} from './controls/editors/table-editor/index.js';
 import {Calendar} from './controls/scheduling/calendar/index.js';
-import {GanttChart} from './controls/scheduling/gantt/index.js';
 import {Organizer} from './controls/scheduling/organizer/index.js';
-import {ResourceManager} from './controls/scheduling/resource-manager/index.js';
 import {DocApiBlock, DocApiTable, DocInlineCode, DocShowCode, DocShowExample} from './controls/content/doc/index.js';
 import {ProsePage, ProseParagraph, ProseDivider, ProseBlockQuote, ProseCallout, ProseLinkCard, ProseMarkdown, ProseText, ProseTitle, ProseYoutubeEmbed} from './controls/content/prose/index.js';
 import {createCheckboxGroupManager, getCheckboxGroupManager, setCheckboxGroupManager} from './controls/forms/checkbox/index.js';
-import {getBlockAPI} from './controls/editors/block-editor/index.js';
 import {createModalManager, getModalManager, setModalManager} from './controls/overlays/modal/index.js';
 import {createDrawerManager, getDrawerManager, setDrawerManager} from './controls/overlays/drawer/index.js';
 import {createPopupManager, getPopupManager, setPopupManager} from './controls/overlays/popup/index.js';
 import {createToastManager, getToastManager, setToastManager} from './controls/overlays/toast/index.js';
 import Root from './core/Root.svelte';
 import Atom from './core/Atom.svelte';
-import RenderSnippet from './helpers/RenderSnippet.svelte';
+import {RenderSnippet} from '@atom-forge/svelte-helpers';
 import Spinner from './helpers/Spinner.svelte';
 import SelectPopup from './helpers/SelectPopup.svelte';
 import {getThemeManager} from "./core/theme-manager.svelte";
@@ -167,40 +159,8 @@ export const UI: {
 	readonly ToastContainer: typeof ToastContainer;
 	readonly Tooltip: typeof Tooltip;
 	readonly Zen: typeof Zen;
-	readonly BlockEditor: typeof BlockEditor;
-	readonly BlockItem: typeof BlockItem;
-	readonly BlockView: typeof BlockView;
-	readonly BlockEditTextarea: typeof BlockEditTextarea;
-	readonly BlockEditMarkdown: typeof BlockEditMarkdown;
-	readonly BlockEditHeading: typeof BlockEditHeading;
-	readonly BlockEditQuote: typeof BlockEditQuote;
-	readonly BlockEditDiagram: typeof BlockEditDiagram;
-	readonly BlockEditCallout: typeof BlockEditCallout;
-	readonly BlockEditDivider: typeof BlockEditDivider;
-	readonly BlockEditYoutube: typeof BlockEditYoutube;
-	readonly BlockEditCode: typeof BlockEditCode;
-	readonly BlockEditTable: typeof BlockEditTable;
-	readonly BlockEditLinkCard: typeof BlockEditLinkCard;
-	readonly BlockViewHeading: typeof BlockViewHeading;
-	readonly BlockViewTextarea: typeof BlockViewTextarea;
-	readonly BlockViewMarkdown: typeof BlockViewMarkdown;
-	readonly BlockViewQuote: typeof BlockViewQuote;
-	readonly BlockViewDivider: typeof BlockViewDivider;
-	readonly BlockViewYoutube: typeof BlockViewYoutube;
-	readonly BlockViewTable: typeof BlockViewTable;
-	readonly BlockViewDiagram: typeof BlockViewDiagram;
-	readonly BlockViewCallout: typeof BlockViewCallout;
-	readonly BlockViewCode: typeof BlockViewCode;
-	readonly BlockViewLinkCard: typeof BlockViewLinkCard;
-	readonly DiagramEditor: typeof DiagramEditor;
-	readonly ImgEditor: typeof ImgEditor;
-	readonly MarkdownEditor: typeof MarkdownEditor;
-	readonly TableEditor: typeof TableEditor;
-	readonly TablePreview: typeof TablePreview;
 	readonly Calendar: typeof Calendar;
-	readonly GanttChart: typeof GanttChart;
 	readonly Organizer: typeof Organizer;
-	readonly ResourceManager: typeof ResourceManager;
 	readonly DocApiBlock: typeof DocApiBlock;
 	readonly DocApiTable: typeof DocApiTable;
 	readonly DocInlineCode: typeof DocInlineCode;
@@ -219,7 +179,6 @@ export const UI: {
 	readonly createCheckboxGroupManager: typeof createCheckboxGroupManager;
 	readonly getCheckboxGroupManager: typeof getCheckboxGroupManager;
 	readonly setCheckboxGroupManager: typeof setCheckboxGroupManager;
-	readonly getBlockAPI: typeof getBlockAPI;
 	readonly createModalManager: typeof createModalManager;
 	readonly getModalManager: typeof getModalManager;
 	readonly setModalManager: typeof setModalManager;
@@ -329,40 +288,8 @@ export const UI: {
 	ToastContainer,
 	Tooltip,
 	Zen,
-	BlockEditor,
-	BlockItem,
-	BlockView,
-	BlockEditTextarea,
-	BlockEditMarkdown,
-	BlockEditHeading,
-	BlockEditQuote,
-	BlockEditDiagram,
-	BlockEditCallout,
-	BlockEditDivider,
-	BlockEditYoutube,
-	BlockEditCode,
-	BlockEditTable,
-	BlockEditLinkCard,
-	BlockViewHeading,
-	BlockViewTextarea,
-	BlockViewMarkdown,
-	BlockViewQuote,
-	BlockViewDivider,
-	BlockViewYoutube,
-	BlockViewTable,
-	BlockViewDiagram,
-	BlockViewCallout,
-	BlockViewCode,
-	BlockViewLinkCard,
-	DiagramEditor,
-	ImgEditor,
-	MarkdownEditor,
-	TableEditor,
-	TablePreview,
 	Calendar,
-	GanttChart,
 	Organizer,
-	ResourceManager,
 	DocApiBlock,
 	DocApiTable,
 	DocInlineCode,
@@ -381,7 +308,6 @@ export const UI: {
 	createCheckboxGroupManager,
 	getCheckboxGroupManager,
 	setCheckboxGroupManager,
-	getBlockAPI,
 	createModalManager,
 	getModalManager,
 	setModalManager,

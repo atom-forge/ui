@@ -3,4 +3,4 @@ type: content
 title: "Select"
 ---
 
-![[../../../docs/controls/forms/select]]
+![[../../../docs/en/controls/forms/select]]

@@ -3,4 +3,4 @@ type: content
 title: "Timeline"
 ---
 
-![[../../../docs/controls/data/timeline]]
+![[../../../docs/en/controls/data/timeline]]

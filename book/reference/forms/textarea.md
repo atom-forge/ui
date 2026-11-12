@@ -3,4 +3,4 @@ type: content
 title: "Textarea"
 ---
 
-![[../../../docs/controls/forms/textarea]]
+![[../../../docs/en/controls/forms/textarea]]

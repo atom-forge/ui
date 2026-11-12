@@ -1,6 +1,6 @@
 <script lang="ts">
 	import TooltipContent from "./TooltipContent.svelte";
-	import type {AnyProp, ClassProp} from "../../../helpers/types";
+	import type {AnyProp, ClassProp} from '@atom-forge/svelte-helpers';
 	import {twMerge} from "tailwind-merge";
 
 	type ChartSegment = {

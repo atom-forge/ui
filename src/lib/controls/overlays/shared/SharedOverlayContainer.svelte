@@ -13,10 +13,10 @@
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === 'Escape') {
-			e.preventDefault();
-			manager.closeTopmostIfClosable();
-		}
+		// An Escape already handled by an element inside the overlay (a dropdown, a menu, a popup) is left alone.
+		// This listener is on window (bubble), so handlers on elements and on document run before it.
+		if (e.key !== 'Escape' || e.defaultPrevented) return;
+		if (manager.closeTopmostIfClosable()) e.preventDefault();
 	}
 
 	function modalDistanceFromTop(item: OverlayState) {

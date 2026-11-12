@@ -3,4 +3,4 @@ type: content
 title: "NativeSelect"
 ---
 
-![[../../../docs/controls/forms/native-select]]
+![[../../../docs/en/controls/forms/native-select]]

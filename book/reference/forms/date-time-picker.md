@@ -3,4 +3,4 @@ type: content
 title: "DateTimePicker"
 ---
 
-![[../../../docs/controls/forms/date-time-picker]]
+![[../../../docs/en/controls/forms/date-time-picker]]

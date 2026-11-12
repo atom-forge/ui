@@ -3,4 +3,4 @@ type: content
 title: "Carousel"
 ---
 
-![[../../../docs/controls/display/carousel]]
+![[../../../docs/en/controls/display/carousel]]

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {useFieldControl} from '../field/field-context';
-	import type {XOR} from "../../../index";
+	import type {XOR} from '@atom-forge/svelte-helpers';
 	import {untrack} from 'svelte';
 	import {ChevronDown} from 'lucide-svelte';
 	import {Icon} from "../../general/icon";

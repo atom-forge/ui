@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {twMerge} from 'tailwind-merge';
-	import type {ChildrenProp, ClassProp} from '../../../helpers/types';
+	import type {ChildrenProp, ClassProp} from '@atom-forge/svelte-helpers';
 
 	let {
 		labelWidth = 'auto',

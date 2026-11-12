@@ -2,7 +2,7 @@
 	import {useFieldControl} from '../field/field-context';
 	import { Icon } from '../../general/icon';
 	import TimePopover from './TimePopover.svelte';
-	import type { XOR } from '../../../helpers/types';
+	import type { XOR } from '@atom-forge/svelte-helpers';
 	import { Clock, X } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { twMerge } from 'tailwind-merge';

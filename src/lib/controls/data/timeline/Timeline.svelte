@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { XOR } from '../../../helpers/types';
+	import type { XOR } from '@atom-forge/svelte-helpers';
 	import { twMerge } from 'tailwind-merge';
 
 	let {

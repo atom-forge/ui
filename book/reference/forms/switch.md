@@ -3,4 +3,4 @@ type: content
 title: "Switch"
 ---
 
-![[../../../docs/controls/forms/switch]]
+![[../../../docs/en/controls/forms/switch]]

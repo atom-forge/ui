@@ -13,4 +13,4 @@ children:
 
 # Display
 
-Control reference for the Display category. Each page is embedded from `docs/controls/display/`.
+Control reference for the Display category. Each page is embedded from `docs/en/controls/display/`.

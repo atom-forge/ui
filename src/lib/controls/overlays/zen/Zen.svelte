@@ -1,7 +1,7 @@
 <script lang="ts">
 	import {fade} from 'svelte/transition';
 	import {twMerge} from 'tailwind-merge';
-	import type {ClassProp} from '../../../helpers/types';
+	import type {ClassProp} from '@atom-forge/svelte-helpers';
 	import type {Snippet} from 'svelte';
 	import {Icon} from '../../general/icon';
 	import {X} from 'lucide-svelte';
@@ -33,8 +33,12 @@
 		if (closeOnBackdrop && e.target === e.currentTarget) close();
 	}
 
+	// Bubble phase on document: popups (document capture) and elements inside handle Escape first;
+	// an enclosing modal (window) runs after and ignores the Escape handled here.
 	function onKeydown(e: KeyboardEvent) {
-		if (closeOnEsc && e.key === 'Escape') { e.preventDefault(); close(); }
+		if (!active || !closeOnEsc || e.key !== 'Escape' || e.defaultPrevented) return;
+		e.preventDefault();
+		close();
 	}
 
 	$effect(() => {
@@ -49,7 +53,7 @@
 	});
 </script>
 
-<svelte:window onkeydown={onKeydown}/>
+<svelte:document onkeydown={onKeydown}/>
 
 {#if active}
 	<div

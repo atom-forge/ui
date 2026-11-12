@@ -1,4 +1,5 @@
-import type {IconDefinition, PopupManager} from "../../../index";
+import type {IconDefinition} from "../../general/icon";
+import type {PopupManager} from "../popup";
 
 
 type Separator = { separator: true };

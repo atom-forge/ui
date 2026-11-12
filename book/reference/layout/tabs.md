@@ -3,4 +3,4 @@ type: content
 title: "Tabs"
 ---
 
-![[../../../docs/controls/layout/tabs]]
+![[../../../docs/en/controls/layout/tabs]]

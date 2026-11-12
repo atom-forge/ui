@@ -3,4 +3,4 @@ type: content
 title: "Slider / Range"
 ---
 
-![[../../../docs/controls/forms/slider]]
+![[../../../docs/en/controls/forms/slider]]

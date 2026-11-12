@@ -3,4 +3,4 @@ type: content
 title: "Charts (Chart.js)"
 ---
 
-![[../../../docs/controls/data/charts]]
+![[../../../docs/en/controls/data/charts]]

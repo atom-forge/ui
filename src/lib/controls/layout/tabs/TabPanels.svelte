@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {ChildrenProp, ClassProp} from "../../../index";
+	import type {ChildrenProp, ClassProp} from '@atom-forge/svelte-helpers';
 	import {twMerge} from 'tailwind-merge';
 	import {getContext} from 'svelte';
 	import {Spring} from 'svelte/motion';

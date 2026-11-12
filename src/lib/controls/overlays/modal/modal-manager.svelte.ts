@@ -1,4 +1,4 @@
-import RenderSnippet from '../../../helpers/RenderSnippet.svelte';
+import {RenderSnippet} from '@atom-forge/svelte-helpers';
 import type {Component, Snippet} from 'svelte';
 import {getContext, setContext} from 'svelte';
 import {getOverlayStackManager, type OverlayOptions, type OverlayStackManager, type OverlayState} from '../shared/overlay-manager.svelte';
@@ -47,8 +47,8 @@ class ModalManagerFacade {
 		this.manager.resolve('modal', result);
 	}
 
-	closeTopmostIfClosable(result?: any) {
-		this.manager.closeTopmostIfClosable(result);
+	closeTopmostIfClosable(result?: any): boolean {
+		return this.manager.closeTopmostIfClosable(result);
 	}
 
 	isTopmost(modal: ModalState | undefined) {

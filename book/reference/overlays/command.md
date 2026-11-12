@@ -3,4 +3,4 @@ type: content
 title: "CommandPalette"
 ---
 
-![[../../../docs/controls/overlays/command]]
+![[../../../docs/en/controls/overlays/command]]

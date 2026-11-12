@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ClassProp } from "../../../helpers/types";
+	import type { ClassProp } from '@atom-forge/svelte-helpers';
 	import { Icon } from '../../general/icon';
 	import { Check, Minus } from 'lucide-svelte';
 	import { twMerge } from 'tailwind-merge';

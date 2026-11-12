@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { ClassProp } from '../../../helpers/types';
+	import type { ClassProp } from '@atom-forge/svelte-helpers';
 	import type { MeterItem } from './MeterGroup.svelte';
 	import { twMerge } from 'tailwind-merge';
 	import { untrack } from 'svelte';

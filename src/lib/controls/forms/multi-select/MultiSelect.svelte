@@ -11,7 +11,7 @@
 	import MultiSelectDropdown from './MultiSelectDropdown.svelte';
 	import {buttonTriggerVariant} from '../select/utils';
 	import type {SelectButtonTrigger, SelectOption, SelectOptionsSource} from '../select/Select.svelte';
-	import type {XOR, ClassProp} from '../../../index';
+	import type {XOR, ClassProp} from '@atom-forge/svelte-helpers';
 
 	type SortableOption = SelectOption & { id: string | number };
 

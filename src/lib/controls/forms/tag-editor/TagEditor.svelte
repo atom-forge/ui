@@ -9,7 +9,7 @@
 	import SortableList from '../../data/sortable/SortableList.svelte';
 	import TagEditorDropdown from './TagEditorDropdown.svelte';
 	import type {FlatItem} from '../../../helpers/SelectPopup.svelte';
-	import type {XOR, ClassProp} from '../../../index';
+	import type {XOR, ClassProp} from '@atom-forge/svelte-helpers';
 
 	type OptionsSource = string[] | ((query: string) => Promise<string[]>);
 	type SortableTag = { id: string; tag: string };

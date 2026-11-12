@@ -11,4 +11,4 @@ children:
 
 # General
 
-Control reference for the General category. Each page is embedded from `docs/controls/general/`.
+Control reference for the General category. Each page is embedded from `docs/en/controls/general/`.

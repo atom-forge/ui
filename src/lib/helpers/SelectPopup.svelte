@@ -121,7 +121,7 @@
 		if (e.key === 'ArrowDown') { e.preventDefault(); moveDown(); }
 		else if (e.key === 'ArrowUp') { e.preventDefault(); moveUp(); }
 		else if (e.key === 'Enter') { e.preventDefault(); confirm(); }
-		else if (e.key === 'Escape') { close?.(); }
+		else if (e.key === 'Escape') { e.preventDefault(); close?.(); }
 	}
 </script>
 

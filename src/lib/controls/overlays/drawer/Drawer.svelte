@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { DrawerPosition, DrawerSize } from './drawer-manager.svelte';
-	import type { ChildrenProp, ClassProp } from '../../../helpers/types';
+	import type { ChildrenProp, ClassProp } from '@atom-forge/svelte-helpers';
 	import { cubicOut } from 'svelte/easing';
 	import type { TransitionConfig } from 'svelte/transition';
 	import {twMerge} from 'tailwind-merge';

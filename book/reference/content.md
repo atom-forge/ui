@@ -8,4 +8,4 @@ children:
 
 # Content
 
-Control reference for the Content category. Each page is embedded from `docs/controls/content/`.
+Control reference for the Content category. Each page is embedded from `docs/en/controls/content/`.

@@ -3,4 +3,4 @@ type: content
 title: "Heatmap"
 ---
 
-![[../../../docs/controls/data/heatmap]]
+![[../../../docs/en/controls/data/heatmap]]

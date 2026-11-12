@@ -1,7 +1,7 @@
 <script lang="ts">
 	import {getAccordionManager} from './accordion-manager.svelte';
 	import {Icon, type IconDefinition} from "../../general/icon";
-	import type {AnyProp, ChildrenProp, ClassProp} from "../../../helpers/types";
+	import type {AnyProp, ChildrenProp, ClassProp} from '@atom-forge/svelte-helpers';
 	import {ChevronDown} from "lucide-svelte";
 	import {slide} from 'svelte/transition';
 	import {twMerge} from 'tailwind-merge';

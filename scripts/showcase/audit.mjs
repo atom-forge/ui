@@ -11,7 +11,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const dist = path.join(root, 'dist');
 const owned = ['src/routes/(site)/ui/data', 'src/routes/(site)/ui/overlays'];
 const pkg = JSON.parse(await readFile(path.join(dist, '../package.json'), 'utf8'));
-const AUDITED_VERSION = '0.0.37';
+const AUDITED_VERSION = '0.0.39';
 if (pkg.version !== AUDITED_VERSION) console.warn(`WARNING: the API inventory was last audited against ${AUDITED_VERSION}; the packaged library is ${pkg.version}. Re-audit the API.`);
 async function files(dir) {
     const entries = await readdir(path.join(root, dir), { withFileTypes: true });

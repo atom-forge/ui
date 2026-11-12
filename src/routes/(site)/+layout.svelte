@@ -1,11 +1,11 @@
 <script lang="ts">
 	import App from '../../site/App.svelte';
-	import type {ChildrenProp} from '../../lib/helpers/types';
+	import type {ChildrenProp} from '@atom-forge/svelte-helpers';
 
 	let {children}: ChildrenProp = $props();
 
 	const title = 'AtomForge UI — Components, live';
-	const description = 'Live examples of every AtomForge UI component: forms, data, overlays, editors, scheduling and complete showcase applications.';
+	const description = 'Live examples of every AtomForge UI component: forms, data, overlays, content, scheduling and complete showcase applications.';
 </script>
 
 <svelte:head>

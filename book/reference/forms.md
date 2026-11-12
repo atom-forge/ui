@@ -23,4 +23,4 @@ children:
 
 # Forms
 
-Control reference for the Forms category. Each page is embedded from `docs/controls/forms/`.
+Control reference for the Forms category. Each page is embedded from `docs/en/controls/forms/`.

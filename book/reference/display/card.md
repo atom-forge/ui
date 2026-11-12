@@ -3,4 +3,4 @@ type: content
 title: "Card"
 ---
 
-![[../../../docs/controls/display/card]]
+![[../../../docs/en/controls/display/card]]

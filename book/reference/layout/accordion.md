@@ -3,4 +3,4 @@ type: content
 title: "Accordion"
 ---
 
-![[../../../docs/controls/layout/accordion]]
+![[../../../docs/en/controls/layout/accordion]]

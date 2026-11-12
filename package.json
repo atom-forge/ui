@@ -18,11 +18,21 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"package": "svelte-package",
 		"prepublishOnly": "npm run prepack",
-		"release": "npm publish --access public",
-		"pub-check": "bun run scripts/pub-check.ts",
-		"pub": "bun run scripts/pub.ts",
+		"pub-check": "ship-it check",
+		"pub": "ship-it",
 		"check:showcase": "bun run package && node scripts/showcase/migration-check.mjs && node scripts/showcase/audit.mjs",
 		"deploy": "python3 deploy/local.py"
+	},
+	"ship": {
+		"verify": [
+			"bun run check",
+			"bun run check:showcase",
+			"bunx publint"
+		],
+		"after": [
+			"ship-it check --wait 900",
+			"bun run deploy"
+		]
 	},
 	"repository": {
 		"url": "git://github.com/atom-forge/ui.git"
@@ -60,6 +70,7 @@
 		"svelte": "^5.0.0"
 	},
 	"devDependencies": {
+		"@atom-forge/ship": "0.3.0",
 		"@sveltejs/adapter-static": "^4.0.0",
 		"@sveltejs/kit": "^2.49.1",
 		"@sveltejs/package": "^2.5.7",
@@ -67,7 +78,6 @@
 		"@tailwindcss/forms": "^0.5.10",
 		"@tailwindcss/typography": "^0.5.20",
 		"@tailwindcss/vite": "^4.1.17",
-		"@types/turndown": "^5.0.6",
 		"publint": "^0.3.15",
 		"svelte": "^5.45.6",
 		"svelte-check": "^4.3.4",
@@ -81,15 +91,13 @@
 	],
 	"dependencies": {
 		"@atlaskit/pragmatic-drag-and-drop": "^1.7.9",
-		"@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.1.0",
+		"@atom-forge/svelte-helpers": "^0.0.4",
 		"chart.js": "^4.5.1",
 		"esm-env": "^1.2.2",
 		"lucide-svelte": "^0.561.0",
 		"marked": "^17.0.4",
-		"sheetclip": "^0.3.0",
 		"svelte-dnd-action": "^0.9.70",
 		"svelte-highlight": "^7.9.0",
-		"tailwind-merge": "^3.4.0",
-		"turndown": "^7.2.0"
+		"tailwind-merge": "^3.4.0"
 	}
 }

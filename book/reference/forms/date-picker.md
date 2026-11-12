@@ -3,4 +3,4 @@ type: content
 title: "DatePicker"
 ---
 
-![[../../../docs/controls/forms/date-picker]]
+![[../../../docs/en/controls/forms/date-picker]]

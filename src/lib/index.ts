@@ -64,18 +64,9 @@ export * from "./controls/overlays/toast/index.js"
 export * from "./controls/overlays/tooltip/index.js"
 export * from "./controls/overlays/zen/index.js"
 
-// Editors
-export * from "./controls/editors/block-editor/index.js";
-export * from "./controls/editors/diagram-editor/index.js";
-export * from "./controls/editors/img-editor/index.js";
-export * from "./controls/editors/markdown-editor/index.js";
-export * from "./controls/editors/table-editor/index.js";
-
 // Scheduling
 export * from "./controls/scheduling/calendar/index.js";
-export * from "./controls/scheduling/gantt/index.js";
 export * from "./controls/scheduling/organizer/index.js";
-export * from "./controls/scheduling/resource-manager/index.js";
 
 // Content
 export * from "./controls/content/doc/index.js";
@@ -90,12 +81,9 @@ export {getThemeManager} from "./core/theme-manager.svelte"
 export {default as Atom} from "./core/Atom.svelte"
 
 // Helpers
-export {default as RenderSnippet} from "./helpers/RenderSnippet.svelte"
 export {default as Spinner} from "./helpers/Spinner.svelte"
 export {default as SelectPopup} from "./helpers/SelectPopup.svelte"
-export * from "./helpers/types"
 export * from "./helpers/actions"
-export {debounceAsync} from "./helpers/debounce";
-export {debounce} from "./helpers/debounce";
-export {variantMap} from "./helpers/variantMap";
-export {as} from "./helpers/as";
+// Prop types, type utilities and helpers, re-exported from @atom-forge/svelte-helpers
+export * from "@atom-forge/svelte-helpers";
+export * from "./helpers/portal"

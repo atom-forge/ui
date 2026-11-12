@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {ClassProp} from "../../../index";
+	import type {ClassProp} from '@atom-forge/svelte-helpers';
 	import {setContext, type Snippet, untrack} from 'svelte';
 	import {twMerge} from "tailwind-merge";
 	import {TREE_VIEW_CONTEXT, type TreeDropTarget, type TreeViewContext} from './context';

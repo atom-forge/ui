@@ -1,6 +1,6 @@
 <script lang="ts">
 	import {twMerge} from 'tailwind-merge';
-	import type {AnyProp, ClassProp, XOR} from '../../../helpers/types';
+	import type {AnyProp, ClassProp, XOR} from '@atom-forge/svelte-helpers';
 	import {untrack} from 'svelte';
 
 	type CharacterSet = 'any' | 'numeric' | 'alpha' | 'alphanumeric' | ((char: string) => boolean);

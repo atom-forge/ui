@@ -3,4 +3,4 @@ type: content
 title: "BarChart"
 ---
 
-![[../../../docs/controls/data/bar-chart]]
+![[../../../docs/en/controls/data/bar-chart]]

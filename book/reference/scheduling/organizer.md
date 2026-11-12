@@ -3,4 +3,4 @@ type: content
 title: "Organizer"
 ---
 
-![[../../../docs/controls/scheduling/organizer]]
+![[../../../docs/en/controls/scheduling/organizer]]

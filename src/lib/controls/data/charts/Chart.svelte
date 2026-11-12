@@ -3,7 +3,7 @@
 	// Revert to named import, as the initial error message implied 'Chart' is a named export.
 	import { Chart } from 'chart.js/auto';
 	import type { ChartConfiguration } from 'chart.js';
-	import type { ClassProp } from '../../../helpers/types';
+	import type { ClassProp } from '@atom-forge/svelte-helpers';
 	import { twMerge } from 'tailwind-merge';
 
 	// Explicitly assign the imported Chart to a local constant.

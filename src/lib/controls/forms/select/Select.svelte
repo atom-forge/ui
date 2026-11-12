@@ -33,7 +33,7 @@
 	import {getPopupManager} from '../../overlays/popup';
 	import SelectDropdown from './SelectDropdown.svelte';
 	import {buttonTriggerVariant} from './utils';
-	import type {XOR, ClassProp} from '../../../index';
+	import type {XOR, ClassProp} from '@atom-forge/svelte-helpers';
 
 	let {
 		value = $bindable(undefined),

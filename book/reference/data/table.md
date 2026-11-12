@@ -3,4 +3,4 @@ type: content
 title: "Table"
 ---
 
-![[../../../docs/controls/data/table]]
+![[../../../docs/en/controls/data/table]]

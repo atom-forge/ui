@@ -1,4 +1,4 @@
-import {RenderSnippet} from "../../../index";
+import {RenderSnippet} from '@atom-forge/svelte-helpers';
 import type {Component, Snippet} from 'svelte';
 import {getContext, setContext} from "svelte";
 

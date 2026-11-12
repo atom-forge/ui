@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createAccordionManager } from './accordion-manager.svelte';
 	import AccordionItem from './AccordionItem.svelte';
-	import type { AnyProp, ChildrenProp, ClassProp, XOR } from "../../../helpers/types";
+	import type { AnyProp, ChildrenProp, ClassProp, XOR } from '@atom-forge/svelte-helpers';
 	import { type IconDefinition } from "../../general/icon";
 	import { untrack } from 'svelte';
 

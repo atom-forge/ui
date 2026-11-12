@@ -3,4 +3,4 @@ type: content
 title: "Splitter"
 ---
 
-![[../../../docs/controls/layout/splitter]]
+![[../../../docs/en/controls/layout/splitter]]

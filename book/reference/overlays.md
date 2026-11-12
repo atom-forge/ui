@@ -14,4 +14,4 @@ children:
 
 # Overlays
 
-Control reference for the Overlays category. Each page is embedded from `docs/controls/overlays/`.
+Control reference for the Overlays category. Each page is embedded from `docs/en/controls/overlays/`.

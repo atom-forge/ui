@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Regenerates book/07-reference.md and book/reference/** from docs/controls/**.
+// Regenerates book/reference.md and book/reference/** from docs/en/controls/**.
 // Each control page only embeds its source doc; edit the docs, not the generated pages.
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 
-const CONTROLS = "docs/controls";
+const CONTROLS = "docs/en/controls";
 const OUT = "book/reference";
 
 // General to specific. Categories not listed are appended (with a warning).
@@ -15,7 +15,6 @@ const ORDER: [string, string][] = [
   ["data", "Data & Charts"],
   ["overlays", "Overlays"],
   ["content", "Content"],
-  ["editors", "Editors"],
   ["scheduling", "Scheduling"],
 ];
 
@@ -46,5 +45,5 @@ for (const [cat, title] of ORDER) {
   console.log(`✓ ${cat}: ${files.length} controls`);
 }
 
-writeFileSync("book/07-reference.md",
-  `---\ntype: chapter\ntitle: Control reference\nchildren:\n${chapterChildren.join("\n")}\n---\n\n# Control reference\n\nThe complete component reference, one page per control, embedded from \`${CONTROLS}/\`, ordered from general building blocks to specialised controls. The source files stay the single copy; this chapter only assembles them.\n\nChoose a control first with the capability map in [[04-choosing-controls]].\n`);
+writeFileSync("book/reference.md",
+  `---\ntype: chapter\ntitle: Control reference\nchildren:\n${chapterChildren.join("\n")}\n---\n\n# Control reference\n\nThe complete component reference, one page per control, embedded from \`${CONTROLS}/\`, ordered from general building blocks to specialised controls. The source files stay the single copy; this chapter only assembles them.\n\nChoose a control first with the capability map in [[choosing-controls]].\n`);

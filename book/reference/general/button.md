@@ -3,4 +3,4 @@ type: content
 title: "Button"
 ---
 
-![[../../../docs/controls/general/button]]
+![[../../../docs/en/controls/general/button]]
